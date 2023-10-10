@@ -1,0 +1,23 @@
+services:
+  rails: &rails
+    group_add:
+      - '60000' # submitter
+    volumes:
+      - type: bind
+        source: ~/repository-$STAGE
+        target: /repository
+
+  sidekiq:
+    <<: *rails
+
+  postgres:
+    volumes:
+      - type: bind
+        source: ~/ddbj-repository/data/$STAGE/postgres
+        target: /var/lib/postgresql/data
+
+  redis:
+    volumes:
+      - type: bind
+        source: ~/ddbj-repository/data/$STAGE/redis
+        target: /data

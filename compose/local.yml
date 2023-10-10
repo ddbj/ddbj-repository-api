@@ -1,0 +1,10 @@
+volumes:
+  repository:
+
+services:
+  rails: &rails-local
+    volumes:
+      - repository:/repository
+
+  sidekiq:
+    <<: *rails-local
