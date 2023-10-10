@@ -1,32 +1,25 @@
 class SubmitViaUploadController < ApplicationController
-  DB_TO_OBJ_IDS_ASSOC = {
-    bioproject: %w(BioProject Submission),
-    biosample:  %w(BioSample Submission),
-    trad:       %w(Sequence Annotation),
-    dra:        %w(Submission Experiment Run RunFile Analysis AnalysisFile),
-    gea:        %w(IDF SDRF ADF RawDataFile ProcessedDataFile),
-    metabobank: %w(IDF SDRF MAF RawDataFile ProcessedDataFile),
-    jvar:       %w(Study SampleSet Sample Experiment Assay VariantCallSV VariantRegionSV VariantCallFile),
-  }.stringify_keys
-
   def create
     request = nil
+    paths = nil
 
     ActiveRecord::Base.transaction do
       request = dway_user.requests.create!(status: 'processing')
       db      = params.require(:db)
+      tmpdir  = Pathname.new(Dir.mktmpdir)
 
-      DB_TO_OBJ_IDS_ASSOC.fetch(db).each do |obj_id|
-        obj_dir = request.dir.join(obj_id).tap(&:mkpath)
-
+      paths = DB_TO_OBJ_IDS_ASSOC.fetch(db).map {|obj_id|
         # TODO cardinality
         file = params.require(obj_id)
+        dest = tmpdir.join(file.original_filename)
 
-        FileUtils.mv file.path, obj_dir.join(file.original_filename)
-      end
+        FileUtils.mv file.path, dest
+
+        [obj_id, dest.to_s]
+      }.to_h
     end
 
-    SubmitJob.perform_later request
+    SubmitJob.perform_later request, paths
 
     render json: {
       request_id: request.id
