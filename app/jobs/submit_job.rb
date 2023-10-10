@@ -1,7 +1,7 @@
 class SubmitJob < ApplicationJob
   def perform(request, paths)
-    paths.each do |k, v|
-      FileUtils.cp v, request.dir.join(k)
+    paths.each do |obj_id, path|
+      FileUtils.cp path, request.dir.join(obj_id).tap(&:mkpath)
     end
 
     ActiveRecord::Base.transaction do

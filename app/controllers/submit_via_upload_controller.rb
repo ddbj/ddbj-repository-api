@@ -1,7 +1,7 @@
 class SubmitViaUploadController < ApplicationController
   def create
     request = nil
-    paths = nil
+    paths   = nil
 
     ActiveRecord::Base.transaction do
       request = dway_user.requests.create!(status: 'processing')
