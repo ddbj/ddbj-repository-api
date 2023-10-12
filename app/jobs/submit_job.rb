@@ -10,12 +10,7 @@ class SubmitJob < ApplicationJob
       next nil unless param = obj[:validator_param]
 
       path = paths.fetch(obj[:id])
-
-      part = Faraday::Multipart::FilePart.new(
-        File.open(path),
-        'application/octet-stream',
-        File.basename(path)
-      )
+      part = Faraday::Multipart::FilePart.new(path, 'application/octet-stream')
 
       [param, part]
     }.to_h)
