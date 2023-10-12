@@ -1,0 +1,62 @@
+- id: BioProject
+  objects:
+    - id: BioProject
+      validator_param: bioproject
+    - id: Submission
+      validator_param: submission
+
+- id: BioSample
+  objects:
+    - id: BioSample
+      validator_param: biosample
+    - id: Submission
+      validator_param: submission
+
+- id: Trad
+  objects:
+    - id: Sequence
+      validator_param: trad_seq
+    - id: Annotation
+      validator_param: trad_anno
+
+- id: DRA
+  objects:
+    - id: Submission
+      validator_param: submission
+    - id: Experiment
+      validator_param: experiment
+    - id: Run
+      validator_param: run
+    - id: RunFile
+    - id: Analysis
+      validator_param: analysis
+    - id: AnalysisFile
+
+- id: GEA
+  objects:
+    - id: IDF
+    - id: SDRF
+    - id: ADF
+    - id: RawDataFile
+    - id: ProcessedDataFile
+
+- id: MetaboBank
+  objects:
+    - id: IDF
+      validator_param: metabobank_idf
+    - id: SDRF
+      validator_param: metabobank_sdrf
+    - id: MAF
+    - id: RawDataFile
+    - id: ProcessedDataFile
+
+- id: JVar
+  objects:
+    - id: Study
+    - id: SampleSet
+    - id: Sample
+    - id: Experiment
+    - id: Assay
+    - id: VariantCallSV
+    - id: VariantRegionSV
+    - id: VariantCallFile

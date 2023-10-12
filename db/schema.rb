@@ -24,7 +24,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_05_112509) do
   create_table "requests", force: :cascade do |t|
     t.bigint "dway_user_id", null: false
     t.bigint "submission_id"
+    t.string "db", null: false
     t.integer "status", null: false
+    t.jsonb "result"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dway_user_id"], name: "index_requests_on_dway_user_id"
