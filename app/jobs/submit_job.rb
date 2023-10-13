@@ -4,7 +4,7 @@ class SubmitJob < ApplicationJob
       FileUtils.cp path, request.dir.join(obj_id).tap(&:mkpath)
     end
 
-    db = DB.find { _1[:id].downcase == request.db }
+    db = DB.find { _1[:id] == request.db }
 
     res = validator.post('validation', db[:objects].filter_map {|obj|
       next nil unless param = obj[:validator_param]
@@ -42,7 +42,7 @@ class SubmitJob < ApplicationJob
 
     case res.body.fetch(:status)
     when 'accepted', 'running'
-      sleep 1
+      sleep 1 unless Rails.env.test?
       poll_status uuid, &block
     when 'finished'
       result = validator.get("validation/#{uuid}")

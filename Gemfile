@@ -14,3 +14,11 @@ gem 'sidekiq'
 group :development do
   gem 'debug', group: :test
 end
+
+group :test do
+  gem 'climate_control'
+  gem 'fakefs', require: 'fakefs/spec_helpers'
+  gem 'rspec-default_http_header'
+  gem 'rspec-rails', group: :development
+  gem 'webmock', require: 'webmock/rspec'
+end

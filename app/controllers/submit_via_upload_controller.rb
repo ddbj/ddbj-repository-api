@@ -4,11 +4,11 @@ class SubmitViaUploadController < ApplicationController
     paths   = nil
 
     ActiveRecord::Base.transaction do
-      db      = params.require(:db)
-      request = dway_user.requests.create!(db:, status: 'processing')
+      db      = DB.find { _1[:id].downcase == params.require(:db) }
+      request = dway_user.requests.create!(db: db[:id], status: 'processing')
       tmpdir  = Pathname.new(Dir.mktmpdir)
 
-      paths = DB.find { _1[:id].downcase == db }[:objects].map {|obj|
+      paths = db[:objects].map {|obj|
         # TODO cardinality
         file = params.require(obj[:id])
         dest = tmpdir.join(file.original_filename)
