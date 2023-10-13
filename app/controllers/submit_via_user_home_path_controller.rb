@@ -4,17 +4,17 @@ class SubmitViaUserHomePathController < ApplicationController
     paths   = nil
 
     ActiveRecord::Base.transaction do
-      request   = dway_user.requests.create!(status: 'processing')
-      db        = params.require(:db)
+      db        = DB.find { _1[:id].downcase == params.require(:db) }
+      request   = dway_user.requests.create!(db: db[:id], status: 'processing')
       user_home = Pathname.new(ENV.fetch('USER_HOME_DIR').gsub('{user}', dway_user.uid))
 
-      paths = DB_TO_OBJ_IDS_ASSOC.fetch(db).map {|obj_id|
+      paths = db[:objects].map {|obj|
         # TODO cardinality
-        path = user_home.join(params.require(obj_id))
+        path = user_home.join(params.require(obj[:id]))
 
         raise ArgumentError unless path.expand_path.to_s.start_with?(user_home.expand_path.to_s)
 
-        [obj_id, path.to_s]
+        [obj[:id], path.to_s]
       }.to_h
     end
 
