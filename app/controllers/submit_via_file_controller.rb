@@ -1,4 +1,12 @@
 class SubmitViaFileController < ApplicationController
+  class Error < StandardError; end
+
+  rescue_from Error do |e|
+    render json: {
+      error: e.message
+    }, status: :bad_request
+  end
+
   def create
     request = nil
     paths   = nil
@@ -18,14 +26,14 @@ class SubmitViaFileController < ApplicationController
           FileUtils.mv file.path, dest
 
           [obj[:id], dest.to_s]
-        in String => path
-          abs = user_home.join(path)
+        in %r(\A~/.) => path
+          abs = user_home.join(path.delete_prefix('~/'))
 
-          raise ArgumentError unless abs.expand_path.to_s.start_with?(user_home.to_s)
+          raise Error, "path must be in #{user_home}" unless abs.expand_path.to_s.start_with?(user_home.to_s)
 
           [obj[:id], abs.to_s]
-        else
-          raise 'must not happen'
+        in unknown
+          raise Error, "unexpected parameter format in #{obj[:id]}: #{unknown.inspect}"
         end
       }.to_h
     end

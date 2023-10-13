@@ -48,7 +48,7 @@ RSpec.describe 'submit via file', type: :request do
     perform_enqueued_jobs do
       post '/api/bioproject/submit/via-file', params: {
         BioProject: uploaded_file(name: 'mybioproject.xml'),
-        Submission: 'foo/mysubmission.xml'
+        Submission: '~/foo/mysubmission.xml'
       }
     end
 
@@ -81,5 +81,31 @@ RSpec.describe 'submit via file', type: :request do
 
     expect(submission_dir.join('BioProject/mybioproject.xml')).to be_exist
     expect(submission_dir.join('Submission/mysubmission.xml')).to be_exist
+  end
+
+  example do
+    post '/api/bioproject/submit/via-file', params: {
+      BioProject: uploaded_file(name: 'mybioproject.xml'),
+      Submission: 'foo/mysubmission.xml'
+    }
+
+    expect(response).to have_http_status(:bad_request)
+
+    expect(response.parsed_body.deep_symbolize_keys).to eq(
+      error: 'unexpected parameter format in Submission: "foo/mysubmission.xml"'
+    )
+  end
+
+  example do
+    post '/api/bioproject/submit/via-file', params: {
+      BioProject: uploaded_file(name: 'mybioproject.xml'),
+      Submission: '~/../foo/mysubmission.xml'
+    }
+
+    expect(response).to have_http_status(:bad_request)
+
+    expect(response.parsed_body.deep_symbolize_keys).to eq(
+      error: 'path must be in /path/to/home/alice'
+    )
   end
 end
