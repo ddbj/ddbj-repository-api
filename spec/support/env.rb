@@ -1,11 +1,15 @@
 RSpec.configure do |config|
   config.around do |example|
-    env = {
-      REPOSITORY_DIR: 'path/to/repository',
-      USER_HOME_DIR:  'path/to/home/{user}',
-      VALIDATOR_URL:  'http://validator.example.com/api',
-    }
+    Dir.mktmpdir do |repository_dir|
+      Dir.mktmpdir do |user_home_dir|
+        env = {
+          REPOSITORY_DIR: repository_dir,
+          USER_HOME_DIR:  user_home_dir,
+          VALIDATOR_URL:  'http://validator.example.com/api',
+        }
 
-    ClimateControl.modify env, &example
+        ClimateControl.modify env, &example
+      end
+    end
   end
 end

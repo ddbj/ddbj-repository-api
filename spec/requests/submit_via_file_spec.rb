@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'submit via file', type: :request do
-  include FakeFS::SpecHelpers
-
   def uploaded_file(name:)
     Rack::Test::UploadedFile.new(StringIO.new, original_filename: name)
   end
@@ -10,6 +8,9 @@ RSpec.describe 'submit via file', type: :request do
   let(:default_headers) {
     {'X-Dway-User-ID': 'alice'}
   }
+
+  let(:user_home_dir)  { Pathname.new(ENV.fetch('USER_HOME_DIR')) }
+  let(:repository_dir) { Pathname.new(ENV.fetch('REPOSITORY_DIR')) }
 
   before do
     stub_request(:post, 'validator.example.com/api/validation').to_return_json(
@@ -40,8 +41,7 @@ RSpec.describe 'submit via file', type: :request do
       }
     )
 
-    FileUtils.mkdir_p 'path/to/home/alice/foo'
-    FileUtils.touch   'path/to/home/alice/foo/mysubmission.xml'
+    FileUtils.touch user_home_dir.join('alice/foo').tap(&:mkpath).join('mysubmission.xml')
   end
 
   example do
@@ -77,7 +77,7 @@ RSpec.describe 'submit via file', type: :request do
     )
 
     submission_id  = response.parsed_body.dig(:submission, :id)
-    submission_dir = Pathname.new('path/to/repository/alice/submissions').join(submission_id.to_s)
+    submission_dir = repository_dir.join('alice/submissions', submission_id.to_s)
 
     expect(submission_dir.join('BioProject/mybioproject.xml')).to be_exist
     expect(submission_dir.join('Submission/mysubmission.xml')).to be_exist
@@ -104,8 +104,8 @@ RSpec.describe 'submit via file', type: :request do
 
     expect(response).to have_http_status(:bad_request)
 
-    expect(response.parsed_body.deep_symbolize_keys).to eq(
-      error: 'path must be in /path/to/home/alice'
+    expect(response.parsed_body.deep_symbolize_keys).to match(
+      error: /\Apath must be in \S+\z/
     )
   end
 end

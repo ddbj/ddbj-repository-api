@@ -15,7 +15,7 @@ class SubmitViaFileController < ApplicationController
       db        = DB.find { _1[:id].downcase == params.require(:db) }
       request   = dway_user.requests.create!(db: db[:id], status: 'processing')
       tmpdir    = Pathname.new(Dir.mktmpdir)
-      user_home = Pathname.new(ENV.fetch('USER_HOME_DIR').gsub('{user}', dway_user.uid)).expand_path
+      user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).expand_path
 
       paths = db[:objects].map {|obj|
         # TODO cardinality
