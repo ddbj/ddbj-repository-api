@@ -5,9 +5,7 @@ Rails.application.routes.draw do
     post '/:db/submit/via-upload' => 'submit_via_upload#create', constraints: {db: Regexp.union(*dbs)}
     post '/:db/submit/via-user-home-path' => 'submit_via_user_home_path#create', constraints: {db: Regexp.union(*dbs)}
 
-    resources :requests, only: %i(show) do
-      get :status
-    end
+    resources :requests, only: %i(show)
   end
 
   get 'up' => 'rails/health#show', as: :rails_health_check

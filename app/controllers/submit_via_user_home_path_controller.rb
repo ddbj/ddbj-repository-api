@@ -21,7 +21,10 @@ class SubmitViaUserHomePathController < ApplicationController
     SubmitJob.perform_later request, paths
 
     render json: {
-      request_id: request.id
+      request: {
+        id:  request.id,
+        url: url_for(request)
+      }
     }, status: :created
   end
 end

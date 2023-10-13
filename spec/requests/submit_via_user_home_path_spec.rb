@@ -55,20 +55,13 @@ RSpec.describe 'submit via user home path', type: :request do
     expect(response).to have_http_status(:created)
 
     expect(response.parsed_body.deep_symbolize_keys).to match(
-      request_id: an_instance_of(Integer)
+      request: {
+        id:  an_instance_of(Integer),
+        url: %r(\Ahttp://www.example.com/api/requests/\d+\z)
+      }
     )
 
-    request_id = response.parsed_body.fetch(:request_id)
-
-    get "/api/requests/#{request_id}/status"
-
-    expect(response).to have_http_status(:ok)
-
-    expect(response.parsed_body.deep_symbolize_keys).to eq(
-      status: 'succeeded'
-    )
-
-    get "/api/requests/#{request_id}"
+    get response.parsed_body.dig(:request, :url)
 
     expect(response).to have_http_status(:ok)
 
@@ -78,12 +71,15 @@ RSpec.describe 'submit via user home path', type: :request do
         validity: true,
         answer:   42
       },
-      submission_id: an_instance_of(Integer)
+      submission: {
+        id: an_instance_of(Integer)
+      }
     )
 
-    submission_id = response.parsed_body.fetch(:submission_id)
+    submission_id  = response.parsed_body.dig(:submission, :id)
+    submission_dir = Pathname.new('path/to/repository/alice/submissions').join(submission_id.to_s)
 
-    expect(File).to be_exist("path/to/repository/alice/submissions/#{submission_id}/BioProject/mybioproject.xml")
-    expect(File).to be_exist("path/to/repository/alice/submissions/#{submission_id}/Submission/mysubmission.xml")
+    expect(submission_dir.join('BioProject/mybioproject.xml')).to be_exist
+    expect(submission_dir.join('Submission/mysubmission.xml')).to be_exist
   end
 end
