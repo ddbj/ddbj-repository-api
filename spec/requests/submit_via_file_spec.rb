@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'submit via upload', type: :request do
+RSpec.describe 'submit via file', type: :request do
   include FakeFS::SpecHelpers
 
   def uploaded_file(name:)
@@ -39,13 +39,16 @@ RSpec.describe 'submit via upload', type: :request do
         }
       }
     )
+
+    FileUtils.mkdir_p 'path/to/home/alice/foo'
+    FileUtils.touch   'path/to/home/alice/foo/mysubmission.xml'
   end
 
   example do
     perform_enqueued_jobs do
-      post '/api/bioproject/submit/via-upload', params: {
+      post '/api/bioproject/submit/via-file', params: {
         BioProject: uploaded_file(name: 'mybioproject.xml'),
-        Submission: uploaded_file(name: 'mysubmission.xml')
+        Submission: 'foo/mysubmission.xml'
       }
     end
 
