@@ -1,16 +1,9 @@
 class SubmitJob < ApplicationJob
-  def perform(request, paths)
-    paths.each do |obj_id, path|
-      FileUtils.cp path, request.dir.join(obj_id).tap(&:mkpath)
-    end
+  def perform(request)
+    DdbjValidator.validate request do
+      submission = request.dway_user.submissions.create!(request:)
 
-    ActiveRecord::Base.transaction do
-      submission = request.dway_user.submissions.create!
-
-      submission.dir.dirname.mkpath
-      FileUtils.mv request.dir, submission.dir
-
-      request.update! status: 'succeeded', submission:
+      FileUtils.mv request.dir, submission.dir.tap { _1.dirname.mkpath }
     end
   end
 end

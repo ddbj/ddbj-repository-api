@@ -1,6 +1,7 @@
 class Request < ApplicationRecord
   belongs_to :dway_user
-  belongs_to :submission, optional: true
+
+  has_one :submission
 
   enum :status, %i(processing succeeded failed)
 
