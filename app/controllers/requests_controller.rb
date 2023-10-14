@@ -1,15 +1,18 @@
 class RequestsController < ApplicationController
   def show
-    request    = dway_user.requests.find(params[:id])
-    submission = request.submission
+    request = dway_user.requests.find(params[:id])
 
     render json: {
       status: request.status,
       result: request.result,
 
-      submission: submission ? {
-        id: submission.public_id
-      } : nil
+      submission: request.submission.then {|submission|
+        if submission
+          {id: submission.public_id}
+        else
+          nil
+        end
+      }
     }
   end
 end
