@@ -8,19 +8,20 @@ class Init < ActiveRecord::Migration[7.1]
       t.index :uid, unique: true
     end
 
-    create_table :submissions do |t|
-      t.references :dway_user, foreign_key: true, null: false
+    create_table :requests do |t|
+      t.references :dway_user,  foreign_key: true, null: false
+
+      t.string  :db,     null: false
+      t.jsonb   :paths,  null: false
+      t.integer :status, null: false
+      t.jsonb   :result
 
       t.timestamps
     end
 
-    create_table :requests do |t|
-      t.references :dway_user,  foreign_key: true, null: false
-      t.references :submission, foreign_key: true
-
-      t.string :db, null: false
-      t.integer :status, null: false
-      t.jsonb :result
+    create_table :submissions do |t|
+      t.references :dway_user, foreign_key: true, null: false
+      t.references :request,   foreign_key: true, null: false
 
       t.timestamps
     end

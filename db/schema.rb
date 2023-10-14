@@ -23,24 +23,25 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_05_112509) do
 
   create_table "requests", force: :cascade do |t|
     t.bigint "dway_user_id", null: false
-    t.bigint "submission_id"
     t.string "db", null: false
+    t.jsonb "paths", null: false
     t.integer "status", null: false
     t.jsonb "result"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dway_user_id"], name: "index_requests_on_dway_user_id"
-    t.index ["submission_id"], name: "index_requests_on_submission_id"
   end
 
   create_table "submissions", force: :cascade do |t|
     t.bigint "dway_user_id", null: false
+    t.bigint "request_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dway_user_id"], name: "index_submissions_on_dway_user_id"
+    t.index ["request_id"], name: "index_submissions_on_request_id"
   end
 
   add_foreign_key "requests", "dway_users"
-  add_foreign_key "requests", "submissions"
   add_foreign_key "submissions", "dway_users"
+  add_foreign_key "submissions", "requests"
 end

@@ -1,10 +1,10 @@
-class SubmitViaFileController < ApplicationController
+class ValidateViaFileController < ApplicationController
   include ViaFile
 
   def create
     request = create_request_from_params
 
-    SubmitJob.perform_later request
+    ValidateJob.perform_later request
 
     render json: {
       request: {
