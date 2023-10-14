@@ -33,7 +33,7 @@ class DdbjValidator
 
     raise status if status == 'error'
 
-    poll_status uuid do |validated, result|
+    wait_for_finish uuid do |validated, result|
       request.dir.join('validation-report.json').write JSON.pretty_generate(result)
 
       if validated && result.fetch(:validity)
@@ -50,13 +50,13 @@ class DdbjValidator
 
   private
 
-  def poll_status(uuid, &done)
+  def wait_for_finish(uuid, &done)
     res = @client.get("validation/#{uuid}/status")
 
     case res.body.fetch(:status)
     when 'accepted', 'running'
       sleep 1 unless Rails.env.test?
-      poll_status uuid, &done
+      wait_for_finish uuid, &done
     when 'finished'
       result = @client.get("validation/#{uuid}")
 
