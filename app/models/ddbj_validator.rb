@@ -34,6 +34,8 @@ class DdbjValidator
     raise status if status == 'error'
 
     poll_status uuid do |validated, result|
+      request.dir.join('validation-report.json').write JSON.pretty_generate(result)
+
       if validated && result.fetch(:validity)
         ActiveRecord::Base.transaction do
           request.update! status: 'succeeded', result: result

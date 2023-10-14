@@ -9,7 +9,8 @@ RSpec.describe 'validate via file', type: :request do
     {'X-Dway-User-ID': 'alice'}
   }
 
-  let(:user_home_dir) { Pathname.new(ENV.fetch('USER_HOME_DIR')) }
+  let(:user_home_dir)  { Pathname.new(ENV.fetch('USER_HOME_DIR')) }
+  let(:repository_dir) { Pathname.new(ENV.fetch('REPOSITORY_DIR')) }
 
   before do
     stub_request(:post, 'validator.example.com/api/validation').to_return_json(
@@ -59,6 +60,13 @@ RSpec.describe 'validate via file', type: :request do
         url: %r(\Ahttp://www.example.com/api/requests/\d+\z)
       }
     )
+
+    request_id  = response.parsed_body.dig(:request, :id)
+    request_dir = repository_dir.join('alice/requests', request_id.to_s)
+
+    expect(request_dir.join('validation-report.json')).to be_exist
+    expect(request_dir.join('BioProject/mybioproject.xml')).to be_exist
+    expect(request_dir.join('Submission/mysubmission.xml')).to be_exist
 
     get response.parsed_body.dig(:request, :url)
 
