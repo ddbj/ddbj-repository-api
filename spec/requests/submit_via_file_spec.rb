@@ -72,12 +72,12 @@ RSpec.describe 'submit via file', type: :request do
         answer:   42
       },
       submission: {
-        id: an_instance_of(Integer)
+        id: /\AX-\d+\z/
       }
     )
 
     submission_id  = response.parsed_body.dig(:submission, :id)
-    submission_dir = repository_dir.join('alice/submissions', submission_id.to_s)
+    submission_dir = repository_dir.join('alice/submissions', submission_id)
 
     expect(submission_dir.join('BioProject/mybioproject.xml')).to be_exist
     expect(submission_dir.join('Submission/mysubmission.xml')).to be_exist

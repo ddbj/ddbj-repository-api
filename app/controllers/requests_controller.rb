@@ -8,7 +8,7 @@ class RequestsController < ApplicationController
       result: request.result,
 
       submission: submission ? {
-        id: submission.id
+        id: submission.public_id
       } : nil
     }
   end
