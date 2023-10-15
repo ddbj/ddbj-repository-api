@@ -14,14 +14,6 @@ class DdbjValidator
   end
 
   def validate(request, &on_success)
-    request.objs.each do |obj|
-      obj.file.open do |file|
-        dest = request.dir.join(obj.key).tap(&:mkpath).join(obj.file.filename.sanitized)
-
-        FileUtils.mv file.path, dest
-      end
-    end
-
     db  = DB.find { _1[:id] == request.db }
     res = nil
 
@@ -49,8 +41,6 @@ class DdbjValidator
     raise status if status == 'error'
 
     wait_for_finish uuid do |validated, result|
-      request.dir.join('validation-report.json').write JSON.pretty_generate(result)
-
       if validated && result.fetch(:validity)
         ActiveRecord::Base.transaction do
           request.update! status: 'succeeded', result: result

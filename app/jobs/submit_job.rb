@@ -3,7 +3,7 @@ class SubmitJob < ApplicationJob
     DdbjValidator.validate request do
       submission = request.dway_user.submissions.create!(request:)
 
-      FileUtils.mv request.dir, submission.dir.tap { _1.dirname.mkpath }
+      request.write_files to: submission.dir
     end
   end
 end
