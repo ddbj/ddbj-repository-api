@@ -8,7 +8,7 @@ class DdbjValidator
   def initialize
     @client = Faraday.new(url: ENV.fetch('VALIDATOR_URL')) {|f|
       f.request :multipart
-      f.response :raise_error
+      f.response :logger
       f.response :json, parser_options: {symbolize_names: true}
     }
   end
@@ -41,10 +41,8 @@ class DdbjValidator
     in {uuid:}
       validated, result = wait_for_finish(uuid)
 
-      status = if validated && result.fetch(:validity)
-                 'valid'
-               elsif validated
-                 'invalid'
+      status = if validated
+                 result.fetch(:validity) ? 'valid' : 'invalid'
                else
                  'error'
                end
@@ -65,14 +63,16 @@ class DdbjValidator
       sleep 1 unless Rails.env.test?
 
       wait_for_finish(uuid)
-    in {status: 'finished'}
-      result = @client.get("validation/#{uuid}")
+    in {status: 'finished', uuid:}
+      detail = @client.get("validation/#{uuid}")
 
-      [true, result.body.fetch(:result)]
-    in {status: 'error', message:}
-      [false, error: message]
+      [true, detail.body.fetch(:result)]
+    in {status: 'error', uuid:}
+      detail = @client.get("validation/#{uuid}")
+
+      [false, error: detail.body.fetch(:message)]
     else
-      raise 'must not happen'
+      raise "must not happen: #{res.body.to_json}"
     end
   end
 end
