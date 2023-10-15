@@ -3,6 +3,10 @@ class Submission < ApplicationRecord
 
   has_one :request
 
+  after_destroy do |submission|
+    submission.dir.rmtree
+  end
+
   def public_id
     id ? "X-#{id}" : nil
   end
