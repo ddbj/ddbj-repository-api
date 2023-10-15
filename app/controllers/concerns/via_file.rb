@@ -15,7 +15,7 @@ module ViaFile
     ActiveRecord::Base.transaction {
       db        = DB.find { _1[:id].downcase == params.require(:db) }
       request   = dway_user.requests.create!(db: db[:id], status: 'processing')
-      user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).expand_path
+      user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).cleanpath
 
       db[:objects].each do |obj|
         key = obj[:id]
@@ -25,7 +25,7 @@ module ViaFile
         in ActionDispatch::Http::UploadedFile => file
           request.objs.create! key: key, file: file
         in %r(\A~/.) => relative_path
-          path = user_home.join(relative_path.delete_prefix('~/')).expand_path
+          path = user_home.join(relative_path.delete_prefix('~/')).cleanpath
 
           raise Error, "path must be in #{user_home}" unless path.to_s.start_with?(user_home.to_s)
 
