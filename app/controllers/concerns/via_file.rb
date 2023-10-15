@@ -24,14 +24,14 @@ module ViaFile
         case params.require(key)
         in ActionDispatch::Http::UploadedFile => file
           request.objs.create! key: key, file: file
-        in %r(\A~/.) => path
-          abs = user_home.join(path.delete_prefix('~/')).expand_path
+        in %r(\A~/.) => relative_path
+          path = user_home.join(relative_path.delete_prefix('~/')).expand_path
 
-          raise Error, "path must be in #{user_home}" unless abs.to_s.start_with?(user_home.to_s)
+          raise Error, "path must be in #{user_home}" unless path.to_s.start_with?(user_home.to_s)
 
           request.objs.create! key: key, file: {
-            io:       abs.open,
-            filename: abs.basename
+            io:       path.open,
+            filename: path.basename
           }
         in unknown
           raise Error, "unexpected parameter format in #{key}: #{unknown.inspect}"
