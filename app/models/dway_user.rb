@@ -1,4 +1,4 @@
 class DwayUser < ApplicationRecord
-  has_many :requests,    dependent: :destroy
-  has_many :submissions, dependent: :destroy
+  has_many :requests,    dependent: :nullify
+  has_many :submissions, dependent: :nullify
 end

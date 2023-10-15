@@ -1,6 +1,7 @@
 class Submission < ApplicationRecord
-  belongs_to :dway_user
-  belongs_to :request
+  belongs_to :dway_user, optional: true
+
+  has_one :request
 
   def public_id
     id ? "X-#{id}" : nil
