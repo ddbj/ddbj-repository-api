@@ -77,7 +77,7 @@ RSpec.describe 'validate via file', type: :request do
     expect(response).to have_http_status(:ok)
 
     expect(response.parsed_body.deep_symbolize_keys).to eq(
-      status: 'succeeded',
+      status: 'valid',
       result: {
         validity: true,
         answer:   42

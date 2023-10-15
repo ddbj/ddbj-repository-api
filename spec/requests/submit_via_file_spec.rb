@@ -66,7 +66,7 @@ RSpec.describe 'submit via file', type: :request do
     expect(response).to have_http_status(:ok)
 
     expect(response.parsed_body.deep_symbolize_keys).to match(
-      status: 'succeeded',
+      status: 'submitted',
       result: {
         validity: true,
         answer:   42

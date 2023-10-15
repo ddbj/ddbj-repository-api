@@ -35,34 +35,42 @@ class DdbjValidator
       }.to_h)
     }
 
-    status, uuid = res.body.fetch_values(:status, :uuid)
+    case res.body
+    in {status: 'error', message:}
+      request.update! status: 'error', result: {error: message}
+    in {uuid:}
+      validated, result = wait_for_finish(uuid)
 
-    raise status if status == 'error'
+      status = if validated && result.fetch(:validity)
+                 'valid'
+               elsif validated
+                 'invalid'
+               else
+                 'error'
+               end
 
-    wait_for_finish uuid do |validated, result|
-      if validated && result.fetch(:validity)
-        request.update! status: 'succeeded', result: result
-      else
-        request.update! status: 'failed', result: result
-      end
+      request.update! status: status, result: result
+    else
+      raise 'must not happen'
     end
   end
 
   private
 
-  def wait_for_finish(uuid, &done)
+  def wait_for_finish(uuid)
     res = @client.get("validation/#{uuid}/status")
 
-    case res.body.fetch(:status)
-    when 'accepted', 'running'
+    case res.body
+    in {status: 'accepted' | 'running'}
       sleep 1 unless Rails.env.test?
-      wait_for_finish uuid, &done
-    when 'finished'
+
+      wait_for_finish(uuid)
+    in {status: 'finished'}
       result = @client.get("validation/#{uuid}")
 
-      done.call true, result.body.fetch(:result)
-    when 'error'
-      done.call false, error: result.body.fetch(:message)
+      [true, result.body.fetch(:result)]
+    in {status: 'error', message:}
+      [false, error: message]
     else
       raise 'must not happen'
     end

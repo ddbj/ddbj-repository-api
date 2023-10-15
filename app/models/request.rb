@@ -4,7 +4,8 @@ class Request < ApplicationRecord
 
   has_many :objs, dependent: :destroy
 
-  enum :status, %i(processing succeeded failed)
+  validates :db,     inclusion: {in: DB.map { _1[:id] }}
+  validates :status, inclusion: {in: %w(processing valid invalid error submitted)}
 
   after_destroy do |request|
     request.dir.rmtree

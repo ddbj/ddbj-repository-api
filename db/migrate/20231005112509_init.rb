@@ -18,9 +18,9 @@ class Init < ActiveRecord::Migration[7.1]
       t.references :dway_user,  foreign_key: true
       t.references :submission, foreign_key: true
 
-      t.string  :db,     null: false
-      t.integer :status, null: false
-      t.jsonb   :result
+      t.string :db,     null: false
+      t.string :status, null: false
+      t.jsonb  :result
 
       t.timestamps
     end
