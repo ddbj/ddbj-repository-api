@@ -13,7 +13,7 @@ class DdbjValidator
     }
   end
 
-  def validate(request, &on_success)
+  def validate(request)
     db = DB.find { _1[:id] == request.db }
 
     res = Dir.mktmpdir {|tmpdir|
@@ -41,11 +41,7 @@ class DdbjValidator
 
     wait_for_finish uuid do |validated, result|
       if validated && result.fetch(:validity)
-        ActiveRecord::Base.transaction do
-          request.update! status: 'succeeded', result: result
-
-          on_success&.call
-        end
+        request.update! status: 'succeeded', result: result
       else
         request.update! status: 'failed', result: result
       end
