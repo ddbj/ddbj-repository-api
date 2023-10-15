@@ -19,11 +19,16 @@ class Init < ActiveRecord::Migration[7.1]
       t.references :submission, foreign_key: true
 
       t.string  :db,     null: false
-      t.jsonb   :paths,  null: false
       t.integer :status, null: false
       t.jsonb   :result
 
       t.timestamps
+    end
+
+    create_table :objs do |t|
+      t.references :request, foreign_key: true, null: false
+
+      t.string :key, null: false
     end
   end
 end

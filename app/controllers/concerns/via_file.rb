@@ -12,30 +12,33 @@ module ViaFile
   end
 
   def create_request_from_params
-    db        = DB.find { _1[:id].downcase == params.require(:db) }
-    tmpdir    = Pathname.new(Dir.mktmpdir)
-    user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).expand_path
+    ActiveRecord::Base.transaction {
+      db        = DB.find { _1[:id].downcase == params.require(:db) }
+      request   = dway_user.requests.create!(db: db[:id], status: 'processing')
+      user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).expand_path
 
-    paths = db[:objects].map {|obj|
-      # TODO cardinality
-      case params.require(obj[:id])
-      in ActionDispatch::Http::UploadedFile => file
-        dest = tmpdir.join(file.original_filename)
+      db[:objects].each do |obj|
+        key = obj[:id]
 
-        FileUtils.mv file.path, dest
+        # TODO cardinality
+        case params.require(key)
+        in ActionDispatch::Http::UploadedFile => file
+          request.objs.create! key: key, file: file
+        in %r(\A~/.) => path
+          abs = user_home.join(path.delete_prefix('~/')).expand_path
 
-        [obj[:id], dest.to_s]
-      in %r(\A~/.) => path
-        abs = user_home.join(path.delete_prefix('~/'))
+          raise Error, "path must be in #{user_home}" unless abs.to_s.start_with?(user_home.to_s)
 
-        raise Error, "path must be in #{user_home}" unless abs.expand_path.to_s.start_with?(user_home.to_s)
-
-        [obj[:id], abs.to_s]
-      in unknown
-        raise Error, "unexpected parameter format in #{obj[:id]}: #{unknown.inspect}"
+          request.objs.create! key: key, file: {
+            io:       abs.open,
+            filename: abs.basename
+          }
+        in unknown
+          raise Error, "unexpected parameter format in #{key}: #{unknown.inspect}"
+        end
       end
-    }.to_h
 
-    dway_user.requests.create!(db: db[:id], paths:, status: 'processing')
+      request
+    }
   end
 end

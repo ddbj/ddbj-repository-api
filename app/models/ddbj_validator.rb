@@ -14,20 +14,35 @@ class DdbjValidator
   end
 
   def validate(request, &on_success)
-    request.paths.each do |obj_id, path|
-      FileUtils.cp path, request.dir.join(obj_id).tap(&:mkpath)
+    request.objs.each do |obj|
+      obj.file.open do |file|
+        dest = request.dir.join(obj.key).tap(&:mkpath).join(obj.file.filename.sanitized)
+
+        FileUtils.mv file.path, dest
+      end
     end
 
-    db = DB.find { _1[:id] == request.db }
+    db  = DB.find { _1[:id] == request.db }
+    res = nil
 
-    res = @client.post('validation', db[:objects].filter_map {|obj|
-      next nil unless param = obj[:validator_param]
+    Dir.mktmpdir do |tmpdir|
+      tmpdir = Pathname.new(tmpdir)
 
-      path = request.paths.fetch(obj[:id])
-      part = Faraday::Multipart::FilePart.new(path, 'application/octet-stream')
+      res = @client.post('validation', db[:objects].filter_map {|obj|
+        next false unless param = obj[:validator_param]
 
-      [param, part]
-    }.to_h)
+        obj = request.objs.find { _1.key == obj[:id] }
+        path  = tmpdir.join(obj.file.filename.sanitized)
+
+        obj.file.open do |file|
+          FileUtils.mv file.path, path
+        end
+
+        part = Faraday::Multipart::FilePart.new(path.to_s, 'application/octet-stream')
+
+        [param, part]
+      }.to_h)
+    end
 
     status, uuid = res.body.fetch_values(:status, :uuid)
 

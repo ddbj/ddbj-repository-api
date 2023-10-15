@@ -2,6 +2,8 @@ class Request < ApplicationRecord
   belongs_to :dway_user,  optional: true
   belongs_to :submission, optional: true
 
+  has_many :objs, dependent: :destroy
+
   enum :status, %i(processing succeeded failed)
 
   def dir
