@@ -14,17 +14,16 @@ class DdbjValidator
   end
 
   def validate(request, &on_success)
-    db  = DB.find { _1[:id] == request.db }
-    res = nil
+    db = DB.find { _1[:id] == request.db }
 
-    Dir.mktmpdir do |tmpdir|
+    res = Dir.mktmpdir {|tmpdir|
       tmpdir = Pathname.new(tmpdir)
 
-      res = @client.post('validation', db[:objects].filter_map {|obj|
+      @client.post('validation', db[:objects].filter_map {|obj|
         next false unless param = obj[:validator_param]
 
-        obj = request.objs.find { _1.key == obj[:id] }
-        path  = tmpdir.join(obj.file.filename.sanitized)
+        obj  = request.objs.find { _1.key == obj[:id] }
+        path = tmpdir.join(obj.file.filename.sanitized)
 
         obj.file.open do |file|
           FileUtils.mv file.path, path
@@ -34,7 +33,7 @@ class DdbjValidator
 
         [param, part]
       }.to_h)
-    end
+    }
 
     status, uuid = res.body.fetch_values(:status, :uuid)
 
