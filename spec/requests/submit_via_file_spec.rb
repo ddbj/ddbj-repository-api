@@ -79,9 +79,13 @@ RSpec.describe 'submit via file', type: :request do
     submission_id  = response.parsed_body.dig(:submission, :id)
     submission_dir = repository_dir.join('alice/submissions', submission_id)
 
-    expect(submission_dir.join('validation-report.json')).to be_exist
-    expect(submission_dir.join('BioProject/mybioproject.xml')).to be_exist
-    expect(submission_dir.join('Submission/mysubmission.xml')).to be_exist
+    expect(Dir.glob('**/*', base: submission_dir)).to match_array(%w(
+      validation-report.json
+      BioProject
+      BioProject/mybioproject.xml
+      Submission
+      Submission/mysubmission.xml
+    ))
   end
 
   example do
