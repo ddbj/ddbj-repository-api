@@ -39,22 +39,19 @@ class DdbjValidator
       }.to_h)
     }
 
-    case res.body
-    in {status: 'error', message:}
-      request.update! status: 'error', result: {error: message}
-    in {uuid:}
-      validated, result = wait_for_finish(uuid)
+    validated, result = wait_for_finish(res.body.fetch(:uuid))
 
-      status = if validated
-                 result.fetch(:validity) ? 'valid' : 'invalid'
-               else
-                 'error'
-               end
+    status = if validated
+               result.fetch(:validity) ? 'valid' : 'invalid'
+             else
+               'error'
+             end
 
-      request.update! status: status, result: result
-    else
-      raise 'must not happen'
-    end
+    request.update! status: status, result: result
+  rescue => e
+    request.update! status: 'error', result: {error: e.message}
+
+    Rails.logger.error e
   end
 
   private
