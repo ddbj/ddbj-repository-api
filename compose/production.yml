@@ -5,7 +5,10 @@ services:
     volumes:
       - type: bind
         source: ~/repository-$STAGE
-        target: /repository
+        target: /mnt/repository
+      - type: bind
+        source: /home
+        target: /mnt/home
 
   sidekiq:
     <<: *rails
