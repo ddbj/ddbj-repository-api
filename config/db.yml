@@ -1,35 +1,27 @@
 - id: BioProject
   objects:
     - id: BioProject
-      validator_param: bioproject
     - id: Submission
-      validator_param: submission
 
 - id: BioSample
   objects:
     - id: BioSample
-      validator_param: biosample
+      validator: ddbj_validator
+      param_name: biosample
     - id: Submission
-      validator_param: submission
 
 - id: Trad
   objects:
     - id: Sequence
-      validator_param: trad_seq
     - id: Annotation
-      validator_param: trad_anno
 
 - id: DRA
   objects:
     - id: Submission
-      validator_param: submission
     - id: Experiment
-      validator_param: experiment
     - id: Run
-      validator_param: run
     - id: RunFile
     - id: Analysis
-      validator_param: analysis
     - id: AnalysisFile
 
 - id: GEA
@@ -43,9 +35,7 @@
 - id: MetaboBank
   objects:
     - id: IDF
-      validator_param: metabobank_idf
     - id: SDRF
-      validator_param: metabobank_sdrf
     - id: MAF
     - id: RawDataFile
     - id: ProcessedDataFile

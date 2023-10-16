@@ -46,8 +46,8 @@ RSpec.describe 'validate via file', type: :request do
 
   example do
     perform_enqueued_jobs do
-      post '/api/bioproject/validate/via-file', params: {
-        BioProject: uploaded_file(name: 'mybioproject.xml'),
+      post '/api/biosample/validate/via-file', params: {
+        BioSample:  uploaded_file(name: 'mybiosample.xml'),
         Submission: '~/foo/mysubmission.xml'
       }
     end
@@ -73,11 +73,15 @@ RSpec.describe 'validate via file', type: :request do
       },
       submission: nil
     )
+
+    expect(a_request(:post, 'validator.example.com/api/validation')).to have_been_made.times(1)
+    expect(a_request(:get, 'validator.example.com/api/validation/deadbeef/status')).to have_been_made.times(3)
+    expect(a_request(:get, 'validator.example.com/api/validation/deadbeef')).to have_been_made.times(1)
   end
 
   example do
-    post '/api/bioproject/validate/via-file', params: {
-      BioProject: uploaded_file(name: 'mybioproject.xml'),
+    post '/api/biosample/validate/via-file', params: {
+      BioSample:  uploaded_file(name: 'mybiosample.xml'),
       Submission: 'foo/mysubmission.xml'
     }
 
@@ -89,8 +93,8 @@ RSpec.describe 'validate via file', type: :request do
   end
 
   example do
-    post '/api/bioproject/validate/via-file', params: {
-      BioProject: uploaded_file(name: 'mybioproject.xml'),
+    post '/api/biosample/validate/via-file', params: {
+      BioSample:  uploaded_file(name: 'mybiosample.xml'),
       Submission: '~/../foo/mysubmission.xml'
     }
 

@@ -14,14 +14,18 @@ class DdbjValidator
   end
 
   def validate(request)
-    db = DB.find { _1[:id] == request.db }
+    db   = DB.find { _1[:id] == request.db }
+    objs = db[:objects].select { _1[:validator] == 'ddbj_validator' }
+
+    if objs.empty?
+      request.update! status: 'valid'
+      return
+    end
 
     res = Dir.mktmpdir {|tmpdir|
       tmpdir = Pathname.new(tmpdir)
 
-      @client.post('validation', db[:objects].filter_map {|obj|
-        next false unless param = obj[:validator_param]
-
+      @client.post('validation', objs.map {|obj|
         obj  = request.objs.find { _1.key == obj[:id] }
         path = tmpdir.join(obj.file.filename.sanitized)
 
@@ -31,7 +35,7 @@ class DdbjValidator
 
         part = Faraday::Multipart::FilePart.new(path.to_s, 'application/octet-stream')
 
-        [param, part]
+        [obj[:param_name], part]
       }.to_h)
     }
 
