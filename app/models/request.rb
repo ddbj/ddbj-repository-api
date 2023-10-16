@@ -7,14 +7,6 @@ class Request < ApplicationRecord
   validates :db,     inclusion: {in: DB.map { _1[:id] }}
   validates :status, inclusion: {in: %w(processing valid invalid error submitted)}
 
-  after_destroy do |request|
-    request.dir.rmtree
-  end
-
-  def dir
-    Pathname.new(ENV.fetch('REPOSITORY_DIR')).join(dway_user.uid, 'requests', id.to_s)
-  end
-
   def write_files(to:)
     to.tap(&:mkpath).join('validation-report.json').write JSON.pretty_generate(result)
 

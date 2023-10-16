@@ -61,17 +61,6 @@ RSpec.describe 'validate via file', type: :request do
       }
     )
 
-    request_id  = response.parsed_body.dig(:request, :id)
-    request_dir = repository_dir.join('alice/requests', request_id.to_s)
-
-    expect(Dir.glob('**/*', base: request_dir)).to match_array(%w(
-      validation-report.json
-      BioProject
-      BioProject/mybioproject.xml
-      Submission
-      Submission/mysubmission.xml
-    ))
-
     get response.parsed_body.dig(:request, :url)
 
     expect(response).to have_http_status(:ok)
