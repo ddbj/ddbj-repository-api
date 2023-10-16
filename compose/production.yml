@@ -4,6 +4,9 @@ services:
       - '60000' # submitter
     volumes:
       - type: bind
+        source: ~/ddbj-repository/data/$STAGE/storage
+        target: /rails/storage
+      - type: bind
         source: ~/repository-$STAGE
         target: /mnt/repository
       - type: bind
