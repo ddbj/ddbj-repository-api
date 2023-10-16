@@ -7,6 +7,7 @@ gem 'rails', '~> 7.1.0'
 gem 'bootsnap', require: false
 gem 'faraday'
 gem 'faraday-multipart'
+gem 'parallel'
 gem 'pg'
 gem 'puma'
 gem 'sidekiq'

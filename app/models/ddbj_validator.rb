@@ -17,17 +17,12 @@ class DdbjValidator
     db   = DB.find { _1[:id] == request.db }
     objs = db[:objects].select { _1[:validator] == 'ddbj_validator' }
 
-    if objs.empty?
-      request.update! status: 'valid'
-      return
-    end
+    Parallel.each objs, in_threads: 4 do |obj|
+      obj = request.objs.find { _1.key == obj[:id] }
 
-    res = Dir.mktmpdir {|tmpdir|
-      tmpdir = Pathname.new(tmpdir)
-
-      @client.post('validation', objs.map {|obj|
-        obj  = request.objs.find { _1.key == obj[:id] }
-        path = tmpdir.join(obj.file.filename.sanitized)
+      res = Dir.mktmpdir {|tmpdir|
+        tmpdir = Pathname.new(tmpdir)
+        path   = tmpdir.join(obj.file.filename.sanitized)
 
         obj.file.open do |file|
           FileUtils.mv file.path, path
@@ -35,23 +30,23 @@ class DdbjValidator
 
         part = Faraday::Multipart::FilePart.new(path.to_s, 'application/octet-stream')
 
-        [obj[:param_name], part]
-      }.to_h)
-    }
+        @client.post('validation', obj[:param_name] => part)
+      }
 
-    validated, result = wait_for_finish(res.body.fetch(:uuid))
+      validated, details = wait_for_finish(res.body.fetch(:uuid))
 
-    status = if validated
-               result.fetch(:validity) ? 'valid' : 'invalid'
-             else
-               'error'
-             end
+      validity = if validated
+                 details.fetch(:validity) ? 'valid' : 'invalid'
+               else
+                 'error'
+               end
 
-    request.update! status: status, result: result
-  rescue => e
-    request.update! status: 'error', result: {error: e.message}
+      obj.update! validity: validity, validation_details: details
+    rescue => e
+      obj.update! validity: 'error', validation_details: {error: e.message}
 
-    Rails.logger.error e
+      Rails.logger.error e
+    end
   end
 
   private

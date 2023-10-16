@@ -66,11 +66,25 @@ RSpec.describe 'submit via file', type: :request do
     expect(response).to have_http_status(:ok)
 
     expect(response.parsed_body.deep_symbolize_keys).to match(
-      status: 'submitted',
-      result: {
-        validity: true,
-        answer:   42
+      status: 'finished',
+      validity: 'valid',
+
+      validation_report: {
+        BioSample: {
+          validity: 'valid',
+
+          details: {
+            validity: true,
+            answer:   42
+          }
+        },
+
+        Submission: {
+          validity: nil,
+          details:  nil
+        }
       },
+
       submission: {
         id: /\AX-\d+\z/
       }
@@ -84,11 +98,13 @@ RSpec.describe 'submit via file', type: :request do
     submission_dir = repository_dir.join('alice/submissions', submission_id)
 
     expect(Dir.glob('**/*', base: submission_dir)).to match_array(%w(
-      validation-report.json
       BioSample
       BioSample/mybiosample.xml
+      BioSample/validation-report.json
       Submission
       Submission/mysubmission.xml
+      Submission/validation-report.json
+      validation-report.json
     ))
   end
 

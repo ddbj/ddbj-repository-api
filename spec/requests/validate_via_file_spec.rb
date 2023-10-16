@@ -66,11 +66,25 @@ RSpec.describe 'validate via file', type: :request do
     expect(response).to have_http_status(:ok)
 
     expect(response.parsed_body.deep_symbolize_keys).to eq(
-      status: 'valid',
-      result: {
-        validity: true,
-        answer:   42
+      status: 'finished',
+      validity: 'valid',
+
+      validation_report: {
+        BioSample: {
+          validity: 'valid',
+
+          details: {
+            validity: true,
+            answer:   42
+          }
+        },
+
+        Submission: {
+          validity: nil,
+          details:  nil
+        }
       },
+
       submission: nil
     )
 

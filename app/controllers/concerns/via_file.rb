@@ -14,7 +14,7 @@ module ViaFile
   def create_request_from_params
     ActiveRecord::Base.transaction {
       db        = DB.find { _1[:id].downcase == params.require(:db) }
-      request   = dway_user.requests.create!(db: db[:id], status: 'processing')
+      request   = dway_user.requests.create!(db: db[:id], status: 'waiting')
       user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).cleanpath
 
       db[:objects].each do |obj|

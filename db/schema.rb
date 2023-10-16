@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_05_112509) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_16_122957) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_05_112509) do
   create_table "objs", force: :cascade do |t|
     t.bigint "request_id", null: false
     t.string "key", null: false
+    t.string "validity"
+    t.jsonb "validation_details"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["request_id"], name: "index_objs_on_request_id"
   end
 
@@ -60,7 +64,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_05_112509) do
     t.bigint "submission_id"
     t.string "db", null: false
     t.string "status", null: false
-    t.jsonb "result"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dway_user_id"], name: "index_requests_on_dway_user_id"
