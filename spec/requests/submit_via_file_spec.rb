@@ -69,7 +69,7 @@ RSpec.describe 'submit via file', type: :request do
       status: 'finished',
       validity: 'valid',
 
-      validation_report: {
+      validation_reports: {
         BioSample: {
           validity: 'valid',
 

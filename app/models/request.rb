@@ -19,12 +19,12 @@ class Request < ApplicationRecord
     end
   end
 
-  def validation_report
+  def validation_reports
     objs.map { [_1.key, _1.validation_report] }.to_h
   end
 
   def write_files(to:)
-    to.tap(&:mkpath).join('validation-report.json').write JSON.pretty_generate(validation_report)
+    to.tap(&:mkpath).join('validation-report.json').write JSON.pretty_generate(validation_reports)
 
     objs.each do |obj|
       obj.file.open do |file|

@@ -3,9 +3,9 @@ class RequestsController < ApplicationController
     request = dway_user.requests.find(params[:id])
 
     render json: {
-      status:            request.status,
-      validity:          request.validity,
-      validation_report: request.validation_report,
+      status:             request.status,
+      validity:           request.validity,
+      validation_reports: request.validation_reports,
 
       submission: request.submission.then {|submission|
         if submission

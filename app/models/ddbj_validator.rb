@@ -8,8 +8,9 @@ class DdbjValidator
   def initialize
     @client = Faraday.new(url: ENV.fetch('VALIDATOR_URL')) {|f|
       f.request :multipart
-      f.response :logger unless Rails.env.test?
+
       f.response :json, parser_options: {symbolize_names: true}
+      f.response :logger unless Rails.env.test?
     }
   end
 
