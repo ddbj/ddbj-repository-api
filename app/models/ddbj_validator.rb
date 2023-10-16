@@ -1,11 +1,8 @@
 class DdbjValidator
-  include Singleton
+  def initialize(obj, meta)
+    @obj  = obj
+    @meta = meta
 
-  class << self
-    delegate :validate, to: :instance
-  end
-
-  def initialize
     @client = Faraday.new(url: ENV.fetch('VALIDATOR_URL')) {|f|
       f.request :multipart
 
@@ -14,40 +11,33 @@ class DdbjValidator
     }
   end
 
-  def validate(request)
-    db   = DB.find { _1[:id] == request.db }
-    objs = db[:objects].select { _1[:validator] == 'ddbj_validator' }
+  def validate
+    res = Dir.mktmpdir {|tmpdir|
+      tmpdir = Pathname.new(tmpdir)
+      path   = tmpdir.join(@obj.file.filename.sanitized)
 
-    Parallel.each objs, in_threads: 4 do |obj|
-      obj = request.objs.find { _1.key == obj[:id] }
+      @obj.file.open do |file|
+        FileUtils.mv file.path, path
+      end
 
-      res = Dir.mktmpdir {|tmpdir|
-        tmpdir = Pathname.new(tmpdir)
-        path   = tmpdir.join(obj.file.filename.sanitized)
+      part = Faraday::Multipart::FilePart.new(path.to_s, 'application/octet-stream')
 
-        obj.file.open do |file|
-          FileUtils.mv file.path, path
-        end
+      @client.post('validation', @meta[:param_name] => part)
+    }
 
-        part = Faraday::Multipart::FilePart.new(path.to_s, 'application/octet-stream')
+    validated, details = wait_for_finish(res.body.fetch(:uuid))
 
-        @client.post('validation', obj[:param_name] => part)
-      }
+    validity = if validated
+               details.fetch(:validity) ? 'valid' : 'invalid'
+             else
+               'error'
+             end
 
-      validated, details = wait_for_finish(res.body.fetch(:uuid))
+    @obj.update! validity: validity, validation_details: details
+  rescue => e
+    @obj.update! validity: 'error', validation_details: {error: e.message}
 
-      validity = if validated
-                 details.fetch(:validity) ? 'valid' : 'invalid'
-               else
-                 'error'
-               end
-
-      obj.update! validity: validity, validation_details: details
-    rescue => e
-      obj.update! validity: 'error', validation_details: {error: e.message}
-
-      Rails.logger.error e
-    end
+    Rails.logger.error e
   end
 
   private

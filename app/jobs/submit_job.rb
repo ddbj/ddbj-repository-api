@@ -1,15 +1,11 @@
 class SubmitJob < ApplicationJob
   def perform(request)
-    request.update! status: 'processing'
+    Validators.new(request).validate do
+      next unless request.validity == 'valid'
 
-    DdbjValidator.validate request
+      submission = request.dway_user.submissions.create!(request:)
 
-    return unless request.validity == 'valid'
-
-    submission = request.dway_user.submissions.create!(request:)
-
-    request.write_files to: submission.dir
-  ensure
-    request.update! status: 'finished'
+      request.write_files to: submission.dir
+    end
   end
 end

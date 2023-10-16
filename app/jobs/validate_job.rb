@@ -1,9 +1,5 @@
 class ValidateJob < ApplicationJob
   def perform(request)
-    request.update! status: 'processing'
-
-    DdbjValidator.validate request
-  ensure
-    request.update! status: 'finished'
+    Validators.new(request).validate
   end
 end
