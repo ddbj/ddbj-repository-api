@@ -1,0 +1,185 @@
+---
+openapi: 3.0.3
+info:
+  title: ddbj-repository-api
+  version: 1.0.0
+servers:
+  - url: https://repository.ddbj.nig.ac.jp/api
+  - url: https://repository-staging.ddbj.nig.ac.jp/api
+  - url: https://repository-dev.ddbj.nig.ac.jp/api
+paths:
+  "/biosample/validate/via-file":
+    post:
+      tags:
+        - Validate
+      requestBody:
+        $ref: "#/components/requestBodies/BioSampleViaFileRequestBody"
+      responses:
+        '201':
+          $ref: "#/components/responses/BioSampleViaFileCreatedResponse"
+        '400':
+          $ref: "#/components/responses/BioSampleViaFileBadRequestResponse"
+  "/biosample/submit/via-file":
+    post:
+      tags:
+        - Submit
+      requestBody:
+        $ref: "#/components/requestBodies/BioSampleViaFileRequestBody"
+      responses:
+        '201':
+          $ref: "#/components/responses/BioSampleViaFileCreatedResponse"
+        '400':
+          $ref: "#/components/responses/BioSampleViaFileBadRequestResponse"
+  "/requests/{id}":
+    get:
+      tags:
+        - Request
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        example: 42
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - waiting
+                      - processing
+                      - finished
+                  validity:
+                    type: string
+                    nullable: true
+                    enum:
+                      - valid
+                      - invalid
+                      - error
+                  validation_reports:
+                    type: object
+                    properties:
+                      BioSample:
+                        $ref: "#/components/schemas/ValidationReport"
+                      Submission:
+                        $ref: "#/components/schemas/ValidationReport"
+                    required:
+                    - BioSample
+                    - Submission
+                  submission:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                    required:
+                    - id
+                    nullable: true
+                required:
+                - status
+                - validity
+                - validation_reports
+                - submission
+              example:
+                status: finished
+                validity: valid
+                validation_reports:
+                  BioSample:
+                    validity: valid
+                    details:
+                      validity: true
+                      answer: 42
+                  Submission:
+                    validity:
+                    details:
+                submission:
+components:
+  schemas:
+    ValidationReport:
+      type: object
+      properties:
+        validity:
+          type: string
+          nullable: true
+          enum:
+            - valid
+            - invalid
+            - error
+        details:
+          type: object
+          nullable: true
+      required:
+      - validity
+      - details
+  requestBodies:
+    BioSampleViaFileRequestBody:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              BioSample:
+                type: string
+                format: binary
+              Submission:
+                type: string
+                format: binary
+            required:
+            - BioSample
+            - Submission
+        application/json:
+          schema:
+            type: object
+            properties:
+              BioSample:
+                type: string
+              Submission:
+                type: string
+            required:
+            - BioSample
+            - Submission
+          example:
+            BioSample: "~/mybiosample.xml"
+            Submission: "~/mysubmission.xml"
+  responses: 
+    BioSampleViaFileCreatedResponse:
+      description: The requested process initiated successfully.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              request:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  url:
+                    type: string
+                required:
+                - id
+                - url
+            required:
+            - request
+          example:
+            request:
+              id: 42
+              url: http://www.example.com/api/requests/42
+    BioSampleViaFileBadRequestResponse:
+        description: The requested process could not be initiated.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+              required:
+              - error
+            example:
+              error: path must be in /home/alice
