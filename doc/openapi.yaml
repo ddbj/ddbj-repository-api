@@ -16,14 +16,14 @@ paths:
         - Validate
 
       requestBody:
-        $ref: '#/components/requestBodies/BioSampleViaFileRequestBody'
+        $ref: '#/components/requestBodies/BioSampleViaFile'
 
       responses:
         '201':
-          $ref: '#/components/responses/BioSampleViaFileCreatedResponse'
+          $ref: '#/components/responses/CreateResponseCreated'
 
         '400':
-          $ref: '#/components/responses/BioSampleViaFileBadRequestResponse'
+          $ref: '#/components/responses/CreateResponseBadRequest'
 
   /biosample/submit/via-file:
     post:
@@ -31,14 +31,14 @@ paths:
         - Submit
 
       requestBody:
-        $ref: '#/components/requestBodies/BioSampleViaFileRequestBody'
+        $ref: '#/components/requestBodies/BioSampleViaFile'
 
       responses:
         '201':
-          $ref: '#/components/responses/BioSampleViaFileCreatedResponse'
+          $ref: '#/components/responses/CreateResponseCreated'
 
         '400':
-          $ref: '#/components/responses/BioSampleViaFileBadRequestResponse'
+          $ref: '#/components/responses/CreateResponseBadRequest'
 
   /requests/{id}:
     get:
@@ -156,49 +156,51 @@ components:
         - validity
         - details
 
+    BioSampleViaFileSubmission:
+      type: object
+
+      properties:
+        BioSample:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Submission:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - BioSample
+        - Submission
+
   requestBodies:
-    BioSampleViaFileRequestBody:
+    BioSampleViaFile:
       content:
-        multipart/form-data:
-          schema:
-            type: object
-
-            properties:
-              BioSample:
-                type: string
-                format: binary
-
-              Submission:
-                type: string
-                format: binary
-
-            required:
-              - BioSample
-              - Submission
-
         application/json:
           schema:
-            type: object
+            $ref: '#/components/schemas/BioSampleViaFileSubmission'
 
-            properties:
-              BioSample:
-                type: string
-                pattern: ^~/.
+          example:
+            BioSample: ~/mybiosample.xml
+            Submission: ~/mysubmission.xml
 
-              Submission:
-                type: string
-                pattern: ^~/.
-
-            required:
-              - BioSample
-              - Submission
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/BioSampleViaFileSubmission'
 
           example:
             BioSample: ~/mybiosample.xml
             Submission: ~/mysubmission.xml
 
   responses:
-    BioSampleViaFileCreatedResponse:
+    CreateResponseCreated:
       description: The requested process initiated successfully.
 
       content:
@@ -230,7 +232,7 @@ components:
               id: 42
               url: http://www.example.com/api/requests/42
 
-    BioSampleViaFileBadRequestResponse:
+    CreateResponseBadRequest:
       description: The requested process could not be initiated.
 
       content:
