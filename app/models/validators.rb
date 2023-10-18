@@ -1,6 +1,6 @@
 class Validators
   ASSOC = {
-    ddbj_validator: DdbjValidator
+    ddbj_validator: DdbjValidator.new
   }.stringify_keys
 
   def initialize(request)
@@ -16,7 +16,7 @@ class Validators
     Parallel.each objs, in_threads: 4 do |meta|
       obj = @request.objs.find { _1.key == meta[:id] }
 
-      ASSOC.fetch(meta[:validator]).new(obj, meta).validate
+      ASSOC.fetch(meta[:validator]).validate obj, meta
     end
 
     on_finish&.call
