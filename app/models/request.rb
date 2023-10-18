@@ -8,7 +8,7 @@ class Request < ApplicationRecord
   validates :status, inclusion: {in: %w(waiting processing finished)}
 
   def validity
-    validities = Set.new(objs.pluck(:validity).compact)
+    validities = Set.new(objs.pluck(:validity))
 
     if validities.include?('error')
       'error'
