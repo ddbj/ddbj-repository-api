@@ -16,10 +16,10 @@ class DdbjValidator
     validated, details = wait_for_finish(res.body.fetch(:uuid))
 
     validity = if validated
-               details.fetch(:validity) ? 'valid' : 'invalid'
-             else
-               'error'
-             end
+                 details.fetch(:validity) ? 'valid' : 'invalid'
+               else
+                 'error'
+               end
 
     obj.update! validity: validity, validation_details: details
   rescue => e
