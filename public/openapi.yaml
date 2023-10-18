@@ -1,0 +1,893 @@
+openapi: 3.1.0
+
+info:
+  title: ddbj-repository-api
+  version: 1.0.0
+
+servers:
+  - url: https://repository.ddbj.nig.ac.jp/api
+  - url: https://repository-staging.ddbj.nig.ac.jp/api
+  - url: https://repository-dev.ddbj.nig.ac.jp/api
+
+paths:
+  /bioproject/validate/via-file:
+    post:
+      tags:
+        - Validate
+
+      requestBody:
+        $ref: '#/components/requestBodies/BioProjectViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /bioproject/submit/via-file:
+    post:
+      tags:
+        - Submit
+
+      requestBody:
+        $ref: '#/components/requestBodies/BioProjectViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /biosample/validate/via-file:
+    post:
+      tags:
+        - Validate
+
+      requestBody:
+        $ref: '#/components/requestBodies/BioSampleViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /biosample/submit/via-file:
+    post:
+      tags:
+        - Submit
+
+      requestBody:
+        $ref: '#/components/requestBodies/BioSampleViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /trad/validate/via-file:
+    post:
+      tags:
+        - Validate
+
+      requestBody:
+        $ref: '#/components/requestBodies/TradViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /trad/submit/via-file:
+    post:
+      tags:
+        - Submit
+
+      requestBody:
+        $ref: '#/components/requestBodies/TradViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /dra/validate/via-file:
+    post:
+      tags:
+        - Validate
+
+      requestBody:
+        $ref: '#/components/requestBodies/DRAViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /dra/submit/via-file:
+    post:
+      tags:
+        - Submit
+
+      requestBody:
+        $ref: '#/components/requestBodies/DRAViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /gea/validate/via-file:
+    post:
+      tags:
+        - Validate
+
+      requestBody:
+        $ref: '#/components/requestBodies/GEAViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /gea/submit/via-file:
+    post:
+      tags:
+        - Submit
+
+      requestBody:
+        $ref: '#/components/requestBodies/GEAViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /metabobank/validate/via-file:
+    post:
+      tags:
+        - Validate
+
+      requestBody:
+        $ref: '#/components/requestBodies/MetaboBankViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /metabobank/submit/via-file:
+    post:
+      tags:
+        - Submit
+
+      requestBody:
+        $ref: '#/components/requestBodies/MetaboBankViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /jvar/validate/via-file:
+    post:
+      tags:
+        - Validate
+
+      requestBody:
+        $ref: '#/components/requestBodies/JVarViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /jvar/submit/via-file:
+    post:
+      tags:
+        - Submit
+
+      requestBody:
+        $ref: '#/components/requestBodies/JVarViaFile'
+
+      responses:
+        '201':
+          $ref: '#/components/responses/CreateResponseCreated'
+
+        '400':
+          $ref: '#/components/responses/CreateResponseBadRequest'
+
+  /requests/{id}:
+    get:
+      tags:
+        - Request
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+          example: 42
+
+      responses:
+        '200':
+          description: Return the request resource.
+
+          content:
+            application/json:
+              schema:
+                type: object
+
+                properties:
+                  status:
+                    type: string
+
+                    enum:
+                      - waiting
+                      - processing
+                      - finished
+
+                  validity:
+                    type: string
+                    nullable: true
+
+                    enum:
+                      - valid
+                      - invalid
+                      - error
+                      - null
+
+                  validation_reports:
+                    type: object
+
+                    properties:
+                      BioProject:
+                        $ref: '#/components/schemas/ValidationReport'
+                      Submission:
+                        $ref: '#/components/schemas/ValidationReport'
+                      BioSample:
+                        $ref: '#/components/schemas/ValidationReport'
+                      Sequence:
+                        $ref: '#/components/schemas/ValidationReport'
+                      Annotation:
+                        $ref: '#/components/schemas/ValidationReport'
+                      Experiment:
+                        $ref: '#/components/schemas/ValidationReport'
+                      Run:
+                        $ref: '#/components/schemas/ValidationReport'
+                      RunFile:
+                        $ref: '#/components/schemas/ValidationReport'
+                      Analysis:
+                        $ref: '#/components/schemas/ValidationReport'
+                      AnalysisFile:
+                        $ref: '#/components/schemas/ValidationReport'
+                      IDF:
+                        $ref: '#/components/schemas/ValidationReport'
+                      SDRF:
+                        $ref: '#/components/schemas/ValidationReport'
+                      ADF:
+                        $ref: '#/components/schemas/ValidationReport'
+                      RawDataFile:
+                        $ref: '#/components/schemas/ValidationReport'
+                      ProcessedDataFile:
+                        $ref: '#/components/schemas/ValidationReport'
+                      MAF:
+                        $ref: '#/components/schemas/ValidationReport'
+                      Study:
+                        $ref: '#/components/schemas/ValidationReport'
+                      SampleSet:
+                        $ref: '#/components/schemas/ValidationReport'
+                      Sample:
+                        $ref: '#/components/schemas/ValidationReport'
+                      Assay:
+                        $ref: '#/components/schemas/ValidationReport'
+                      VariantCallSV:
+                        $ref: '#/components/schemas/ValidationReport'
+                      VariantRegionSV:
+                        $ref: '#/components/schemas/ValidationReport'
+                      VariantCallFile:
+                        $ref: '#/components/schemas/ValidationReport'
+
+                  submission:
+                    type: object
+                    nullable: true
+
+                    properties:
+                      id:
+                        type: string
+
+                    required:
+                      - id
+
+                required:
+                - status
+                - validity
+                - validation_reports
+                - submission
+
+              example:
+                status: finished
+                validity: valid
+
+                validation_reports:
+                  BioSample:
+                    validity: valid
+
+                    details:
+                      validity: true
+                      answer: 42
+
+                submission:
+                  id: X-84
+
+components:
+  schemas:
+    ValidationReport:
+      type: object
+
+      properties:
+        validity:
+          type: string
+          nullable: true
+
+          enum:
+            - valid
+            - invalid
+            - error
+            - null
+
+        details:
+          type: object
+          nullable: true
+
+      required:
+        - validity
+        - details
+
+    BioProjectViaFileSubmission:
+      type: object
+
+      properties:
+        BioProject:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Submission:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - BioProject
+        - Submission
+
+    BioSampleViaFileSubmission:
+      type: object
+
+      properties:
+        BioSample:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Submission:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - BioSample
+        - Submission
+
+    TradViaFileSubmission:
+      type: object
+
+      properties:
+        Sequence:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Annotation:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - Sequence
+        - Annotation
+
+    DRAViaFileSubmission:
+      type: object
+
+      properties:
+        Submission:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Experiment:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Run:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        RunFile:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Analysis:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        AnalysisFile:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - Submission
+        - Experiment
+        - Run
+        - RunFile
+        - Analysis
+        - AnalysisFile
+
+    GEAViaFileSubmission:
+      type: object
+
+      properties:
+        IDF:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        SDRF:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        ADF:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        RawDataFile:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        ProcessedDataFile:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - IDF
+        - SDRF
+        - ADF
+        - RawDataFile
+        - ProcessedDataFile
+
+    MetaboBankViaFileSubmission:
+      type: object
+
+      properties:
+        IDF:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        SDRF:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        MAF:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        RawDataFile:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        ProcessedDataFile:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - IDF
+        - SDRF
+        - MAF
+        - RawDataFile
+        - ProcessedDataFile
+
+    JVarViaFileSubmission:
+      type: object
+
+      properties:
+        Study:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        SampleSet:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Sample:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Experiment:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Assay:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        VariantCallSV:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        VariantRegionSV:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        VariantCallFile:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - Study
+        - SampleSet
+        - Sample
+        - Experiment
+        - Assay
+        - VariantCallSV
+        - VariantRegionSV
+        - VariantCallFile
+
+  requestBodies:
+    BioProjectViaFile:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BioProjectViaFileSubmission'
+
+          example:
+            BioProject: ~/mybioproject.xml
+            Submission: ~/mysubmission.xml
+
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/BioProjectViaFileSubmission'
+
+          example:
+            BioProject: ~/mybioproject.xml
+            Submission: ~/mysubmission.xml
+
+    BioSampleViaFile:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BioSampleViaFileSubmission'
+
+          example:
+            BioSample: ~/mybiosample.xml
+            Submission: ~/mysubmission.xml
+
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/BioSampleViaFileSubmission'
+
+          example:
+            BioSample: ~/mybiosample.xml
+            Submission: ~/mysubmission.xml
+
+    TradViaFile:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TradViaFileSubmission'
+
+          example:
+            Sequence: ~/mysequence.xml
+            Annotation: ~/myannotation.xml
+
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/TradViaFileSubmission'
+
+          example:
+            Sequence: ~/mysequence.xml
+            Annotation: ~/myannotation.xml
+
+    DRAViaFile:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DRAViaFileSubmission'
+
+          example:
+            Submission: ~/mysubmission.xml
+            Experiment: ~/myexperiment.xml
+            Run: ~/myrun.xml
+            RunFile: ~/myrunfile.xml
+            Analysis: ~/myanalysis.xml
+            AnalysisFile: ~/myanalysisfile.xml
+
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/DRAViaFileSubmission'
+
+          example:
+            Submission: ~/mysubmission.xml
+            Experiment: ~/myexperiment.xml
+            Run: ~/myrun.xml
+            RunFile: ~/myrunfile.xml
+            Analysis: ~/myanalysis.xml
+            AnalysisFile: ~/myanalysisfile.xml
+
+    GEAViaFile:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GEAViaFileSubmission'
+
+          example:
+            IDF: ~/myidf.xml
+            SDRF: ~/mysdrf.xml
+            ADF: ~/myadf.xml
+            RawDataFile: ~/myrawdatafile.xml
+            ProcessedDataFile: ~/myprocesseddatafile.xml
+
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/GEAViaFileSubmission'
+
+          example:
+            IDF: ~/myidf.xml
+            SDRF: ~/mysdrf.xml
+            ADF: ~/myadf.xml
+            RawDataFile: ~/myrawdatafile.xml
+            ProcessedDataFile: ~/myprocesseddatafile.xml
+
+    MetaboBankViaFile:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MetaboBankViaFileSubmission'
+
+          example:
+            IDF: ~/myidf.xml
+            SDRF: ~/mysdrf.xml
+            MAF: ~/mymaf.xml
+            RawDataFile: ~/myrawdatafile.xml
+            ProcessedDataFile: ~/myprocesseddatafile.xml
+
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/MetaboBankViaFileSubmission'
+
+          example:
+            IDF: ~/myidf.xml
+            SDRF: ~/mysdrf.xml
+            MAF: ~/mymaf.xml
+            RawDataFile: ~/myrawdatafile.xml
+            ProcessedDataFile: ~/myprocesseddatafile.xml
+
+    JVarViaFile:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/JVarViaFileSubmission'
+
+          example:
+            Study: ~/mystudy.xml
+            SampleSet: ~/mysampleset.xml
+            Sample: ~/mysample.xml
+            Experiment: ~/myexperiment.xml
+            Assay: ~/myassay.xml
+            VariantCallSV: ~/myvariantcallsv.xml
+            VariantRegionSV: ~/myvariantregionsv.xml
+            VariantCallFile: ~/myvariantcallfile.xml
+
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/JVarViaFileSubmission'
+
+          example:
+            Study: ~/mystudy.xml
+            SampleSet: ~/mysampleset.xml
+            Sample: ~/mysample.xml
+            Experiment: ~/myexperiment.xml
+            Assay: ~/myassay.xml
+            VariantCallSV: ~/myvariantcallsv.xml
+            VariantRegionSV: ~/myvariantregionsv.xml
+            VariantCallFile: ~/myvariantcallfile.xml
+
+  responses:
+    CreateResponseCreated:
+      description: The requested process initiated successfully.
+
+      content:
+        application/json:
+          schema:
+            type: object
+
+            properties:
+              request:
+                type: object
+
+                properties:
+                  id:
+                    type: integer
+
+                  url:
+                    type: string
+                    format: uri
+
+                required:
+                  - id
+                  - url
+
+            required:
+              - request
+
+          example:
+            request:
+              id: 42
+              url: http://www.example.com/api/requests/42
+
+    CreateResponseBadRequest:
+      description: The requested process could not be initiated.
+
+      content:
+        application/json:
+          schema:
+            type: object
+
+            properties:
+              error:
+                type: string
+
+            required:
+              - error
+
+          example:
+            error: path must be in /home/alice

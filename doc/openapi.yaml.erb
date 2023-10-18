@@ -1,3 +1,5 @@
+<%- require 'yaml' -%>
+<%- dbs = YAML.load_file(File.expand_path('../../config/db.yml', __FILE__), symbolize_names: true) -%>
 openapi: 3.1.0
 
 info:
@@ -10,13 +12,14 @@ servers:
   - url: https://repository-dev.ddbj.nig.ac.jp/api
 
 paths:
-  /biosample/validate/via-file:
+  <%- dbs.each do |db| -%>
+  /<%= db[:id].downcase %>/validate/via-file:
     post:
       tags:
         - Validate
 
       requestBody:
-        $ref: '#/components/requestBodies/BioSampleViaFile'
+        $ref: '#/components/requestBodies/<%= db[:id] %>ViaFile'
 
       responses:
         '201':
@@ -25,13 +28,13 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /biosample/submit/via-file:
+  /<%= db[:id].downcase %>/submit/via-file:
     post:
       tags:
         - Submit
 
       requestBody:
-        $ref: '#/components/requestBodies/BioSampleViaFile'
+        $ref: '#/components/requestBodies/<%= db[:id] %>ViaFile'
 
       responses:
         '201':
@@ -40,6 +43,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
+  <%- end -%>
   /requests/{id}:
     get:
       tags:
@@ -87,14 +91,10 @@ paths:
                     type: object
 
                     properties:
-                      BioSample:
+                      <%- dbs.flat_map { _1[:objects] }.uniq { _1[:id] }.each do |obj| -%>
+                      <%= obj[:id] %>:
                         $ref: '#/components/schemas/ValidationReport'
-                      Submission:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                    required:
-                      - BioSample
-                      - Submission
+                      <%- end -%>
 
                   submission:
                     type: object
@@ -125,10 +125,6 @@ paths:
                       validity: true
                       answer: 42
 
-                  Submission:
-                    validity:
-                    details:
-
                 submission:
                   id: X-84
 
@@ -156,11 +152,13 @@ components:
         - validity
         - details
 
-    BioSampleViaFileSubmission:
+    <%- dbs.each do |db| -%>
+    <%= db[:id] %>ViaFileSubmission:
       type: object
 
       properties:
-        BioSample:
+        <%- db[:objects].each do |obj| -%>
+        <%= obj[:id] %>:
           oneOf:
             - type: string
               format: binary
@@ -168,37 +166,36 @@ components:
               pattern: ^~/.
               description: Relative path from the user's home directory prefixed by `~/`.
 
-        Submission:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
-
+        <%- end -%>
       required:
-        - BioSample
-        - Submission
+        <%- db[:objects].each do |obj| -%>
+        - <%= obj[:id] %>
+        <%- end -%>
 
+    <%- end -%>
   requestBodies:
-    BioSampleViaFile:
+    <%- dbs.each do |db| -%>
+    <%= db[:id] %>ViaFile:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BioSampleViaFileSubmission'
+            $ref: '#/components/schemas/<%= db[:id] %>ViaFileSubmission'
 
           example:
-            BioSample: ~/mybiosample.xml
-            Submission: ~/mysubmission.xml
+            <%- db[:objects].each do |obj| -%>
+            <%= obj[:id] %>: ~/my<%= obj[:id].downcase %>.xml
+            <%- end -%>
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/BioSampleViaFileSubmission'
+            $ref: '#/components/schemas/<%= db[:id] %>ViaFileSubmission'
 
           example:
-            BioSample: ~/mybiosample.xml
-            Submission: ~/mysubmission.xml
+            <%- db[:objects].each do |obj| -%>
+            <%= obj[:id] %>: ~/my<%= obj[:id].downcase %>.xml
+            <%- end -%>
 
+    <%- end -%>
   responses:
     CreateResponseCreated:
       description: The requested process initiated successfully.
