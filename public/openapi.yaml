@@ -1,7 +1,7 @@
 openapi: 3.1.0
 
 info:
-  title: ddbj-repository-api
+  title: DDBJ Repository API
   version: 1.0.0
 
 servers:
@@ -326,10 +326,10 @@ paths:
                       - id
 
                 required:
-                - status
-                - validity
-                - validation_reports
-                - submission
+                  - status
+                  - validity
+                  - validation_reports
+                  - submission
 
               example:
                 status: finished
