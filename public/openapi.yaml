@@ -352,6 +352,14 @@ components:
       type: object
 
       properties:
+        validator:
+          type: string
+          nullable: true
+
+          enum:
+            - ddbj_validator
+            - null
+
         validity:
           type: string
           nullable: true

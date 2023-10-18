@@ -71,7 +71,8 @@ RSpec.describe 'submit via file', type: :request do
 
       validation_reports: {
         BioSample: {
-          validity: 'valid',
+          validator: 'ddbj_validator',
+          validity:  'valid',
 
           details: {
             validity: true,
@@ -80,8 +81,9 @@ RSpec.describe 'submit via file', type: :request do
         },
 
         Submission: {
-          validity: nil,
-          details:  nil
+          validator: nil,
+          validity:  nil,
+          details:   nil
         }
       },
 

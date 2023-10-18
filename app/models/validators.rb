@@ -14,9 +14,12 @@ class Validators
     objs = db[:objects].select { _1[:validator] }
 
     Parallel.each objs, in_threads: 4 do |meta|
-      obj = @request.objs.find { _1.key == meta[:id] }
+      id, validator = meta.fetch_values(:id, :validator)
 
-      ASSOC.fetch(meta[:validator]).validate obj, meta
+      obj = @request.objs.find { _1.key == id }
+      obj.update! validator: validator
+
+      ASSOC.fetch(validator).validate obj, meta
     end
 
     on_finish&.call
