@@ -78,8 +78,9 @@ paths:
                       - finished
 
                   validity:
-                    type: string
-                    nullable: true
+                    type:
+                      - string
+                      - 'null'
 
                     enum:
                       - valid
@@ -97,8 +98,9 @@ paths:
                       <%- end -%>
 
                   submission:
-                    type: object
-                    nullable: true
+                    type:
+                      - object
+                      - 'null'
 
                     properties:
                       id:
@@ -135,8 +137,9 @@ components:
 
       properties:
         validator:
-          type: string
-          nullable: true
+          type:
+            - string
+            - 'null'
 
           enum:
             <%- dbs.flat_map { _1[:objects].map {|obj| obj[:validator] } }.compact.uniq.each do |validator| -%>
@@ -145,8 +148,9 @@ components:
             - null
 
         validity:
-          type: string
-          nullable: true
+          type:
+            - string
+            - 'null'
 
           enum:
             - valid
@@ -155,10 +159,12 @@ components:
             - null
 
         details:
-          type: object
-          nullable: true
+          type:
+            - object
+            - 'null'
 
       required:
+        - validator
         - validity
         - details
 

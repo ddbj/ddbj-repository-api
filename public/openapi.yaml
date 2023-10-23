@@ -254,8 +254,9 @@ paths:
                       - finished
 
                   validity:
-                    type: string
-                    nullable: true
+                    type:
+                      - string
+                      - 'null'
 
                     enum:
                       - valid
@@ -315,8 +316,9 @@ paths:
                         $ref: '#/components/schemas/ValidationReport'
 
                   submission:
-                    type: object
-                    nullable: true
+                    type:
+                      - object
+                      - 'null'
 
                     properties:
                       id:
@@ -353,16 +355,18 @@ components:
 
       properties:
         validator:
-          type: string
-          nullable: true
+          type:
+            - string
+            - 'null'
 
           enum:
             - ddbj_validator
             - null
 
         validity:
-          type: string
-          nullable: true
+          type:
+            - string
+            - 'null'
 
           enum:
             - valid
@@ -371,10 +375,12 @@ components:
             - null
 
         details:
-          type: object
-          nullable: true
+          type:
+            - object
+            - 'null'
 
       required:
+        - validator
         - validity
         - details
 
