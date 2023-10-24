@@ -1,6 +1,8 @@
 - id: BioProject
   objects:
     - id: BioProject
+      validator: ddbj_validator
+      param_name: biosample
 
 - id: BioSample
   objects:
