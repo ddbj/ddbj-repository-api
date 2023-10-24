@@ -47,8 +47,7 @@ RSpec.describe 'validate via file', type: :request do
   example do
     perform_enqueued_jobs do
       post '/api/biosample/validate/via-file', params: {
-        BioSample:  uploaded_file(name: 'mybiosample.xml'),
-        Submission: '~/foo/mysubmission.xml'
+        BioSample: uploaded_file(name: 'mybiosample.xml')
       }
     end
 
@@ -78,12 +77,6 @@ RSpec.describe 'validate via file', type: :request do
             validity: true,
             answer:   42
           }
-        },
-
-        Submission: {
-          validator: nil,
-          validity:  nil,
-          details:   nil
         }
       },
 
@@ -97,21 +90,19 @@ RSpec.describe 'validate via file', type: :request do
 
   example do
     post '/api/biosample/validate/via-file', params: {
-      BioSample:  uploaded_file(name: 'mybiosample.xml'),
-      Submission: 'foo/mysubmission.xml'
+      BioSample: 'foo/mybiosample.xml'
     }
 
     expect(response).to have_http_status(:bad_request)
 
     expect(response.parsed_body.deep_symbolize_keys).to eq(
-      error: 'unexpected parameter format in Submission: "foo/mysubmission.xml"'
+      error: 'unexpected parameter format in BioSample: "foo/mybiosample.xml"'
     )
   end
 
   example do
     post '/api/biosample/validate/via-file', params: {
-      BioSample:  uploaded_file(name: 'mybiosample.xml'),
-      Submission: '~/../foo/mysubmission.xml'
+      BioSample: '~/../foo/mybiosample.xml'
     }
 
     expect(response).to have_http_status(:bad_request)
