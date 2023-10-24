@@ -270,13 +270,13 @@ paths:
                     properties:
                       BioProject:
                         $ref: '#/components/schemas/ValidationReport'
-                      Submission:
-                        $ref: '#/components/schemas/ValidationReport'
                       BioSample:
                         $ref: '#/components/schemas/ValidationReport'
                       Sequence:
                         $ref: '#/components/schemas/ValidationReport'
                       Annotation:
+                        $ref: '#/components/schemas/ValidationReport'
+                      Submission:
                         $ref: '#/components/schemas/ValidationReport'
                       Experiment:
                         $ref: '#/components/schemas/ValidationReport'
@@ -396,17 +396,8 @@ components:
               pattern: ^~/.
               description: Relative path from the user's home directory prefixed by `~/`.
 
-        Submission:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
-
       required:
         - BioProject
-        - Submission
 
     BioSampleViaFileSubmission:
       type: object
@@ -420,17 +411,8 @@ components:
               pattern: ^~/.
               description: Relative path from the user's home directory prefixed by `~/`.
 
-        Submission:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
-
       required:
         - BioSample
-        - Submission
 
     TradViaFileSubmission:
       type: object
@@ -705,7 +687,6 @@ components:
 
           example:
             BioProject: ~/mybioproject.xml
-            Submission: ~/mysubmission.xml
 
         multipart/form-data:
           schema:
@@ -713,7 +694,6 @@ components:
 
           example:
             BioProject: ~/mybioproject.xml
-            Submission: ~/mysubmission.xml
 
     BioSampleViaFile:
       content:
@@ -723,7 +703,6 @@ components:
 
           example:
             BioSample: ~/mybiosample.xml
-            Submission: ~/mysubmission.xml
 
         multipart/form-data:
           schema:
@@ -731,7 +710,6 @@ components:
 
           example:
             BioSample: ~/mybiosample.xml
-            Submission: ~/mysubmission.xml
 
     TradViaFile:
       content:

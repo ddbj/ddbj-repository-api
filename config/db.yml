@@ -1,14 +1,12 @@
 - id: BioProject
   objects:
     - id: BioProject
-    - id: Submission
 
 - id: BioSample
   objects:
     - id: BioSample
       validator: ddbj_validator
       param_name: biosample
-    - id: Submission
 
 - id: Trad
   objects:
