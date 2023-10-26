@@ -1,6 +1,8 @@
 class Validators
-  ASSOC = {
-    ddbj_validator: DdbjValidator.new
+  VALIDATOR = {
+    bioproject: DdbjValidator.new(obj_id: 'BioProject'),
+    biosample:  DdbjValidator.new(obj_id: 'BioSample'),
+    dra:        DraValidator.new
   }.stringify_keys
 
   def initialize(request)
@@ -10,17 +12,10 @@ class Validators
   def validate(&on_finish)
     @request.update! status: 'processing'
 
-    db   = DB.find { _1[:id] == @request.db }
-    objs = db[:objects].select { _1[:validator] }
+    db        = DB.find { _1[:id] == @request.db }
+    validator = db[:validator]
 
-    Parallel.each objs, in_threads: 4 do |meta|
-      id, validator = meta.fetch_values(:id, :validator)
-
-      obj = @request.objs.find { _1.key == id }
-      obj.update! validator: validator
-
-      ASSOC.fetch(validator).validate obj, meta
-    end
+    VALIDATOR.fetch(validator).validate @request
 
     on_finish&.call
   ensure

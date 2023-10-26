@@ -1,5 +1,11 @@
 class DdbjValidator
-  def validate(obj, meta)
+  def initialize(obj_id:)
+    @obj_id = obj_id
+  end
+
+  def validate(request)
+    obj = request.objs.find_by!(key: @obj_id)
+
     res = Dir.mktmpdir {|tmpdir|
       tmpdir = Pathname.new(tmpdir)
       path   = tmpdir.join(obj.file.filename.sanitized)
@@ -10,7 +16,7 @@ class DdbjValidator
 
       part = Faraday::Multipart::FilePart.new(path.to_s, 'application/octet-stream')
 
-      client.post('validation', meta[:param_name] => part)
+      client.post('validation', @obj_id.downcase => part)
     }
 
     validated, details = wait_for_finish(res.body.fetch(:uuid))

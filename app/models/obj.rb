@@ -7,9 +7,8 @@ class Obj < ApplicationRecord
 
   def validation_report
     {
-      validator: validator,
-      validity:  validity,
-      details:   validation_details
+      validity: validity,
+      details:  validation_details
     }
   end
 end

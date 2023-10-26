@@ -1,14 +1,14 @@
 - id: BioProject
+  validator: bioproject
+
   objects:
     - id: BioProject
-      validator: ddbj_validator
-      param_name: biosample
 
 - id: BioSample
+  validator: biosample
+
   objects:
     - id: BioSample
-      validator: ddbj_validator
-      param_name: biosample
 
 - id: Trad
   objects:
@@ -16,13 +16,17 @@
     - id: Annotation
 
 - id: DRA
+  validator: dra
   objects:
     - id: Submission
     - id: Experiment
     - id: Run
     - id: RunFile
+      ignore: true
     - id: Analysis
+      optional: true
     - id: AnalysisFile
+      ignore: true
 
 - id: GEA
   objects:

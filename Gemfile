@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby File.read('.ruby-version').chomp
+ruby File.read(__dir__ + '/.ruby-version').chomp
 
 gem 'rails', '~> 7.1.0'
 
@@ -11,6 +11,7 @@ gem 'parallel'
 gem 'pg'
 gem 'puma'
 gem 'sidekiq'
+gem 'submission-excel2xml', github: 'ddbj/submission-excel2xml', branch: 'repository'
 
 group :development do
   gem 'debug', group: :test

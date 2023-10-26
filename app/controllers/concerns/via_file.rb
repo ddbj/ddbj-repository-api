@@ -18,10 +18,12 @@ module ViaFile
       user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).cleanpath
 
       db[:objects].each do |obj|
+        next if obj[:ignore]
+
         key = obj[:id]
 
         # TODO cardinality
-        case params.require(key)
+        case obj[:optional] ? params[key] : params.require(key)
         in ActionDispatch::Http::UploadedFile => file
           request.objs.create! key: key, file: file
         in %r(\A~/.) => relative_path
@@ -33,6 +35,8 @@ module ViaFile
             io:       path.open,
             filename: path.basename
           }
+        in nil
+          next
         in unknown
           raise Error, "unexpected parameter format in #{key}: #{unknown.inspect}"
         end
