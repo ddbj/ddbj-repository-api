@@ -17,6 +17,8 @@ module ViaFile
       request   = dway_user.requests.create!(db: db[:id], status: 'waiting')
       user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).cleanpath
 
+      request.objs.create! key: '_base'
+
       db[:objects].each do |obj|
         key = obj[:id]
 

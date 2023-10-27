@@ -34,6 +34,10 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validity: 'valid',
 
       validation_reports: {
+        _base: {
+          validity: nil,
+          details: nil
+        },
         Submission: {
           validity: 'valid',
           details: nil
@@ -100,6 +104,10 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validity: 'valid',
 
       validation_reports: {
+        _base: {
+          validity: nil,
+          details: nil
+        },
         Submission: {
           validity: 'valid',
           details: nil
@@ -178,6 +186,10 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validity: 'invalid',
 
       validation_reports: {
+        _base: {
+          validity: nil,
+          details: nil
+        },
         Submission: {
           validity: 'invalid',
           details: [
@@ -195,6 +207,57 @@ RSpec.describe 'DRA: submit via file', type: :request do
           details: [
             {message: '41:1: FATAL: Premature end of data in tag RUN_SET line 2', object_id: 'Run'}
           ]
+        },
+        RunFile: {
+          validity: nil,
+          details: nil
+        }
+      },
+
+      submission: nil
+    )
+  end
+
+  example 'without Analysis, error' do
+    allow(Open3).to receive(:capture2e).and_raise('Something went wrong.')
+
+    perform_enqueued_jobs do
+      post '/api/dra/submit/via-file', params: {
+        Submission: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml'),
+        Experiment: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml'),
+        Run:        file_fixture_upload('dra/valid/example-0001_dra_Run.xml'),
+        RunFile:    uploaded_file(name: 'runfile.xml')
+      }
+    end
+
+    expect(response).to have_http_status(:created)
+
+    get response.parsed_body.dig(:request, :url)
+
+    expect(response).to have_http_status(:ok)
+
+    expect(response.parsed_body.deep_symbolize_keys).to match(
+      status: 'finished',
+      validity: 'error',
+
+      validation_reports: {
+        _base: {
+          validity: 'error',
+          details: {
+            error: 'Something went wrong.'
+          }
+        },
+        Submission: {
+          validity: nil,
+          details: nil
+        },
+        Experiment: {
+          validity: nil,
+          details: nil
+        },
+        Run: {
+          validity: nil,
+          details: nil
         },
         RunFile: {
           validity: nil,

@@ -2,7 +2,11 @@ class Request < ApplicationRecord
   belongs_to :dway_user,  optional: true
   belongs_to :submission, optional: true
 
-  has_many :objs, dependent: :destroy
+  has_many :objs, dependent: :destroy do
+    def base
+      find { _1.key == '_base' }
+    end
+  end
 
   validates :db,     inclusion: {in: DB.map { _1[:id] }}
   validates :status, inclusion: {in: %w(waiting processing finished)}

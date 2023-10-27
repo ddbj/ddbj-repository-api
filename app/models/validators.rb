@@ -15,7 +15,13 @@ class Validators
     db        = DB.find { _1[:id] == @request.db }
     validator = db[:validator]
 
-    VALIDATOR.fetch(validator).validate @request
+    begin
+      VALIDATOR.fetch(validator).validate @request
+    rescue => e
+      @request.objs.base.update! validity: 'error', validation_details: {error: e.message}
+
+      Rails.logger.error e
+    end
 
     on_finish&.call
   ensure
