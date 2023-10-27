@@ -354,14 +354,6 @@ components:
       type: object
 
       properties:
-        validator:
-          type:
-            - string
-            - 'null'
-
-          enum:
-            - null
-
         validity:
           type:
             - string
@@ -379,7 +371,6 @@ components:
             - 'null'
 
       required:
-        - validator
         - validity
         - details
 

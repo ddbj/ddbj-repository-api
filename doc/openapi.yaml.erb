@@ -136,17 +136,6 @@ components:
       type: object
 
       properties:
-        validator:
-          type:
-            - string
-            - 'null'
-
-          enum:
-            <%- dbs.flat_map { _1[:objects].map {|obj| obj[:validator] } }.compact.uniq.each do |validator| -%>
-            - <%= validator %>
-            <%- end -%>
-            - null
-
         validity:
           type:
             - string
@@ -164,7 +153,6 @@ components:
             - 'null'
 
       required:
-        - validator
         - validity
         - details
 
