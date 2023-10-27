@@ -18,8 +18,6 @@ module ViaFile
       user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).cleanpath
 
       db[:objects].each do |obj|
-        next if obj[:ignore]
-
         key = obj[:id]
 
         # TODO cardinality

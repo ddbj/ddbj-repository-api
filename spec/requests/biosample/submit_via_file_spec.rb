@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'submit via file', type: :request do
+RSpec.describe 'BioSample: submit via file', type: :request do
   def uploaded_file(name:)
     Rack::Test::UploadedFile.new(StringIO.new, original_filename: name)
   end

@@ -22,11 +22,10 @@
     - id: Experiment
     - id: Run
     - id: RunFile
-      ignore: true
     - id: Analysis
       optional: true
     - id: AnalysisFile
-      ignore: true
+      optional: true
 
 - id: GEA
   objects:
