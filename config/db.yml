@@ -32,16 +32,20 @@
     - id: IDF
     - id: SDRF
     - id: ADF
+      optional: true
     - id: RawDataFile
     - id: ProcessedDataFile
+      optional: true
 
 - id: MetaboBank
   objects:
     - id: IDF
     - id: SDRF
     - id: MAF
+      optional: true
     - id: RawDataFile
     - id: ProcessedDataFile
+      optional: true
 
 - id: JVar
   objects:
@@ -53,3 +57,4 @@
     - id: VariantCallSV
     - id: VariantRegionSV
     - id: VariantCallFile
+      optional: true
