@@ -36,23 +36,27 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validation_reports: {
         _base: {
           validity: nil,
-          details: nil
+          details:  nil
         },
+
         Submission: {
           validity: 'valid',
-          details: nil
+          details:  nil
         },
+
         Experiment: {
           validity: 'valid',
-          details: nil
+          details:  nil
         },
+
         Run: {
           validity: 'valid',
-          details: nil
+          details:  nil
         },
+
         RunFile: {
           validity: nil,
-          details: nil
+          details:  nil
         }
       },
 
@@ -108,26 +112,32 @@ RSpec.describe 'DRA: submit via file', type: :request do
           validity: nil,
           details: nil
         },
+
         Submission: {
           validity: 'valid',
           details: nil
         },
+
         Experiment: {
           validity: 'valid',
           details: nil
         },
+
         Run: {
           validity: 'valid',
           details: nil
         },
+
         RunFile: {
           validity: nil,
           details: nil
         },
+
         Analysis: {
           validity: 'valid',
           details: nil
         },
+
         AnalysisFile: {
           validity: nil,
           details: nil
@@ -190,27 +200,37 @@ RSpec.describe 'DRA: submit via file', type: :request do
           validity: nil,
           details: nil
         },
+
         Submission: {
           validity: 'invalid',
+
           details: [
-            {message: '18:1: FATAL: Premature end of data in tag SUBMISSION line 2', object_id: 'Submission'}
+            object_id: 'Submission',
+            message: '18:1: FATAL: Premature end of data in tag SUBMISSION line 2'
           ]
         },
+
         Experiment: {
           validity: 'invalid',
+
           details: [
-            {message: '167:1: FATAL: Premature end of data in tag EXPERIMENT_SET line 2', object_id: 'Experiment'}
+            object_id: 'Experiment',
+            message: '167:1: FATAL: Premature end of data in tag EXPERIMENT_SET line 2'
           ]
         },
+
         Run: {
           validity: 'invalid',
+
           details: [
-            {message: '41:1: FATAL: Premature end of data in tag RUN_SET line 2', object_id: 'Run'}
+            object_id: 'Run',
+            message: '41:1: FATAL: Premature end of data in tag RUN_SET line 2'
           ]
         },
+
         RunFile: {
           validity: nil,
-          details: nil
+          details:  nil
         }
       },
 
@@ -243,25 +263,30 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validation_reports: {
         _base: {
           validity: 'error',
+
           details: {
             error: 'Something went wrong.'
           }
         },
+
         Submission: {
           validity: nil,
-          details: nil
+          details:  nil
         },
+
         Experiment: {
           validity: nil,
-          details: nil
+          details:  nil
         },
+
         Run: {
           validity: nil,
-          details: nil
+          details:  nil
         },
+
         RunFile: {
           validity: nil,
-          details: nil
+          details:  nil
         }
       },
 

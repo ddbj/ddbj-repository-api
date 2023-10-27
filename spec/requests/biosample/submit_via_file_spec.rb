@@ -71,8 +71,9 @@ RSpec.describe 'BioSample: submit via file', type: :request do
       validation_reports: {
         _base: {
           validity: nil,
-          details: nil
+          details:  nil
         },
+
         BioSample: {
           validity: 'valid',
 
