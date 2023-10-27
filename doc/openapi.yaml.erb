@@ -184,7 +184,7 @@ components:
 
         <%- end -%>
       required:
-        <%- db[:objects].each do |obj| -%>
+        <%- db[:objects].reject { _1[:optional] }.each do |obj| -%>
         - <%= obj[:id] %>
         <%- end -%>
 

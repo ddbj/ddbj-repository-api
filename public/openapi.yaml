@@ -360,7 +360,6 @@ components:
             - 'null'
 
           enum:
-            - ddbj_validator
             - null
 
         validity:
@@ -495,8 +494,6 @@ components:
         - Experiment
         - Run
         - RunFile
-        - Analysis
-        - AnalysisFile
 
     GEAViaFileSubmission:
       type: object
