@@ -2,7 +2,7 @@ class DraValidator
   OBJ_IDS = %w(Submission Experiment Run Analysis)
 
   def validate(request)
-    objs = request.objs.index_by(&:key).slice(*OBJ_IDS)
+    objs = request.objs.index_by(&:_id).slice(*OBJ_IDS)
 
     Dir.mktmpdir do |tmpdir|
       tmpdir = Pathname.new(tmpdir)
@@ -11,7 +11,7 @@ class DraValidator
         next unless obj
 
         obj.file.open do |file|
-          FileUtils.mv file.path, tmpdir.join("example-0001_dra_#{obj.key}.xml")
+          FileUtils.mv file.path, tmpdir.join("example-0001_dra_#{obj._id}.xml")
         end
       end
 

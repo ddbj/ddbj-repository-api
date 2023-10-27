@@ -17,28 +17,28 @@ module ViaFile
       request   = dway_user.requests.create!(db: db[:id], status: 'waiting')
       user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).cleanpath
 
-      request.objs.create! key: '_base'
+      request.objs.create! _id: '_base'
 
       db[:objects].each do |obj|
-        key = obj[:id]
+        id = obj[:id]
 
         # TODO cardinality
-        case obj[:optional] ? params[key] : params.require(key)
+        case obj[:optional] ? params[id] : params.require(id)
         in ActionDispatch::Http::UploadedFile => file
-          request.objs.create! key: key, file: file
+          request.objs.create! _id: id, file: file
         in %r(\A~/.) => relative_path
           path = user_home.join(relative_path.delete_prefix('~/')).cleanpath
 
           raise Error, "path must be in #{user_home}" unless path.to_s.start_with?(user_home.to_s)
 
-          request.objs.create! key: key, file: {
+          request.objs.create! _id: id, file: {
             io:       path.open,
             filename: path.basename
           }
         in nil
           next
         in unknown
-          raise Error, "unexpected parameter format in #{key}: #{unknown.inspect}"
+          raise Error, "unexpected parameter format in #{id}: #{unknown.inspect}"
         end
       end
 

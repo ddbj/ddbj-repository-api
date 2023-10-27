@@ -4,7 +4,7 @@ class DdbjValidator
   end
 
   def validate(request)
-    obj = request.objs.find_by!(key: @obj_id)
+    obj = request.objs.find_by!(_id: @obj_id)
 
     res = Dir.mktmpdir {|tmpdir|
       tmpdir = Pathname.new(tmpdir)
