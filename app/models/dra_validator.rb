@@ -26,9 +26,7 @@ class DraValidator
 
         errors = JSON.parse(out, symbolize_names: true).group_by { _1.fetch(:object_id) }
 
-        OBJ_IDS.each do |obj_id|
-          next unless obj = request.objs.find_by(key: obj_id)
-
+        objs.each do |obj_id, obj|
           if errs = errors[obj_id]
             obj.update! validity: 'invalid', validation_details: errs
           else
