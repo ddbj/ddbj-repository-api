@@ -10,21 +10,23 @@ class Validators
   end
 
   def validate(&on_finish)
-    @request.update! status: 'processing'
-
-    db        = DB.find { _1[:id] == @request.db }
-    validator = db[:validator]
-
     begin
-      VALIDATOR.fetch(validator).validate @request
-    rescue => e
-      @request.objs.base.update! validity: 'error', validation_details: {error: e.message}
+      @request.update! status: 'processing'
 
-      Rails.logger.error e
+      db        = DB.find { _1[:id] == @request.db }
+      validator = db[:validator]
+
+      begin
+        VALIDATOR.fetch(validator).validate @request
+      rescue => e
+        @request.objs.base.update! validity: 'error', validation_details: {error: e.message}
+
+        Rails.logger.error e
+      end
+    ensure
+      @request.update! status: 'finished'
     end
 
     on_finish&.call
-  ensure
-    @request.update! status: 'finished'
   end
 end
