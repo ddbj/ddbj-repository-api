@@ -110,37 +110,37 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validation_reports: {
         _base: {
           validity: nil,
-          details: nil
+          details:  nil
         },
 
         Submission: {
           validity: 'valid',
-          details: nil
+          details:  nil
         },
 
         Experiment: {
           validity: 'valid',
-          details: nil
+          details:  nil
         },
 
         Run: {
           validity: 'valid',
-          details: nil
+          details:  nil
         },
 
         RunFile: {
           validity: nil,
-          details: nil
+          details:  nil
         },
 
         Analysis: {
           validity: 'valid',
-          details: nil
+          details:  nil
         },
 
         AnalysisFile: {
           validity: nil,
-          details: nil
+          details:  nil
         }
       },
 
@@ -198,7 +198,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validation_reports: {
         _base: {
           validity: nil,
-          details: nil
+          details:  nil
         },
 
         Submission: {
@@ -206,7 +206,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
 
           details: [
             object_id: 'Submission',
-            message: '18:1: FATAL: Premature end of data in tag SUBMISSION line 2'
+            message:   '18:1: FATAL: Premature end of data in tag SUBMISSION line 2'
           ]
         },
 
@@ -215,7 +215,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
 
           details: [
             object_id: 'Experiment',
-            message: '167:1: FATAL: Premature end of data in tag EXPERIMENT_SET line 2'
+            message:   '167:1: FATAL: Premature end of data in tag EXPERIMENT_SET line 2'
           ]
         },
 
@@ -224,7 +224,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
 
           details: [
             object_id: 'Run',
-            message: '41:1: FATAL: Premature end of data in tag RUN_SET line 2'
+            message:   '41:1: FATAL: Premature end of data in tag RUN_SET line 2'
           ]
         },
 
