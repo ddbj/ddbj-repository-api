@@ -268,52 +268,80 @@ paths:
                     type: object
 
                     properties:
+                      _base:
+                        $ref: '#/components/schemas/ValidationReport'
+
                       BioProject:
                         $ref: '#/components/schemas/ValidationReport'
+
                       BioSample:
                         $ref: '#/components/schemas/ValidationReport'
+
                       Sequence:
                         $ref: '#/components/schemas/ValidationReport'
+
                       Annotation:
                         $ref: '#/components/schemas/ValidationReport'
+
                       Submission:
                         $ref: '#/components/schemas/ValidationReport'
+
                       Experiment:
                         $ref: '#/components/schemas/ValidationReport'
+
                       Run:
                         $ref: '#/components/schemas/ValidationReport'
+
                       RunFile:
                         $ref: '#/components/schemas/ValidationReport'
+
                       Analysis:
                         $ref: '#/components/schemas/ValidationReport'
+
                       AnalysisFile:
                         $ref: '#/components/schemas/ValidationReport'
+
                       IDF:
                         $ref: '#/components/schemas/ValidationReport'
+
                       SDRF:
                         $ref: '#/components/schemas/ValidationReport'
+
                       ADF:
                         $ref: '#/components/schemas/ValidationReport'
+
                       RawDataFile:
                         $ref: '#/components/schemas/ValidationReport'
+
                       ProcessedDataFile:
                         $ref: '#/components/schemas/ValidationReport'
+
                       MAF:
                         $ref: '#/components/schemas/ValidationReport'
+
                       Study:
                         $ref: '#/components/schemas/ValidationReport'
+
                       SampleSet:
                         $ref: '#/components/schemas/ValidationReport'
+
                       Sample:
                         $ref: '#/components/schemas/ValidationReport'
+
                       Assay:
                         $ref: '#/components/schemas/ValidationReport'
+
                       VariantCallSV:
                         $ref: '#/components/schemas/ValidationReport'
+
                       VariantRegionSV:
                         $ref: '#/components/schemas/ValidationReport'
+
                       VariantCallFile:
                         $ref: '#/components/schemas/ValidationReport'
+
+                    required:
+                      - _base
 
                   submission:
                     type:

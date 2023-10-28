@@ -92,10 +92,16 @@ paths:
                     type: object
 
                     properties:
+                      _base:
+                        $ref: '#/components/schemas/ValidationReport'
+
                       <%- dbs.flat_map { _1[:objects] }.uniq { _1[:id] }.each do |obj| -%>
                       <%= obj[:id] %>:
                         $ref: '#/components/schemas/ValidationReport'
+
                       <%- end -%>
+                    required:
+                      - _base
 
                   submission:
                     type:
