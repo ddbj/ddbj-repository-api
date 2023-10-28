@@ -239,7 +239,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
   end
 
   example 'without Analysis, error' do
-    allow(Open3).to receive(:capture2e).and_raise('Something went wrong.')
+    allow(Open3).to receive(:capture2e) { ['Something went wrong.', double(success?: false)] }
 
     perform_enqueued_jobs do
       post '/api/dra/submit/via-file', params: {
