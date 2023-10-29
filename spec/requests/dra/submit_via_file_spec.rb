@@ -69,9 +69,6 @@ RSpec.describe 'DRA: submit via file', type: :request do
     submission_dir = repository_dir.join('alice/submissions', submission_id)
 
     expect(Dir.glob('**/*', base: submission_dir)).to match_array(%w(
-      Submission
-      Submission/example-0001_dra_Submission.xml
-      Submission/validation-report.json
       Experiment
       Experiment/example-0001_dra_Experiment.xml
       Experiment/validation-report.json
@@ -81,6 +78,11 @@ RSpec.describe 'DRA: submit via file', type: :request do
       RunFile
       RunFile/runfile.xml
       RunFile/validation-report.json
+      Submission
+      Submission/example-0001_dra_Submission.xml
+      Submission/validation-report.json
+      _base
+      _base/validation-report.json
       validation-report.json
     ))
   end
@@ -153,9 +155,12 @@ RSpec.describe 'DRA: submit via file', type: :request do
     submission_dir = repository_dir.join('alice/submissions', submission_id)
 
     expect(Dir.glob('**/*', base: submission_dir)).to match_array(%w(
-      Submission
-      Submission/example-0002_dra_Submission.xml
-      Submission/validation-report.json
+      Analysis
+      Analysis/example-0002_dra_Analysis.xml
+      Analysis/validation-report.json
+      AnalysisFile
+      AnalysisFile/analysisfile.xml
+      AnalysisFile/validation-report.json
       Experiment
       Experiment/example-0002_dra_Experiment.xml
       Experiment/validation-report.json
@@ -165,12 +170,11 @@ RSpec.describe 'DRA: submit via file', type: :request do
       RunFile
       RunFile/runfile.xml
       RunFile/validation-report.json
-      Analysis
-      Analysis/example-0002_dra_Analysis.xml
-      Analysis/validation-report.json
-      AnalysisFile
-      AnalysisFile/analysisfile.xml
-      AnalysisFile/validation-report.json
+      Submission
+      Submission/example-0002_dra_Submission.xml
+      Submission/validation-report.json
+      _base
+      _base/validation-report.json
       validation-report.json
     ))
   end

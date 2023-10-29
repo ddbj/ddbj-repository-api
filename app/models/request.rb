@@ -33,12 +33,13 @@ class Request < ApplicationRecord
     to.tap(&:mkpath).join('validation-report.json').write JSON.pretty_generate(validation_reports)
 
     objs.each do |obj|
-      obj.file.open do |file|
-        base = to.join(obj._id).tap(&:mkpath)
+      obj_dir = to.join(obj._id).tap(&:mkpath)
 
-        FileUtils.mv file.path, base.join(obj.file.filename.sanitized)
-        base.join('validation-report.json').write JSON.pretty_generate(obj.validation_report)
-      end
+      obj_dir.join('validation-report.json').write JSON.pretty_generate(obj.validation_report)
+
+      obj.file.open do |file|
+        FileUtils.mv file.path, obj_dir.join(obj.file.filename.sanitized)
+      end if obj.file.attached?
     end
   end
 end

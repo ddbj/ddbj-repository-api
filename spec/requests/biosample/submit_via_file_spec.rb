@@ -100,6 +100,8 @@ RSpec.describe 'BioSample: submit via file', type: :request do
       BioSample
       BioSample/mybiosample.xml
       BioSample/validation-report.json
+      _base
+      _base/validation-report.json
       validation-report.json
     ))
   end
