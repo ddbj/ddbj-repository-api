@@ -175,6 +175,7 @@ components:
         <%= obj[:id] %>:
           <%- if obj[:multiple] -%>
           type: array
+          minItems: <%= obj[:optional] ? 0 : 1 %>
 
           items:
             oneOf:

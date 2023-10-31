@@ -442,6 +442,7 @@ components:
       properties:
         Sequence:
           type: array
+          minItems: 1
 
           items:
             oneOf:
@@ -453,6 +454,7 @@ components:
 
         Annotation:
           type: array
+          minItems: 1
 
           items:
             oneOf:
@@ -496,6 +498,7 @@ components:
 
         RunFile:
           type: array
+          minItems: 1
 
           items:
             oneOf:
@@ -515,6 +518,7 @@ components:
 
         AnalysisFile:
           type: array
+          minItems: 0
 
           items:
             oneOf:
@@ -552,6 +556,7 @@ components:
 
         ADF:
           type: array
+          minItems: 0
 
           items:
             oneOf:
@@ -563,6 +568,7 @@ components:
 
         RawDataFile:
           type: array
+          minItems: 0
 
           items:
             oneOf:
@@ -574,6 +580,7 @@ components:
 
         ProcessedDataFile:
           type: array
+          minItems: 0
 
           items:
             oneOf:
@@ -609,6 +616,7 @@ components:
 
         MAF:
           type: array
+          minItems: 0
 
           items:
             oneOf:
@@ -620,6 +628,7 @@ components:
 
         RawDataFile:
           type: array
+          minItems: 0
 
           items:
             oneOf:
@@ -631,6 +640,7 @@ components:
 
         ProcessedDataFile:
           type: array
+          minItems: 0
 
           items:
             oneOf:
@@ -706,6 +716,7 @@ components:
 
         VariantCallFile:
           type: array
+          minItems: 0
 
           items:
             oneOf:
