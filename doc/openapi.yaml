@@ -441,20 +441,26 @@ components:
 
       properties:
         Sequence:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
         Annotation:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
       required:
         - Sequence
@@ -489,12 +495,15 @@ components:
               description: Relative path from the user's home directory prefixed by `~/`.
 
         RunFile:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
         Analysis:
           oneOf:
@@ -505,12 +514,15 @@ components:
               description: Relative path from the user's home directory prefixed by `~/`.
 
         AnalysisFile:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
       required:
         - Submission
@@ -539,33 +551,41 @@ components:
               description: Relative path from the user's home directory prefixed by `~/`.
 
         ADF:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
         RawDataFile:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
         ProcessedDataFile:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
       required:
         - IDF
         - SDRF
-        - RawDataFile
 
     MetaboBankViaFileSubmission:
       type: object
@@ -588,33 +608,41 @@ components:
               description: Relative path from the user's home directory prefixed by `~/`.
 
         MAF:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
         RawDataFile:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
         ProcessedDataFile:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
       required:
         - IDF
         - SDRF
-        - RawDataFile
 
     JVarViaFileSubmission:
       type: object
@@ -677,12 +705,15 @@ components:
               description: Relative path from the user's home directory prefixed by `~/`.
 
         VariantCallFile:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
 
       required:
         - Study

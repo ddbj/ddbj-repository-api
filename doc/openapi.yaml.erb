@@ -173,12 +173,24 @@ components:
       properties:
         <%- db[:objects].each do |obj| -%>
         <%= obj[:id] %>:
+          <%- if obj[:multiple] -%>
+          type: array
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+          <%- else -%>
           oneOf:
             - type: string
               format: binary
             - type: string
               pattern: ^~/.
               description: Relative path from the user's home directory prefixed by `~/`.
+          <%- end -%>
 
         <%- end -%>
       required:
