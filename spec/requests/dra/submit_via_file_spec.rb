@@ -15,7 +15,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
 
   example 'without Analysis, valid' do
     perform_enqueued_jobs do
-      post '/api/dra/submit/via-file', params: {
+      post '/api/submissions/dra/via-file', params: {
         Submission: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml'),
         Experiment: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml'),
         Run:        file_fixture_upload('dra/valid/example-0001_dra_Run.xml'),
@@ -89,7 +89,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
 
   example 'with Analysis, valid' do
     perform_enqueued_jobs do
-      post '/api/dra/submit/via-file', params: {
+      post '/api/submissions/dra/via-file', params: {
         Submission:   file_fixture_upload('dra/valid/example-0002_dra_Submission.xml'),
         Experiment:   file_fixture_upload('dra/valid/example-0002_dra_Experiment.xml'),
         Run:          file_fixture_upload('dra/valid/example-0002_dra_Run.xml'),
@@ -181,7 +181,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
 
   example 'without Analysis, invalid' do
     perform_enqueued_jobs do
-      post '/api/dra/submit/via-file', params: {
+      post '/api/submissions/dra/via-file', params: {
         Submission: file_fixture_upload('dra/invalid/example-0001_dra_Submission.xml'),
         Experiment: file_fixture_upload('dra/invalid/example-0001_dra_Experiment.xml'),
         Run:        file_fixture_upload('dra/invalid/example-0001_dra_Run.xml'),
@@ -246,7 +246,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
     allow(Open3).to receive(:capture2e) { ['Something went wrong.', double(success?: false)] }
 
     perform_enqueued_jobs do
-      post '/api/dra/submit/via-file', params: {
+      post '/api/submissions/dra/via-file', params: {
         Submission: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml'),
         Experiment: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml'),
         Run:        file_fixture_upload('dra/valid/example-0001_dra_Run.xml'),

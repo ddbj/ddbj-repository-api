@@ -10,7 +10,7 @@ servers:
   - url: https://repository-dev.ddbj.nig.ac.jp/api
 
 paths:
-  /bioproject/validate/via-file:
+  /validations/bioproject/via-file:
     post:
       tags:
         - Validate
@@ -25,7 +25,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /bioproject/submit/via-file:
+  /submissions/bioproject/via-file:
     post:
       tags:
         - Submit
@@ -40,7 +40,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /biosample/validate/via-file:
+  /validations/biosample/via-file:
     post:
       tags:
         - Validate
@@ -55,7 +55,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /biosample/submit/via-file:
+  /submissions/biosample/via-file:
     post:
       tags:
         - Submit
@@ -70,7 +70,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /trad/validate/via-file:
+  /validations/trad/via-file:
     post:
       tags:
         - Validate
@@ -85,7 +85,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /trad/submit/via-file:
+  /submissions/trad/via-file:
     post:
       tags:
         - Submit
@@ -100,7 +100,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /dra/validate/via-file:
+  /validations/dra/via-file:
     post:
       tags:
         - Validate
@@ -115,7 +115,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /dra/submit/via-file:
+  /submissions/dra/via-file:
     post:
       tags:
         - Submit
@@ -130,7 +130,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /gea/validate/via-file:
+  /validations/gea/via-file:
     post:
       tags:
         - Validate
@@ -145,7 +145,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /gea/submit/via-file:
+  /submissions/gea/via-file:
     post:
       tags:
         - Submit
@@ -160,7 +160,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /metabobank/validate/via-file:
+  /validations/metabobank/via-file:
     post:
       tags:
         - Validate
@@ -175,7 +175,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /metabobank/submit/via-file:
+  /submissions/metabobank/via-file:
     post:
       tags:
         - Submit
@@ -190,7 +190,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /jvar/validate/via-file:
+  /validations/jvar/via-file:
     post:
       tags:
         - Validate
@@ -205,7 +205,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /jvar/submit/via-file:
+  /submissions/jvar/via-file:
     post:
       tags:
         - Submit
@@ -366,6 +366,10 @@ paths:
                 validity: valid
 
                 validation_reports:
+                  _base:
+                    validity: null
+                    details: null
+
                   BioSample:
                     validity: valid
 

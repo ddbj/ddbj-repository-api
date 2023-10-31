@@ -13,7 +13,7 @@ servers:
 
 paths:
   <%- dbs.each do |db| -%>
-  /<%= db[:id].downcase %>/validate/via-file:
+  /validations/<%= db[:id].downcase %>/via-file:
     post:
       tags:
         - Validate
@@ -28,7 +28,7 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
-  /<%= db[:id].downcase %>/submit/via-file:
+  /submissions/<%= db[:id].downcase %>/via-file:
     post:
       tags:
         - Submit

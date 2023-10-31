@@ -46,7 +46,7 @@ RSpec.describe 'BioSample: validate via file', type: :request do
 
   example do
     perform_enqueued_jobs do
-      post '/api/biosample/validate/via-file', params: {
+      post '/api/validations/biosample/via-file', params: {
         BioSample: uploaded_file(name: 'mybiosample.xml')
       }
     end
@@ -93,7 +93,7 @@ RSpec.describe 'BioSample: validate via file', type: :request do
   end
 
   example do
-    post '/api/biosample/validate/via-file', params: {
+    post '/api/validations/biosample/via-file', params: {
       BioSample: 'foo/mybiosample.xml'
     }
 
@@ -105,7 +105,7 @@ RSpec.describe 'BioSample: validate via file', type: :request do
   end
 
   example do
-    post '/api/biosample/validate/via-file', params: {
+    post '/api/validations/biosample/via-file', params: {
       BioSample: '~/../foo/mybiosample.xml'
     }
 
