@@ -26,7 +26,7 @@ class Request < ApplicationRecord
   end
 
   def validation_reports
-    objs.map { [_1._id, _1.validation_report] }.to_h
+    objs.map(&:validation_report)
   end
 
   def write_files(to:)
@@ -35,11 +35,17 @@ class Request < ApplicationRecord
     objs.each do |obj|
       obj_dir = to.join(obj._id).tap(&:mkpath)
 
-      obj_dir.join('validation-report.json').write JSON.pretty_generate(obj.validation_report)
+      if obj.file.attached?
+        filename = obj.file.filename.sanitized
 
-      obj.file.open do |file|
-        FileUtils.mv file.path, obj_dir.join(obj.file.filename.sanitized)
-      end if obj.file.attached?
+        obj_dir.join("#{filename}-validation-report.json").write JSON.pretty_generate(obj.validation_report)
+
+        obj.file.open do |file|
+          FileUtils.mv file.path, obj_dir.join(filename)
+        end
+      else
+        obj_dir.join('validation-report.json').write JSON.pretty_generate(obj.validation_report)
+      end
     end
   end
 end

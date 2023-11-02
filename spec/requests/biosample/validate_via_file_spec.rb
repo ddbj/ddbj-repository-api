@@ -68,13 +68,16 @@ RSpec.describe 'BioSample: validate via file', type: :request do
       status: 'finished',
       validity: 'valid',
 
-      validation_reports: {
-        _base: {
+      validation_reports: [
+        {
+          objectId: '_base',
+          filename: nil,
           validity: nil,
           details:  nil
         },
-
-        BioSample: {
+        {
+          objectId: 'BioSample',
+          filename: 'mybiosample.xml',
           validity: 'valid',
 
           details: {
@@ -82,7 +85,7 @@ RSpec.describe 'BioSample: validate via file', type: :request do
             answer:   42
           }
         }
-      },
+      ],
 
       submission: nil
     )

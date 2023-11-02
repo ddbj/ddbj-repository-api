@@ -33,32 +33,38 @@ RSpec.describe 'DRA: submit via file', type: :request do
       status: 'finished',
       validity: 'valid',
 
-      validation_reports: {
-        _base: {
+      validation_reports: contain_exactly(
+        {
+          objectId: '_base',
+          filename: nil,
           validity: nil,
           details:  nil
         },
-
-        Submission: {
+        {
+          objectId: 'Submission',
+          filename: 'example-0001_dra_Submission.xml',
           validity: 'valid',
           details:  nil
         },
-
-        Experiment: {
+        {
+          objectId: 'Experiment',
+          filename: 'example-0001_dra_Experiment.xml',
           validity: 'valid',
           details:  nil
         },
-
-        Run: {
+        {
+          objectId: 'Run',
+          filename: 'example-0001_dra_Run.xml',
           validity: 'valid',
           details:  nil
         },
-
-        RunFile: {
+        {
+          objectId: 'RunFile',
+          filename: 'runfile.xml',
           validity: nil,
           details:  nil
         }
-      },
+      ),
 
       submission: {
         id: /\AX-\d+\z/
@@ -71,16 +77,16 @@ RSpec.describe 'DRA: submit via file', type: :request do
     expect(Dir.glob('**/*', base: submission_dir)).to match_array(%w(
       Experiment
       Experiment/example-0001_dra_Experiment.xml
-      Experiment/validation-report.json
+      Experiment/example-0001_dra_Experiment.xml-validation-report.json
       Run
       Run/example-0001_dra_Run.xml
-      Run/validation-report.json
+      Run/example-0001_dra_Run.xml-validation-report.json
       RunFile
       RunFile/runfile.xml
-      RunFile/validation-report.json
+      RunFile/runfile.xml-validation-report.json
       Submission
       Submission/example-0001_dra_Submission.xml
-      Submission/validation-report.json
+      Submission/example-0001_dra_Submission.xml-validation-report.json
       _base
       _base/validation-report.json
       validation-report.json
@@ -109,42 +115,50 @@ RSpec.describe 'DRA: submit via file', type: :request do
       status: 'finished',
       validity: 'valid',
 
-      validation_reports: {
-        _base: {
+      validation_reports: contain_exactly(
+        {
+          objectId: '_base',
+          filename: nil,
           validity: nil,
           details:  nil
         },
-
-        Submission: {
+        {
+          objectId: 'Submission',
+          filename: 'example-0002_dra_Submission.xml',
           validity: 'valid',
           details:  nil
         },
-
-        Experiment: {
+        {
+          objectId: 'Experiment',
+          filename: 'example-0002_dra_Experiment.xml',
           validity: 'valid',
           details:  nil
         },
-
-        Run: {
+        {
+          objectId: 'Run',
+          filename: 'example-0002_dra_Run.xml',
           validity: 'valid',
           details:  nil
         },
-
-        RunFile: {
+        {
+          objectId: 'RunFile',
+          filename: 'runfile.xml',
           validity: nil,
           details:  nil
         },
-
-        Analysis: {
+        {
+          objectId: 'Analysis',
+          filename: 'example-0002_dra_Analysis.xml',
           validity: 'valid',
           details:  nil
         },
-
-        AnalysisFile: {
+        {
+          objectId: 'AnalysisFile',
+          filename: 'analysisfile.xml',
           validity: nil,
           details:  nil
         }
-      },
+      ),
 
       submission: {
         id: /\AX-\d+\z/
@@ -157,22 +171,22 @@ RSpec.describe 'DRA: submit via file', type: :request do
     expect(Dir.glob('**/*', base: submission_dir)).to match_array(%w(
       Analysis
       Analysis/example-0002_dra_Analysis.xml
-      Analysis/validation-report.json
+      Analysis/example-0002_dra_Analysis.xml-validation-report.json
       AnalysisFile
       AnalysisFile/analysisfile.xml
-      AnalysisFile/validation-report.json
+      AnalysisFile/analysisfile.xml-validation-report.json
       Experiment
       Experiment/example-0002_dra_Experiment.xml
-      Experiment/validation-report.json
+      Experiment/example-0002_dra_Experiment.xml-validation-report.json
       Run
       Run/example-0002_dra_Run.xml
-      Run/validation-report.json
+      Run/example-0002_dra_Run.xml-validation-report.json
       RunFile
       RunFile/runfile.xml
-      RunFile/validation-report.json
+      RunFile/runfile.xml-validation-report.json
       Submission
       Submission/example-0002_dra_Submission.xml
-      Submission/validation-report.json
+      Submission/example-0002_dra_Submission.xml-validation-report.json
       _base
       _base/validation-report.json
       validation-report.json
@@ -199,13 +213,16 @@ RSpec.describe 'DRA: submit via file', type: :request do
       status: 'finished',
       validity: 'invalid',
 
-      validation_reports: {
-        _base: {
+      validation_reports: contain_exactly(
+        {
+          objectId: '_base',
+          filename: nil,
           validity: nil,
           details:  nil
         },
-
-        Submission: {
+        {
+          objectId: 'Submission',
+          filename: 'example-0001_dra_Submission.xml',
           validity: 'invalid',
 
           details: [
@@ -213,30 +230,33 @@ RSpec.describe 'DRA: submit via file', type: :request do
             message:   '18:1: FATAL: Premature end of data in tag SUBMISSION line 2'
           ]
         },
-
-        Experiment: {
+        {
+          objectId: 'Experiment',
+          filename: 'example-0001_dra_Experiment.xml',
           validity: 'invalid',
 
           details: [
             object_id: 'Experiment',
-            message:   '167:1: FATAL: Premature end of data in tag EXPERIMENT_SET line 2'
+            message:   '167:1: FATAL: Premature end of data in tag EXPERIMENT_SET line 2',
           ]
         },
-
-        Run: {
+        {
+          objectId: 'Run',
+          filename: 'example-0001_dra_Run.xml',
           validity: 'invalid',
 
           details: [
             object_id: 'Run',
-            message:   '41:1: FATAL: Premature end of data in tag RUN_SET line 2'
+            message:   '41:1: FATAL: Premature end of data in tag RUN_SET line 2',
           ]
         },
-
-        RunFile: {
+        {
+          objectId: 'RunFile',
+          filename: 'runfile.xml',
           validity: nil,
           details:  nil
         }
-      },
+      ),
 
       submission: nil
     )
@@ -264,37 +284,87 @@ RSpec.describe 'DRA: submit via file', type: :request do
       status: 'finished',
       validity: 'error',
 
-      validation_reports: {
-        _base: {
+      validation_reports: contain_exactly(
+        {
+          objectId: '_base',
+          filename: nil,
           validity: 'error',
 
           details: {
             error: 'Something went wrong.'
           }
         },
-
-        Submission: {
+        {
+          objectId: 'Submission',
+          filename: 'example-0001_dra_Submission.xml',
           validity: nil,
           details:  nil
         },
-
-        Experiment: {
+        {
+          objectId: 'Experiment',
+          filename: 'example-0001_dra_Experiment.xml',
           validity: nil,
           details:  nil
         },
-
-        Run: {
+        {
+          objectId: 'Run',
+          filename: 'example-0001_dra_Run.xml',
           validity: nil,
           details:  nil
         },
-
-        RunFile: {
+        {
+          objectId: 'RunFile',
+          filename: 'runfile.xml',
           validity: nil,
           details:  nil
         }
-      },
+      ),
 
       submission: nil
     )
+  end
+
+  example 'with multiple RunFile' do
+    perform_enqueued_jobs do
+      post '/api/submissions/dra/via-file', params: {
+        Submission: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml'),
+        Experiment: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml'),
+        Run:        file_fixture_upload('dra/valid/example-0001_dra_Run.xml'),
+
+        RunFile: [
+          uploaded_file(name: 'runfile1.xml'),
+          uploaded_file(name: 'runfile2.xml')
+        ]
+      }
+    end
+
+    expect(response).to have_http_status(:created)
+
+    get response.parsed_body.dig(:request, :url)
+
+    expect(response).to have_http_status(:ok)
+
+    submission_id  = response.parsed_body.dig(:submission, :id)
+    submission_dir = repository_dir.join('alice/submissions', submission_id)
+
+    expect(Dir.glob('**/*', base: submission_dir)).to match_array(%w(
+      Experiment
+      Experiment/example-0001_dra_Experiment.xml
+      Experiment/example-0001_dra_Experiment.xml-validation-report.json
+      Run
+      Run/example-0001_dra_Run.xml
+      Run/example-0001_dra_Run.xml-validation-report.json
+      RunFile
+      RunFile/runfile1.xml
+      RunFile/runfile1.xml-validation-report.json
+      RunFile/runfile2.xml
+      RunFile/runfile2.xml-validation-report.json
+      Submission
+      Submission/example-0001_dra_Submission.xml
+      Submission/example-0001_dra_Submission.xml-validation-report.json
+      _base
+      _base/validation-report.json
+      validation-report.json
+    ))
   end
 end

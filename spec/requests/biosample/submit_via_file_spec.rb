@@ -68,13 +68,16 @@ RSpec.describe 'BioSample: submit via file', type: :request do
       status: 'finished',
       validity: 'valid',
 
-      validation_reports: {
-        _base: {
+      validation_reports: [
+        {
+          objectId: '_base',
+          filename: nil,
           validity: nil,
           details:  nil
         },
-
-        BioSample: {
+        {
+          objectId: 'BioSample',
+          filename: 'mybiosample.xml',
           validity: 'valid',
 
           details: {
@@ -82,7 +85,7 @@ RSpec.describe 'BioSample: submit via file', type: :request do
             answer:   42
           }
         }
-      },
+      ],
 
       submission: {
         id: /\AX-\d+\z/
@@ -99,7 +102,7 @@ RSpec.describe 'BioSample: submit via file', type: :request do
     expect(Dir.glob('**/*', base: submission_dir)).to match_array(%w(
       BioSample
       BioSample/mybiosample.xml
-      BioSample/validation-report.json
+      BioSample/mybiosample.xml-validation-report.json
       _base
       _base/validation-report.json
       validation-report.json
