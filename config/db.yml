@@ -3,45 +3,60 @@
 
   objects:
     - id: BioProject
+      ext: xml
 
 - id: BioSample
   validator: biosample
 
   objects:
     - id: BioSample
+      ext: xml
 
 - id: Trad
   objects:
     - id: Sequence
+      ext: fasta
       multiple: true
     - id: Annotation
+      ext: ann
       multiple: true
 
 - id: DRA
   validator: dra
   objects:
     - id: Submission
+      ext: xml
     - id: Experiment
+      ext: xml
     - id: Run
+      ext: xml
     - id: RunFile
+      ext: fastq
       multiple: true
     - id: Analysis
+      ext: xml
       optional: true
     - id: AnalysisFile
+      ext: raw
       optional: true
       multiple: true
 
 - id: GEA
   objects:
     - id: IDF
+      ext: tsv
     - id: SDRF
+      ext: tsv
     - id: ADF
+      ext: tsv
       optional: true
       multiple: true
     - id: RawDataFile
+      ext: raw
       optional: true
       multiple: true
     - id: ProcessedDataFile
+      ext: raw
       optional: true
       multiple: true
 
@@ -49,26 +64,39 @@
   validator: metabobank
   objects:
     - id: IDF
+      ext: tsv
     - id: SDRF
+      ext: tsv
     - id: MAF
+      ext: tsv
       optional: true
       multiple: true
     - id: RawDataFile
+      ext: raw
       optional: true
       multiple: true
     - id: ProcessedDataFile
+      ext: raw
       optional: true
       multiple: true
 
 - id: JVar
   objects:
     - id: Study
+      ext: tsv
     - id: SampleSet
+      ext: tsv
     - id: Sample
+      ext: tsv
     - id: Experiment
+      ext: tsv
     - id: Assay
+      ext: tsv
     - id: VariantCallSV
+      ext: tsv
     - id: VariantRegionSV
+      ext: tsv
     - id: VariantCallFile
+      ext: vcf
       optional: true
       multiple: true

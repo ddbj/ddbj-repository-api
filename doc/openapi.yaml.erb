@@ -210,7 +210,7 @@ components:
 
           example:
             <%- db[:objects].each do |obj| -%>
-            <%= obj[:id] %>: ~/my<%= obj[:id].downcase %>.xml
+            <%= obj[:id] %>: ~/my<%= obj[:id].downcase %>.<%= obj[:ext] %>
             <%- end -%>
 
         multipart/form-data:
@@ -219,7 +219,7 @@ components:
 
           example:
             <%- db[:objects].each do |obj| -%>
-            <%= obj[:id] %>: ~/my<%= obj[:id].downcase %>.xml
+            <%= obj[:id] %>: ~/my<%= obj[:id].downcase %>.<%= obj[:ext] %>
             <%- end -%>
 
     <%- end -%>

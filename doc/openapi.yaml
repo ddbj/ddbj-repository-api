@@ -775,16 +775,16 @@ components:
             $ref: '#/components/schemas/TradViaFileSubmission'
 
           example:
-            Sequence: ~/mysequence.xml
-            Annotation: ~/myannotation.xml
+            Sequence: ~/mysequence.fasta
+            Annotation: ~/myannotation.ann
 
         multipart/form-data:
           schema:
             $ref: '#/components/schemas/TradViaFileSubmission'
 
           example:
-            Sequence: ~/mysequence.xml
-            Annotation: ~/myannotation.xml
+            Sequence: ~/mysequence.fasta
+            Annotation: ~/myannotation.ann
 
     DRAViaFile:
       content:
@@ -796,9 +796,9 @@ components:
             Submission: ~/mysubmission.xml
             Experiment: ~/myexperiment.xml
             Run: ~/myrun.xml
-            RunFile: ~/myrunfile.xml
+            RunFile: ~/myrunfile.fastq
             Analysis: ~/myanalysis.xml
-            AnalysisFile: ~/myanalysisfile.xml
+            AnalysisFile: ~/myanalysisfile.raw
 
         multipart/form-data:
           schema:
@@ -808,9 +808,9 @@ components:
             Submission: ~/mysubmission.xml
             Experiment: ~/myexperiment.xml
             Run: ~/myrun.xml
-            RunFile: ~/myrunfile.xml
+            RunFile: ~/myrunfile.fastq
             Analysis: ~/myanalysis.xml
-            AnalysisFile: ~/myanalysisfile.xml
+            AnalysisFile: ~/myanalysisfile.raw
 
     GEAViaFile:
       content:
@@ -819,22 +819,22 @@ components:
             $ref: '#/components/schemas/GEAViaFileSubmission'
 
           example:
-            IDF: ~/myidf.xml
-            SDRF: ~/mysdrf.xml
-            ADF: ~/myadf.xml
-            RawDataFile: ~/myrawdatafile.xml
-            ProcessedDataFile: ~/myprocesseddatafile.xml
+            IDF: ~/myidf.tsv
+            SDRF: ~/mysdrf.tsv
+            ADF: ~/myadf.tsv
+            RawDataFile: ~/myrawdatafile.raw
+            ProcessedDataFile: ~/myprocesseddatafile.raw
 
         multipart/form-data:
           schema:
             $ref: '#/components/schemas/GEAViaFileSubmission'
 
           example:
-            IDF: ~/myidf.xml
-            SDRF: ~/mysdrf.xml
-            ADF: ~/myadf.xml
-            RawDataFile: ~/myrawdatafile.xml
-            ProcessedDataFile: ~/myprocesseddatafile.xml
+            IDF: ~/myidf.tsv
+            SDRF: ~/mysdrf.tsv
+            ADF: ~/myadf.tsv
+            RawDataFile: ~/myrawdatafile.raw
+            ProcessedDataFile: ~/myprocesseddatafile.raw
 
     MetaboBankViaFile:
       content:
@@ -843,22 +843,22 @@ components:
             $ref: '#/components/schemas/MetaboBankViaFileSubmission'
 
           example:
-            IDF: ~/myidf.xml
-            SDRF: ~/mysdrf.xml
-            MAF: ~/mymaf.xml
-            RawDataFile: ~/myrawdatafile.xml
-            ProcessedDataFile: ~/myprocesseddatafile.xml
+            IDF: ~/myidf.tsv
+            SDRF: ~/mysdrf.tsv
+            MAF: ~/mymaf.tsv
+            RawDataFile: ~/myrawdatafile.raw
+            ProcessedDataFile: ~/myprocesseddatafile.raw
 
         multipart/form-data:
           schema:
             $ref: '#/components/schemas/MetaboBankViaFileSubmission'
 
           example:
-            IDF: ~/myidf.xml
-            SDRF: ~/mysdrf.xml
-            MAF: ~/mymaf.xml
-            RawDataFile: ~/myrawdatafile.xml
-            ProcessedDataFile: ~/myprocesseddatafile.xml
+            IDF: ~/myidf.tsv
+            SDRF: ~/mysdrf.tsv
+            MAF: ~/mymaf.tsv
+            RawDataFile: ~/myrawdatafile.raw
+            ProcessedDataFile: ~/myprocesseddatafile.raw
 
     JVarViaFile:
       content:
@@ -867,28 +867,28 @@ components:
             $ref: '#/components/schemas/JVarViaFileSubmission'
 
           example:
-            Study: ~/mystudy.xml
-            SampleSet: ~/mysampleset.xml
-            Sample: ~/mysample.xml
-            Experiment: ~/myexperiment.xml
-            Assay: ~/myassay.xml
-            VariantCallSV: ~/myvariantcallsv.xml
-            VariantRegionSV: ~/myvariantregionsv.xml
-            VariantCallFile: ~/myvariantcallfile.xml
+            Study: ~/mystudy.tsv
+            SampleSet: ~/mysampleset.tsv
+            Sample: ~/mysample.tsv
+            Experiment: ~/myexperiment.tsv
+            Assay: ~/myassay.tsv
+            VariantCallSV: ~/myvariantcallsv.tsv
+            VariantRegionSV: ~/myvariantregionsv.tsv
+            VariantCallFile: ~/myvariantcallfile.vcf
 
         multipart/form-data:
           schema:
             $ref: '#/components/schemas/JVarViaFileSubmission'
 
           example:
-            Study: ~/mystudy.xml
-            SampleSet: ~/mysampleset.xml
-            Sample: ~/mysample.xml
-            Experiment: ~/myexperiment.xml
-            Assay: ~/myassay.xml
-            VariantCallSV: ~/myvariantcallsv.xml
-            VariantRegionSV: ~/myvariantregionsv.xml
-            VariantCallFile: ~/myvariantcallfile.xml
+            Study: ~/mystudy.tsv
+            SampleSet: ~/mysampleset.tsv
+            Sample: ~/mysample.tsv
+            Experiment: ~/myexperiment.tsv
+            Assay: ~/myassay.tsv
+            VariantCallSV: ~/myvariantcallsv.tsv
+            VariantRegionSV: ~/myvariantregionsv.tsv
+            VariantCallFile: ~/myvariantcallfile.vcf
 
   responses:
     CreateResponseCreated:
