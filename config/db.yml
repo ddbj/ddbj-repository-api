@@ -44,11 +44,11 @@
 - id: GEA
   objects:
     - id: IDF
-      ext: tsv
+      ext: idf.txt
     - id: SDRF
-      ext: tsv
+      ext: sdrf.txt
     - id: ADF
-      ext: tsv
+      ext: adf.txt
       optional: true
       multiple: true
     - id: RawDataFile
@@ -64,9 +64,9 @@
   validator: metabobank
   objects:
     - id: IDF
-      ext: tsv
+      ext: idf.txt
     - id: SDRF
-      ext: tsv
+      ext: sdrf.txt
     - id: MAF
       ext: tsv
       optional: true

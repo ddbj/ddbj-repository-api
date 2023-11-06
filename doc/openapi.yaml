@@ -819,9 +819,9 @@ components:
             $ref: '#/components/schemas/GEAViaFileSubmission'
 
           example:
-            IDF: ~/myidf.tsv
-            SDRF: ~/mysdrf.tsv
-            ADF: ~/myadf.tsv
+            IDF: ~/myidf.idf.txt
+            SDRF: ~/mysdrf.sdrf.txt
+            ADF: ~/myadf.adf.txt
             RawDataFile: ~/myrawdatafile.raw
             ProcessedDataFile: ~/myprocesseddatafile.raw
 
@@ -830,9 +830,9 @@ components:
             $ref: '#/components/schemas/GEAViaFileSubmission'
 
           example:
-            IDF: ~/myidf.tsv
-            SDRF: ~/mysdrf.tsv
-            ADF: ~/myadf.tsv
+            IDF: ~/myidf.idf.txt
+            SDRF: ~/mysdrf.sdrf.txt
+            ADF: ~/myadf.adf.txt
             RawDataFile: ~/myrawdatafile.raw
             ProcessedDataFile: ~/myprocesseddatafile.raw
 
@@ -843,8 +843,8 @@ components:
             $ref: '#/components/schemas/MetaboBankViaFileSubmission'
 
           example:
-            IDF: ~/myidf.tsv
-            SDRF: ~/mysdrf.tsv
+            IDF: ~/myidf.idf.txt
+            SDRF: ~/mysdrf.sdrf.txt
             MAF: ~/mymaf.tsv
             RawDataFile: ~/myrawdatafile.raw
             ProcessedDataFile: ~/myprocesseddatafile.raw
@@ -854,8 +854,8 @@ components:
             $ref: '#/components/schemas/MetaboBankViaFileSubmission'
 
           example:
-            IDF: ~/myidf.tsv
-            SDRF: ~/mysdrf.tsv
+            IDF: ~/myidf.idf.txt
+            SDRF: ~/mysdrf.sdrf.txt
             MAF: ~/mymaf.tsv
             RawDataFile: ~/myrawdatafile.raw
             ProcessedDataFile: ~/myprocesseddatafile.raw
