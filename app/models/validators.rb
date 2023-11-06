@@ -2,7 +2,8 @@ class Validators
   VALIDATOR = {
     bioproject: DdbjValidator.new(obj_id: 'BioProject'),
     biosample:  DdbjValidator.new(obj_id: 'BioSample'),
-    dra:        DraValidator.new
+    dra:        DraValidator.new,
+    metabobank: MetabobankValidator.new
   }.stringify_keys
 
   def initialize(request)

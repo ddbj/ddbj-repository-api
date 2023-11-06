@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/ddbj/metabobank_tools.git
+  revision: bc0ece5ded881e179cc106691b5fe821e179dd7d
+  branch: repository
+  specs:
+    metabobank_tools (0.1.0)
+
+GIT
   remote: https://github.com/ddbj/submission-excel2xml.git
   revision: 77dfd51d20691b725bc1ca1bff8536fa8e100a9d
   branch: repository
@@ -254,7 +261,7 @@ GEM
     zeitwerk (2.6.12)
 
 PLATFORMS
-  arm64-darwin-22
+  arm64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
@@ -263,6 +270,7 @@ DEPENDENCIES
   debug
   faraday
   faraday-multipart
+  metabobank_tools!
   parallel
   pg
   puma

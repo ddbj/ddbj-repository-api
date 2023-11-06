@@ -46,6 +46,7 @@
       multiple: true
 
 - id: MetaboBank
+  validator: metabobank
   objects:
     - id: IDF
     - id: SDRF
