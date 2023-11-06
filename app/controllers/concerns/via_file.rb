@@ -19,7 +19,7 @@ module ViaFile
       request.objs.create! _id: '_base'
 
       db[:objects].each do |obj|
-        id  = obj[:id]
+        obj => {id:}
         val = obj[:optional] ? params[id] : params.require(id)
 
         handle_param request, obj, val
@@ -32,7 +32,7 @@ module ViaFile
   private
 
   def handle_param(request, obj, val)
-    id, optional, multiple = obj.values_at(:id, :optional, :multiple)
+    obj => {id:}
 
     case val
     in ActionDispatch::Http::UploadedFile => file
@@ -47,9 +47,9 @@ module ViaFile
         io:       path.open,
         filename: path.basename
       }
-    in nil if optional
+    in nil if obj[:optional]
       # do nothing
-    in Array => vals if multiple
+    in [*vals] if obj[:multiple]
       vals.each do |val|
         handle_param request, obj, val
       end

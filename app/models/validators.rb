@@ -14,8 +14,8 @@ class Validators
     begin
       @request.update! status: 'processing'
 
-      db        = DB.find { _1[:id] == @request.db }
-      validator = db[:validator]
+      db = DB.find { _1[:id] == @request.db }
+      db => {validator:}
 
       begin
         VALIDATOR.fetch(validator).validate @request
