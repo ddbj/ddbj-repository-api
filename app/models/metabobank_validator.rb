@@ -26,7 +26,7 @@ class MetabobankValidator
 
         objs.each do |obj_id, obj|
           if errs = errors[obj_id]
-            validity = if errs.any? { _1[:severity] == 'error' || _1[:severity] == 'error_ignore' }
+            validity = if errs.any? { _1[:severity] == 'error' }
                          'invalid'
                        else
                          'valid'

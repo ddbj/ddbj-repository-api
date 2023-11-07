@@ -32,7 +32,7 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
       validation_reports: include(
         objectId: 'IDF',
         filename: 'MTBKS201.idf.txt',
-        validity: 'invalid',
+        validity: 'valid',
 
         details: include(
           object_id: 'IDF',
