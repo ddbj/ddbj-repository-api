@@ -68,7 +68,7 @@
     - id: SDRF
       ext: sdrf.txt
     - id: MAF
-      ext: tsv
+      ext: maf.txt
       optional: true
       multiple: true
     - id: RawDataFile
