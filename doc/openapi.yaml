@@ -13,7 +13,7 @@ paths:
   /validations/bioproject/via-file:
     post:
       tags:
-        - Validate
+        - Validation
 
       requestBody:
         $ref: '#/components/requestBodies/BioProjectViaFile'
@@ -28,7 +28,7 @@ paths:
   /submissions/bioproject/via-file:
     post:
       tags:
-        - Submit
+        - Submission
 
       requestBody:
         $ref: '#/components/requestBodies/BioProjectViaFile'
@@ -43,7 +43,7 @@ paths:
   /validations/biosample/via-file:
     post:
       tags:
-        - Validate
+        - Validation
 
       requestBody:
         $ref: '#/components/requestBodies/BioSampleViaFile'
@@ -58,7 +58,7 @@ paths:
   /submissions/biosample/via-file:
     post:
       tags:
-        - Submit
+        - Submission
 
       requestBody:
         $ref: '#/components/requestBodies/BioSampleViaFile'
@@ -73,7 +73,7 @@ paths:
   /validations/trad/via-file:
     post:
       tags:
-        - Validate
+        - Validation
 
       requestBody:
         $ref: '#/components/requestBodies/TradViaFile'
@@ -88,7 +88,7 @@ paths:
   /submissions/trad/via-file:
     post:
       tags:
-        - Submit
+        - Submission
 
       requestBody:
         $ref: '#/components/requestBodies/TradViaFile'
@@ -103,7 +103,7 @@ paths:
   /validations/dra/via-file:
     post:
       tags:
-        - Validate
+        - Validation
 
       requestBody:
         $ref: '#/components/requestBodies/DRAViaFile'
@@ -118,7 +118,7 @@ paths:
   /submissions/dra/via-file:
     post:
       tags:
-        - Submit
+        - Submission
 
       requestBody:
         $ref: '#/components/requestBodies/DRAViaFile'
@@ -133,7 +133,7 @@ paths:
   /validations/gea/via-file:
     post:
       tags:
-        - Validate
+        - Validation
 
       requestBody:
         $ref: '#/components/requestBodies/GEAViaFile'
@@ -148,7 +148,7 @@ paths:
   /submissions/gea/via-file:
     post:
       tags:
-        - Submit
+        - Submission
 
       requestBody:
         $ref: '#/components/requestBodies/GEAViaFile'
@@ -163,7 +163,7 @@ paths:
   /validations/metabobank/via-file:
     post:
       tags:
-        - Validate
+        - Validation
 
       requestBody:
         $ref: '#/components/requestBodies/MetaboBankViaFile'
@@ -178,7 +178,7 @@ paths:
   /submissions/metabobank/via-file:
     post:
       tags:
-        - Submit
+        - Submission
 
       requestBody:
         $ref: '#/components/requestBodies/MetaboBankViaFile'
@@ -193,7 +193,7 @@ paths:
   /validations/jvar/via-file:
     post:
       tags:
-        - Validate
+        - Validation
 
       requestBody:
         $ref: '#/components/requestBodies/JVarViaFile'
@@ -208,7 +208,7 @@ paths:
   /submissions/jvar/via-file:
     post:
       tags:
-        - Submit
+        - Submission
 
       requestBody:
         $ref: '#/components/requestBodies/JVarViaFile'
@@ -650,6 +650,14 @@ components:
                 pattern: ^~/.
                 description: Relative path from the user's home directory prefixed by `~/`.
 
+        BioSample:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
       required:
         - IDF
         - SDRF
@@ -845,9 +853,10 @@ components:
           example:
             IDF: ~/myidf.idf.txt
             SDRF: ~/mysdrf.sdrf.txt
-            MAF: ~/mymaf.tsv
+            MAF: ~/mymaf.maf.txt
             RawDataFile: ~/myrawdatafile.raw
             ProcessedDataFile: ~/myprocesseddatafile.raw
+            BioSample: ~/mybiosample.tsv
 
         multipart/form-data:
           schema:
@@ -856,9 +865,10 @@ components:
           example:
             IDF: ~/myidf.idf.txt
             SDRF: ~/mysdrf.sdrf.txt
-            MAF: ~/mymaf.tsv
+            MAF: ~/mymaf.maf.txt
             RawDataFile: ~/myrawdatafile.raw
             ProcessedDataFile: ~/myprocesseddatafile.raw
+            BioSample: ~/mybiosample.tsv
 
     JVarViaFile:
       content:

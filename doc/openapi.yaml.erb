@@ -16,7 +16,7 @@ paths:
   /validations/<%= db[:id].downcase %>/via-file:
     post:
       tags:
-        - Validate
+        - Validation
 
       requestBody:
         $ref: '#/components/requestBodies/<%= db[:id] %>ViaFile'
@@ -31,7 +31,7 @@ paths:
   /submissions/<%= db[:id].downcase %>/via-file:
     post:
       tags:
-        - Submit
+        - Submission
 
       requestBody:
         $ref: '#/components/requestBodies/<%= db[:id] %>ViaFile'
