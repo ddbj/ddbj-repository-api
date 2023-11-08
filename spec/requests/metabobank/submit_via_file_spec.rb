@@ -49,7 +49,7 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
   example 'without MAF and RawDataFile and ProcessedDataFile, invalid' do
     perform_enqueued_jobs do
       post '/api/submissions/metabobank/via-file', params: {
-        IDF: file_fixture_upload('metabobank/MTBKS201.idf.txt'),
+        IDF:  file_fixture_upload('metabobank/MTBKS201.idf.txt'),
         SDRF: file_fixture_upload('metabobank/MTBKS201.sdrf.txt')
       }
     end
@@ -78,6 +78,40 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
       ),
 
       submission: nil
+    )
+  end
+
+  example 'with BioSample, valid' do
+    perform_enqueued_jobs do
+      post '/api/submissions/metabobank/via-file', params: {
+        IDF:       file_fixture_upload('metabobank/MTBKS231.idf.txt'),
+        SDRF:      file_fixture_upload('metabobank/MTBKS231.sdrf.txt'),
+        BioSample: file_fixture_upload('metabobank/MTBKS231.bs.tsv')
+      }
+    end
+
+    expect(response).to have_http_status(:created)
+
+    get response.parsed_body.dig(:request, :url)
+
+    expect(response).to have_http_status(:ok)
+
+    pending
+
+    expect(response.parsed_body.deep_symbolize_keys).to match(
+      status:   'finished',
+      validity: 'valid',
+
+      validation_reports: include(
+        objectId: 'BioSample',
+        filename: 'MTBKS231.bs.tsv',
+        validity: 'valid',
+        details:  an_instance_of(Array)
+      ),
+
+      submission: {
+        id: /\AX-\d+\z/
+      }
     )
   end
 end

@@ -79,6 +79,9 @@
       ext: raw
       optional: true
       multiple: true
+    - id: BioSample
+      ext: tsv
+      optional: true
 
 - id: JVar
   objects:

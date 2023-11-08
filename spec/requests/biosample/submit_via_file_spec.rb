@@ -68,7 +68,7 @@ RSpec.describe 'BioSample: submit via file', type: :request do
       status: 'finished',
       validity: 'valid',
 
-      validation_reports: [
+      validation_reports: contain_exactly(
         {
           objectId: '_base',
           filename: nil,
@@ -85,7 +85,7 @@ RSpec.describe 'BioSample: submit via file', type: :request do
             answer:   42
           }
         }
-      ],
+      ),
 
       submission: {
         id: /\AX-\d+\z/
