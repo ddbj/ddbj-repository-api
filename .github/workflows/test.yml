@@ -25,6 +25,7 @@ jobs:
 
     env:
       BUNDLE_GITHUB__COM: x-access-token:${{ secrets._GITHUB_PAT }}
+      BUNDLE_WITHOUT: development
       PGHOST: localhost
       PGUSER: postgres
       RAILS_ENV: test
