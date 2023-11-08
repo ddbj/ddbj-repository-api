@@ -18,7 +18,7 @@ class DraValidator
           'BUNDLE_GEMFILE' => Rails.root.join('Gemfile').to_s
         }
 
-        out, status = Open3.capture2e(env, 'bundle exec validate_meta_dra -a example -i 0001 --machine-readable')
+        out, status = Open3.capture2e(env, *%w(bundle exec validate_meta_dra -a example -i 0001 --machine-readable))
 
         raise out unless status.success?
 

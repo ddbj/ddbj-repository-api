@@ -18,15 +18,15 @@ class MetabobankValidator
           'BUNDLE_GEMFILE' => Rails.root.join('Gemfile').to_s
         }
 
-        cmd = "bundle exec mb-validate -i #{objs.fetch('IDF').file.filename.sanitized} -s #{objs.fetch('SDRF').file.filename.sanitized} --machine-readable".then {
+        cmd = %W(bundle exec mb-validate -i #{objs.fetch('IDF').file.filename.sanitized} -s #{objs.fetch('SDRF').file.filename.sanitized} --machine-readable).then {
           if bs = objs['BioSample']
-            "#{_1} -t #{bs.file.filename.sanitized}"
+            _1.concat %W(-t #{bs.file.filename.sanitized})
           else
             _1
           end
         }
 
-        out, status = Open3.capture2e(env, cmd)
+        out, status = Open3.capture2e(env, *cmd)
 
         raise out unless status.success?
 
