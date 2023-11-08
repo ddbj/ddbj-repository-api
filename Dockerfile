@@ -1,17 +1,19 @@
 # syntax = docker/dockerfile:1
 
 ARG RUBY_VERSION
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+FROM registry.docker.com/library/ruby:${RUBY_VERSION:?}-slim as base
 
 # Rails app lives here
 WORKDIR /rails
 
 ARG APP_GID
 ARG APP_UID
+ARG GITHUB_PAT
 
 # Set production environment
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_GITHUB__COM="x-access-token:${GITHUB_PAT:?}" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development" \
     TZ=Japan

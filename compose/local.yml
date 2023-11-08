@@ -4,8 +4,8 @@ volumes:
 services:
   rails: &rails-local
     volumes:
-      - tmp/home:/mnt/home
-      - tmp/repository:/mnt/repository
+      - ./tmp/home:/mnt/home
+      - ./tmp/repository:/mnt/repository
 
   sidekiq:
     <<: *rails-local
