@@ -7,10 +7,10 @@ class Obj < ApplicationRecord
 
   def validation_report
     {
-      objectId: _id,
-      filename: file.attached? ? file.filename.sanitized : nil,
-      validity: validity,
-      details:  validation_details
+      object_id: _id,
+      filename:  file.attached? ? file.filename.sanitized : nil,
+      validity:  validity,
+      details:   validation_details
     }
   end
 end

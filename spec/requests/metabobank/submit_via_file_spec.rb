@@ -26,9 +26,9 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
       validity: 'valid',
 
       validation_reports: include(
-        objectId: 'IDF',
-        filename: 'MTBKS231.idf.txt',
-        validity: 'valid',
+        object_id: 'IDF',
+        filename:  'MTBKS231.idf.txt',
+        validity:  'valid',
 
         details: include(
           object_id: 'IDF',
@@ -65,9 +65,9 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
       validity: 'invalid',
 
       validation_reports: include(
-        objectId: 'IDF',
-        filename: 'MTBKS201.idf.txt',
-        validity: 'valid',
+        object_id: 'IDF',
+        filename:  'MTBKS201.idf.txt',
+        validity:  'valid',
 
         details: include(
           object_id: 'IDF',
@@ -103,10 +103,10 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
       validity: 'valid',
 
       validation_reports: include(
-        objectId: 'BioSample',
-        filename: 'MTBKS231.bs.tsv',
-        validity: 'valid',
-        details:  an_instance_of(Array)
+        object_id: 'BioSample',
+        filename:  'MTBKS231.bs.tsv',
+        validity:  'valid',
+        details:   an_instance_of(Array)
       ),
 
       submission: {
