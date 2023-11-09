@@ -14,11 +14,9 @@ class MetabobankValidator
       end
 
       Dir.chdir tmpdir do
-        env = {
-          'BUNDLE_GEMFILE' => Rails.root.join('Gemfile').to_s
-        }
+        idf, sdrf = objs.fetch_values('IDF', 'SDRF').map { _1.file.filename.sanitized }
 
-        cmd = %W(bundle exec mb-validate --machine-readable -i #{objs.fetch('IDF').file.filename.sanitized} -s #{objs.fetch('SDRF').file.filename.sanitized}).then {
+        cmd = %W(bundle exec mb-validate --machine-readable -i #{idf} -s #{sdrf}).then {
           if bs = objs['BioSample']
             _1 + %W(-t #{bs.file.filename.sanitized})
           else
@@ -26,7 +24,9 @@ class MetabobankValidator
           end
         }
 
-        out, status = Open3.capture2e(env, *cmd)
+        out, status = Open3.capture2e({
+          'BUNDLE_GEMFILE' => Rails.root.join('Gemfile').to_s
+        }, *cmd)
 
         raise out unless status.success?
 
