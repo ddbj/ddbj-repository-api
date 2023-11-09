@@ -64,11 +64,11 @@ RSpec.describe 'BioSample: validate via file', type: :request do
 
     expect(response).to have_http_status(:ok)
 
-    expect(response.parsed_body.deep_symbolize_keys).to eq(
+    expect(response.parsed_body.deep_symbolize_keys).to match(
       status: 'finished',
       validity: 'valid',
 
-      validation_reports: [
+      validation_reports: contain_exactly(
         {
           object_id: '_base',
           filename:  nil,
@@ -85,7 +85,7 @@ RSpec.describe 'BioSample: validate via file', type: :request do
             answer:   42
           }
         }
-      ],
+      ),
 
       submission: nil
     )
