@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "run": "deno task gen_db && deno run --allow-read --allow-net run.ts",
+    "install": "deno task gen_db && deno install --allow-read --allow-net --config=deno.json --name ddbj-repository --force run.ts",
+    "gen_db": "deno run --allow-read=../config/db.yml https://deno.land/x/y2j@v2.0.0/y2j.ts ../config/db.yml > db.json"
+  },
+  "imports": {
+    "std/": "https://deno.land/std@0.206.0/"
+  }
+}
