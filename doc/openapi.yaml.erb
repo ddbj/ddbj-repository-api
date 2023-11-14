@@ -167,7 +167,7 @@ components:
         - details
 
     <%- dbs.each do |db| -%>
-    <%= db[:id] %>ViaFileSubmission:
+    <%= db[:id] %>ViaFileJSON:
       type: object
 
       properties:
@@ -199,6 +199,38 @@ components:
         - <%= obj[:id] %>
         <%- end -%>
 
+    <%= db[:id] %>ViaFileFormData:
+      type: object
+
+      properties:
+        <%- db[:objects].each do |obj| -%>
+        <%= key = obj[:multiple] ? "#{obj[:id]}[]" : obj[:id] %>:
+          <%- if obj[:multiple] -%>
+          type: array
+          minItems: <%= obj[:optional] ? 0 : 1 %>
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+          <%- else -%>
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+          <%- end -%>
+
+        <%- end -%>
+      required:
+        <%- db[:objects].reject { _1[:optional] }.each do |obj| -%>
+        - <%= key = obj[:multiple] ? "#{obj[:id]}[]" : obj[:id] %>
+        <%- end -%>
+
     <%- end -%>
   requestBodies:
     <%- dbs.each do |db| -%>
@@ -206,7 +238,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/<%= db[:id] %>ViaFileSubmission'
+            $ref: '#/components/schemas/<%= db[:id] %>ViaFileJSON'
 
           example:
             <%- db[:objects].each do |obj| -%>
@@ -215,11 +247,11 @@ components:
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/<%= db[:id] %>ViaFileSubmission'
+            $ref: '#/components/schemas/<%= db[:id] %>ViaFileFormData'
 
           example:
             <%- db[:objects].each do |obj| -%>
-            <%= obj[:id] %>: ~/my<%= obj[:id].downcase %>.<%= obj[:ext] %>
+            <%= key = obj[:multiple] ? "#{obj[:id]}[]" : obj[:id] %>: ~/my<%= obj[:id].downcase %>.<%= obj[:ext] %>
             <%- end -%>
 
     <%- end -%>

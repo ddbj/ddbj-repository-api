@@ -406,7 +406,7 @@ components:
         - validity
         - details
 
-    BioProjectViaFileSubmission:
+    BioProjectViaFileJSON:
       type: object
 
       properties:
@@ -421,7 +421,22 @@ components:
       required:
         - BioProject
 
-    BioSampleViaFileSubmission:
+    BioProjectViaFileFormData:
+      type: object
+
+      properties:
+        BioProject:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - BioProject
+
+    BioSampleViaFileJSON:
       type: object
 
       properties:
@@ -436,7 +451,22 @@ components:
       required:
         - BioSample
 
-    TradViaFileSubmission:
+    BioSampleViaFileFormData:
+      type: object
+
+      properties:
+        BioSample:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - BioSample
+
+    TradViaFileJSON:
       type: object
 
       properties:
@@ -468,7 +498,39 @@ components:
         - Sequence
         - Annotation
 
-    DRAViaFileSubmission:
+    TradViaFileFormData:
+      type: object
+
+      properties:
+        Sequence[]:
+          type: array
+          minItems: 1
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+        Annotation[]:
+          type: array
+          minItems: 1
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - Sequence[]
+        - Annotation[]
+
+    DRAViaFileJSON:
       type: object
 
       properties:
@@ -534,7 +596,73 @@ components:
         - Run
         - RunFile
 
-    GEAViaFileSubmission:
+    DRAViaFileFormData:
+      type: object
+
+      properties:
+        Submission:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Experiment:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Run:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        RunFile[]:
+          type: array
+          minItems: 1
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+        Analysis:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        AnalysisFile[]:
+          type: array
+          minItems: 0
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - Submission
+        - Experiment
+        - Run
+        - RunFile[]
+
+    GEAViaFileJSON:
       type: object
 
       properties:
@@ -594,7 +722,67 @@ components:
         - IDF
         - SDRF
 
-    MetaboBankViaFileSubmission:
+    GEAViaFileFormData:
+      type: object
+
+      properties:
+        IDF:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        SDRF:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        ADF[]:
+          type: array
+          minItems: 0
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+        RawDataFile[]:
+          type: array
+          minItems: 0
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+        ProcessedDataFile[]:
+          type: array
+          minItems: 0
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - IDF
+        - SDRF
+
+    MetaboBankViaFileJSON:
       type: object
 
       properties:
@@ -662,7 +850,75 @@ components:
         - IDF
         - SDRF
 
-    JVarViaFileSubmission:
+    MetaboBankViaFileFormData:
+      type: object
+
+      properties:
+        IDF:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        SDRF:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        MAF[]:
+          type: array
+          minItems: 0
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+        RawDataFile[]:
+          type: array
+          minItems: 0
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+        ProcessedDataFile[]:
+          type: array
+          minItems: 0
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+        BioSample:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - IDF
+        - SDRF
+
+    JVarViaFileJSON:
       type: object
 
       properties:
@@ -743,19 +999,100 @@ components:
         - VariantCallSV
         - VariantRegionSV
 
+    JVarViaFileFormData:
+      type: object
+
+      properties:
+        Study:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        SampleSet:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Sample:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Experiment:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        Assay:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        VariantCallSV:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        VariantRegionSV:
+          oneOf:
+            - type: string
+              format: binary
+            - type: string
+              pattern: ^~/.
+              description: Relative path from the user's home directory prefixed by `~/`.
+
+        VariantCallFile[]:
+          type: array
+          minItems: 0
+
+          items:
+            oneOf:
+              - type: string
+                format: binary
+              - type: string
+                pattern: ^~/.
+                description: Relative path from the user's home directory prefixed by `~/`.
+
+      required:
+        - Study
+        - SampleSet
+        - Sample
+        - Experiment
+        - Assay
+        - VariantCallSV
+        - VariantRegionSV
+
   requestBodies:
     BioProjectViaFile:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BioProjectViaFileSubmission'
+            $ref: '#/components/schemas/BioProjectViaFileJSON'
 
           example:
             BioProject: ~/mybioproject.xml
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/BioProjectViaFileSubmission'
+            $ref: '#/components/schemas/BioProjectViaFileFormData'
 
           example:
             BioProject: ~/mybioproject.xml
@@ -764,14 +1101,14 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BioSampleViaFileSubmission'
+            $ref: '#/components/schemas/BioSampleViaFileJSON'
 
           example:
             BioSample: ~/mybiosample.xml
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/BioSampleViaFileSubmission'
+            $ref: '#/components/schemas/BioSampleViaFileFormData'
 
           example:
             BioSample: ~/mybiosample.xml
@@ -780,7 +1117,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/TradViaFileSubmission'
+            $ref: '#/components/schemas/TradViaFileJSON'
 
           example:
             Sequence: ~/mysequence.fasta
@@ -788,17 +1125,17 @@ components:
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/TradViaFileSubmission'
+            $ref: '#/components/schemas/TradViaFileFormData'
 
           example:
-            Sequence: ~/mysequence.fasta
-            Annotation: ~/myannotation.ann
+            Sequence[]: ~/mysequence.fasta
+            Annotation[]: ~/myannotation.ann
 
     DRAViaFile:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/DRAViaFileSubmission'
+            $ref: '#/components/schemas/DRAViaFileJSON'
 
           example:
             Submission: ~/mysubmission.xml
@@ -810,21 +1147,21 @@ components:
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/DRAViaFileSubmission'
+            $ref: '#/components/schemas/DRAViaFileFormData'
 
           example:
             Submission: ~/mysubmission.xml
             Experiment: ~/myexperiment.xml
             Run: ~/myrun.xml
-            RunFile: ~/myrunfile.fastq
+            RunFile[]: ~/myrunfile.fastq
             Analysis: ~/myanalysis.xml
-            AnalysisFile: ~/myanalysisfile.raw
+            AnalysisFile[]: ~/myanalysisfile.raw
 
     GEAViaFile:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/GEAViaFileSubmission'
+            $ref: '#/components/schemas/GEAViaFileJSON'
 
           example:
             IDF: ~/myidf.idf.txt
@@ -835,20 +1172,20 @@ components:
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/GEAViaFileSubmission'
+            $ref: '#/components/schemas/GEAViaFileFormData'
 
           example:
             IDF: ~/myidf.idf.txt
             SDRF: ~/mysdrf.sdrf.txt
-            ADF: ~/myadf.adf.txt
-            RawDataFile: ~/myrawdatafile.raw
-            ProcessedDataFile: ~/myprocesseddatafile.raw
+            ADF[]: ~/myadf.adf.txt
+            RawDataFile[]: ~/myrawdatafile.raw
+            ProcessedDataFile[]: ~/myprocesseddatafile.raw
 
     MetaboBankViaFile:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/MetaboBankViaFileSubmission'
+            $ref: '#/components/schemas/MetaboBankViaFileJSON'
 
           example:
             IDF: ~/myidf.idf.txt
@@ -860,21 +1197,21 @@ components:
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/MetaboBankViaFileSubmission'
+            $ref: '#/components/schemas/MetaboBankViaFileFormData'
 
           example:
             IDF: ~/myidf.idf.txt
             SDRF: ~/mysdrf.sdrf.txt
-            MAF: ~/mymaf.maf.txt
-            RawDataFile: ~/myrawdatafile.raw
-            ProcessedDataFile: ~/myprocesseddatafile.raw
+            MAF[]: ~/mymaf.maf.txt
+            RawDataFile[]: ~/myrawdatafile.raw
+            ProcessedDataFile[]: ~/myprocesseddatafile.raw
             BioSample: ~/mybiosample.tsv
 
     JVarViaFile:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/JVarViaFileSubmission'
+            $ref: '#/components/schemas/JVarViaFileJSON'
 
           example:
             Study: ~/mystudy.tsv
@@ -888,7 +1225,7 @@ components:
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/JVarViaFileSubmission'
+            $ref: '#/components/schemas/JVarViaFileFormData'
 
           example:
             Study: ~/mystudy.tsv
@@ -898,7 +1235,7 @@ components:
             Assay: ~/myassay.tsv
             VariantCallSV: ~/myvariantcallsv.tsv
             VariantRegionSV: ~/myvariantregionsv.tsv
-            VariantCallFile: ~/myvariantcallfile.vcf
+            VariantCallFile[]: ~/myvariantcallfile.vcf
 
   responses:
     CreateResponseCreated:

@@ -105,9 +105,10 @@ async function createRequest(
     return [paths].flat().map((path) => [id, path]);
   }).map(async ([id, path]) => {
     const obj = db.objects.find((obj) => obj.id.toLowerCase() === id);
+    const key = obj?.multiple ? `${obj.id}[]` : obj!.id;
     const file = await fetch(toFileUrl(resolve(path)));
 
-    body.append(obj!.id, await file.blob(), basename(path));
+    body.append(key, await file.blob(), basename(path));
   });
 
   await Promise.all(promises);
