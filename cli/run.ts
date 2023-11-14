@@ -101,14 +101,16 @@ async function createRequest(
 ) {
   const body = new FormData();
 
-  for (const [id, paths] of Object.entries(files)) {
-    for (const path of [paths].flat()) {
-      const obj = db.objects.find((obj) => obj.id.toLowerCase() === id);
-      const file = await fetch(toFileUrl(resolve(path)));
+  const promises = Object.entries(files).flatMap(([id, paths]) => {
+    return [paths].flat().map((path) => [id, path]);
+  }).map(async ([id, path]) => {
+    const obj = db.objects.find((obj) => obj.id.toLowerCase() === id);
+    const file = await fetch(toFileUrl(resolve(path)));
 
-      body.append(obj!.id, await file.blob(), basename(path));
-    }
-  }
+    body.append(obj!.id, await file.blob(), basename(path));
+  });
+
+  await Promise.all(promises);
 
   const res = await fetch(
     `${endpoint}/${resource}/${db.id.toLowerCase()}/via-file`,
