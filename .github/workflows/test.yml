@@ -26,6 +26,7 @@ jobs:
     env:
       BUNDLE_GITHUB__COM: x-access-token:${{ secrets._GITHUB_PAT }}
       BUNDLE_WITHOUT: development
+      OIDC_ISSUER_URL: http://localhost:4567/auth/realms/master
       PGHOST: localhost
       PGUSER: postgres
       RAILS_ENV: test
@@ -40,5 +41,7 @@ jobs:
 
       - run: bundle exec submission-excel2xml download_xsd
 
+      - run: bin/fakeoidc &
+      - run: sleep 3
       - run: bin/rails db:prepare
       - run: bundle exec rspec
