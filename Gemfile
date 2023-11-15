@@ -8,6 +8,7 @@ gem 'bootsnap', require: false
 gem 'faraday'
 gem 'faraday-multipart'
 gem 'metabobank_tools', github: 'ddbj/metabobank_tools'
+gem 'openid_connect'
 gem 'parallel'
 gem 'pg'
 gem 'puma'
