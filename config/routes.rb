@@ -2,7 +2,7 @@ dbs = DB.map { _1[:id].downcase }
 
 Rails.application.routes.draw do
   resource :auth, only: %i() do
-    get :initiate
+    get :login
     get :callback
   end
 

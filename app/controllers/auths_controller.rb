@@ -1,7 +1,7 @@
 class AuthsController < ApplicationController
   skip_before_action :authenticate
 
-  def initiate
+  def login
     state = session[:state] = SecureRandom.urlsafe_base64
     nonce = session[:nonce] = SecureRandom.urlsafe_base64
 
