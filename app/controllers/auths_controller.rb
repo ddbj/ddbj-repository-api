@@ -25,8 +25,8 @@ class AuthsController < ApplicationController
     nonce         = session.delete(:nonce)
     code_verifier = session.delete(:code_verifier)
 
-    if state.nil? || state != params.require(:state)
-      render plain: 'Error: The state parameter is missing or does not match.', status: :bad_request
+    unless state == params.require(:state)
+      render plain: 'Error: state mismatch', status: :bad_request
 
       return
     end
