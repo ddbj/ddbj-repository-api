@@ -11,6 +11,9 @@ servers:
   - url: https://repository-staging.ddbj.nig.ac.jp/api
   - url: https://repository-dev.ddbj.nig.ac.jp/api
 
+security:
+  - BearerAuth: []
+
 paths:
   <%- dbs.each do |db| -%>
   /validations/<%= db[:id].downcase %>/via-file:
@@ -28,6 +31,9 @@ paths:
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
 
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
   /submissions/<%= db[:id].downcase %>/via-file:
     post:
       tags:
@@ -42,6 +48,9 @@ paths:
 
         '400':
           $ref: '#/components/responses/CreateResponseBadRequest'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
   <%- end -%>
   /requests/{id}:
@@ -142,7 +151,15 @@ paths:
                 submission:
                   id: X-84
 
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
   schemas:
     ValidationReport:
       type: object
@@ -364,3 +381,21 @@ components:
 
           example:
             error: path must be in /home/alice
+
+    Unauthorized:
+      description: Not authenticated.
+
+      content:
+        application/json:
+          schema:
+            type: object
+
+            properties:
+              error:
+                type: string
+
+            required:
+              - error
+
+          example:
+            error: Unauthorized
