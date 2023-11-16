@@ -3,6 +3,6 @@ class DwayUser < ApplicationRecord
   has_many :submissions, dependent: :nullify
 
   before_create do |user|
-    user.api_token ||= SecureRandom.urlsafe_base64(32)
+    user.api_token ||= "ddbj_repository_#{Base62.encode(SecureRandom.random_number(2 ** 256))}"
   end
 end
