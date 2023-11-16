@@ -57,14 +57,14 @@ function databaseCommands(
   descriptionFn: (db: Db) => string,
 ) {
   let cmd = new Command<
-    { endpoint: string; user: string; file: Record<string, string | string[]> }
+    { endpoint: string; token: string; file: Record<string, string | string[]> }
   >();
 
   for (const db of dbs) {
     cmd = cmd
       .command(db.id.toLowerCase())
       .description(descriptionFn(db))
-      .option("--user <uid:string>", "D-way user ID", { required: true });
+      .option("--token <token:string>", "API token", { required: true });
 
     for (const { id, ext, optional, multiple } of db.objects) {
       cmd = cmd.option(
@@ -74,16 +74,16 @@ function databaseCommands(
       );
     }
 
-    cmd = cmd.action(async ({ endpoint, user, file }) => {
+    cmd = cmd.action(async ({ endpoint, token, file }) => {
       const { request } = await createRequest(
         endpoint,
-        user,
+        token,
         resource,
         db,
         file,
       );
 
-      const payload = await waitForRequestFinished(request.url, user);
+      const payload = await waitForRequestFinished(request.url, token);
 
       colorize(JSON.stringify(payload, null, 2));
     });
@@ -94,7 +94,7 @@ function databaseCommands(
 
 async function createRequest(
   endpoint: string,
-  user: string,
+  token: string,
   resource: string,
   db: Db,
   files: Record<string, string | string[]>,
@@ -118,7 +118,7 @@ async function createRequest(
     {
       method: "post",
       headers: {
-        "X-Dway-User-ID": user,
+        "Authorization": `Bearer ${token}`,
       },
       body,
     },
@@ -129,10 +129,10 @@ async function createRequest(
   return await res.json();
 }
 
-async function waitForRequestFinished(url: string, user: string) {
+async function waitForRequestFinished(url: string, token: string) {
   const res = await fetch(url, {
     headers: {
-      "X-Dway-User-ID": user,
+      "Authorization": `Bearer ${token}`,
     },
   });
 
@@ -144,5 +144,5 @@ async function waitForRequestFinished(url: string, user: string) {
 
   await delay(1000);
 
-  return waitForRequestFinished(url, user);
+  return waitForRequestFinished(url, token);
 }
