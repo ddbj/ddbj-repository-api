@@ -96,8 +96,6 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
 
     expect(response).to have_http_status(:ok)
 
-    pending
-
     expect(response.parsed_body.deep_symbolize_keys).to match(
       status:   'finished',
       validity: 'valid',
@@ -106,7 +104,7 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
         object_id: 'BioSample',
         filename:  'MTBKS231.bs.tsv',
         validity:  'valid',
-        details:   an_instance_of(Array)
+        details:   nil
       ),
 
       submission: {
