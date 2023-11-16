@@ -46,7 +46,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_23_154035) do
     t.string "uid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["uid"], name: "index_dway_users_on_uid", unique: true
+    t.string "sub", null: false
+    t.string "api_token", null: false
+    t.index ["api_token"], name: "index_dway_users_on_api_token", unique: true
+    t.index ["sub"], name: "index_dway_users_on_sub", unique: true
   end
 
   create_table "objs", force: :cascade do |t|

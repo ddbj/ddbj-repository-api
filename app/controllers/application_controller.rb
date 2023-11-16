@@ -1,15 +1,19 @@
 class ApplicationController < ActionController::API
+  include ActionController::HttpAuthentication::Token::ControllerMethods
+
   before_action :authenticate
 
   private
 
   def authenticate
-    head :unauthorized unless dway_user
+    render json: {
+      error: 'Unauthorized'
+    }, status: :unauthorized unless dway_user
   end
 
   def dway_user
-    return nil unless uid = request.headers['X-Dway-User-ID']
-
-    DwayUser.find_or_create_by!(uid:)
+    authenticate_with_http_token {|token|
+      DwayUser.find_by(api_token: token)
+    }
   end
 end

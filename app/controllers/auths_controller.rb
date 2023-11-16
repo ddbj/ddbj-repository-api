@@ -33,7 +33,12 @@ class AuthsController < ApplicationController
       nonce:
     )
 
-    render json: access_token.userinfo!
+    userinfo = access_token.userinfo!
+    user     = DwayUser.find_or_initialize_by(sub: userinfo.sub)
+
+    user.update! uid: userinfo.preferred_username
+
+    render plain: user.api_token
   end
 
   private
