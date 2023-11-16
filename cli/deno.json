@@ -5,6 +5,7 @@
     "gen_db": "deno run --allow-read=../config/db.yml https://deno.land/x/y2j@v2.0.0/y2j.ts ../config/db.yml > db.json"
   },
   "imports": {
+    "cliffy/": "https://deno.land/x/cliffy@v1.0.0-rc.3/",
     "std/": "https://deno.land/std@0.206.0/"
   }
 }

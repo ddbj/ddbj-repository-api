@@ -1,0 +1,131 @@
+import { basename, resolve, toFileUrl } from "std/path/mod.ts";
+import { delay } from "std/async/mod.ts";
+
+import { Command } from "cliffy/command/mod.ts";
+import { colorize } from "https://deno.land/x/json_colorize@0.1.0/mod.ts";
+
+import dbs from "./db.json" with { type: "json" };
+
+export const validate = databaseCommands(
+  "validations",
+  dbs,
+  (db) => `Validate ${db.id} files.`,
+)
+  .description("Validate the specified files.")
+  .action(() => validate.showHelp());
+
+export const submit = databaseCommands(
+  "submissions",
+  dbs,
+  (db) => `Submit files to ${db.id}.`,
+)
+  .description("Submit files to the specified database.")
+  .action(() => submit.showHelp());
+
+type Db = {
+  id: string;
+  objects: Obj[];
+};
+
+type Obj = {
+  id: string;
+  ext: string;
+  optional?: boolean;
+  multiple?: boolean;
+};
+
+function databaseCommands(
+  resource: string,
+  dbs: Db[],
+  descriptionFn: (db: Db) => string,
+) {
+  let cmd = new Command<
+    { endpoint: string; token: string; file: Record<string, string | string[]> }
+  >();
+
+  for (const db of dbs) {
+    cmd = cmd
+      .command(db.id.toLowerCase())
+      .description(descriptionFn(db))
+      .option("--token <token:string>", "API token", { required: true });
+
+    for (const { id, ext, optional, multiple } of db.objects) {
+      cmd = cmd.option(
+        `--file.${id.toLowerCase()} <path:file>`,
+        `Path to ${id} file (${ext})`,
+        { required: optional !== true, collect: multiple === true },
+      );
+    }
+
+    cmd = cmd.action(async ({ endpoint, token, file }) => {
+      const { request } = await createRequest(
+        endpoint,
+        token,
+        resource,
+        db,
+        file,
+      );
+
+      const payload = await waitForRequestFinished(request.url, token);
+
+      colorize(JSON.stringify(payload, null, 2));
+    });
+  }
+
+  return cmd.reset();
+}
+
+async function createRequest(
+  endpoint: string,
+  token: string,
+  resource: string,
+  db: Db,
+  files: Record<string, string | string[]>,
+) {
+  const body = new FormData();
+
+  const promises = Object.entries(files).flatMap(([id, paths]) => {
+    return [paths].flat().map((path) => [id, path]);
+  }).map(async ([id, path]) => {
+    const obj = db.objects.find((obj) => obj.id.toLowerCase() === id);
+    const key = obj?.multiple ? `${obj.id}[]` : obj!.id;
+    const file = await fetch(toFileUrl(resolve(path)));
+
+    body.append(key, await file.blob(), basename(path));
+  });
+
+  await Promise.all(promises);
+
+  const res = await fetch(
+    `${endpoint}/${resource}/${db.id.toLowerCase()}/via-file`,
+    {
+      method: "post",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+      body,
+    },
+  );
+
+  if (!res.ok) throw new Error(res.statusText);
+
+  return await res.json();
+}
+
+async function waitForRequestFinished(url: string, token: string) {
+  const res = await fetch(url, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) throw new Error(res.statusText);
+
+  const payload = await res.json();
+
+  if (payload.status === "finished") return payload;
+
+  await delay(1000);
+
+  return waitForRequestFinished(url, token);
+}
