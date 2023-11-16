@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'BioSample: submit via file', type: :request do
   let(:default_headers) {
-    {'X-Dway-User-ID': 'alice'}
+    {'Authorization': 'Bearer TOKEN'}
   }
 
   let(:user_home_dir)  { Pathname.new(ENV.fetch('USER_HOME_DIR')) }
@@ -36,6 +36,8 @@ RSpec.describe 'BioSample: submit via file', type: :request do
         }
       }
     )
+
+    create :dway_user, uid: 'alice', api_token: 'TOKEN'
 
     FileUtils.touch user_home_dir.join('alice/foo').tap(&:mkpath).join('mysubmission.xml')
   end

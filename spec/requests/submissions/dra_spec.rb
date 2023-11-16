@@ -2,10 +2,14 @@ require 'rails_helper'
 
 RSpec.describe 'DRA: submit via file', type: :request do
   let(:default_headers) {
-    {'X-Dway-User-ID': 'alice'}
+    {'Authorization': 'Bearer TOKEN'}
   }
 
   let(:repository_dir) { Pathname.new(ENV.fetch('REPOSITORY_DIR')) }
+
+  before do
+    create :dway_user, uid: 'alice', api_token: 'TOKEN'
+  end
 
   example 'without Analysis, valid' do
     perform_enqueued_jobs do
