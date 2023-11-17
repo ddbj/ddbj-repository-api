@@ -1,19 +1,15 @@
-import { basename, resolve, toFileUrl } from "std/path/mod.ts";
-import { delay } from "std/async/mod.ts";
+import { basename, resolve, toFileUrl } from 'std/path/mod.ts';
+import { delay } from 'std/async/mod.ts';
 
-import { Command } from "cliffy/command/mod.ts";
-import { colorize } from "https://deno.land/x/json_colorize@0.1.0/mod.ts";
-import { colors } from "cliffy/ansi/colors.ts";
+import { Command } from 'cliffy/command/mod.ts';
+import { colorize } from 'https://deno.land/x/json_colorize@0.1.0/mod.ts';
+import { colors } from 'cliffy/ansi/colors.ts';
 
-import dbs from "./db.json" with { type: "json" };
-import { Config } from "./config.ts";
+import dbs from './db.json' with { type: 'json' };
+import { Config } from './config.ts';
 
 class DatabaseCommand extends Command<{ file: Record<string, string> }> {
-  constructor(
-    config: Config,
-    resource: string,
-    descriptionFn: (db: Db) => string,
-  ) {
+  constructor(config: Config, resource: string, descriptionFn: (db: Db) => string) {
     super();
 
     // deno-lint-ignore no-this-alias
@@ -34,26 +30,14 @@ class DatabaseCommand extends Command<{ file: Record<string, string> }> {
 
       cmd = cmd.action(async ({ file }) => {
         if (!config.auth) {
-          console.log(
-            `First you need to log in; run ${
-              colors.bold("`ddbj-repository auth login`")
-            }.`,
-          );
+          console.log(`First you need to log in; run ${colors.bold('`ddbj-repository auth login`')}.`);
+
           return;
         }
 
-        const { request } = await createRequest(
-          config.endpoint,
-          config.auth.api_token,
-          resource,
-          db,
-          file,
-        );
+        const { request } = await createRequest(config.endpoint, config.auth.api_token, resource, db, file);
 
-        const payload = await waitForRequestFinished(
-          request.url,
-          config.auth.api_token,
-        );
+        const payload = await waitForRequestFinished(request.url, config.auth.api_token);
 
         colorize(JSON.stringify(payload, null, 2));
       });
@@ -65,20 +49,20 @@ class DatabaseCommand extends Command<{ file: Record<string, string> }> {
 
 export class ValidateCommand extends DatabaseCommand {
   constructor(config: Config) {
-    super(config, "validations", (db) => `Validate ${db.id} files.`);
+    super(config, 'validations', (db) => `Validate ${db.id} files.`);
 
     return this
-      .description("Validate the specified files.")
+      .description('Validate the specified files.')
       .action(() => this.showHelp());
   }
 }
 
 export class SubmitCommand extends DatabaseCommand {
   constructor(config: Config) {
-    super(config, "submissions", (db) => `Submit files to ${db.id}.`);
+    super(config, 'submissions', (db) => `Submit files to ${db.id}.`);
 
     return this
-      .description("Submit files to the specified database.")
+      .description('Submit files to the specified database.')
       .action(() => this.showHelp());
   }
 }
@@ -95,13 +79,7 @@ type Obj = {
   multiple?: boolean;
 };
 
-async function createRequest(
-  endpoint: string,
-  token: string,
-  resource: string,
-  db: Db,
-  files: Record<string, string | string[]>,
-) {
+async function createRequest(endpoint: string, token: string, resource: string, db: Db, files: Record<string, string | string[]>) {
   const body = new FormData();
 
   const promises = Object.entries(files).flatMap(([id, paths]) => {
@@ -119,9 +97,9 @@ async function createRequest(
   const res = await fetch(
     `${endpoint}/${resource}/${db.id.toLowerCase()}/via-file`,
     {
-      method: "post",
+      method: 'post',
       headers: {
-        "Authorization": `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,
       },
       body,
     },
@@ -135,7 +113,7 @@ async function createRequest(
 async function waitForRequestFinished(url: string, token: string) {
   const res = await fetch(url, {
     headers: {
-      "Authorization": `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
     },
   });
 
@@ -143,7 +121,7 @@ async function waitForRequestFinished(url: string, token: string) {
 
   const payload = await res.json();
 
-  if (payload.status === "finished") return payload;
+  if (payload.status === 'finished') return payload;
 
   await delay(1000);
 
