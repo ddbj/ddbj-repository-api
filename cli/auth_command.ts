@@ -53,7 +53,12 @@ async function openAuthorizationURL(config: Config) {
   const codeChallenge = await oauth.calculatePKCECodeChallenge(codeVerifier);
 
   const server = Deno.serve(
-    { port },
+    {
+      port,
+      onListen() {
+        // do nothing. suppress noisy output
+      },
+    },
     callbackHandler(
       as,
       client,
