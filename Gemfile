@@ -11,6 +11,7 @@ gem 'metabobank_tools', github: 'ddbj/metabobank_tools', branch: 'repository'
 gem 'parallel'
 gem 'pg'
 gem 'puma'
+gem 'rack-cors'
 gem 'sidekiq'
 gem 'submission-excel2xml', github: 'ddbj/submission-excel2xml', branch: 'repository'
 
