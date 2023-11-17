@@ -36,7 +36,7 @@ class AuthsController < ApplicationController
     access_token = client.access_token!(code_verifier:)
     user         = upsert_user_by_id_token(access_token.id_token, nonce:)
 
-    render plain: user.api_token
+    render plain: "Your API token is: #{user.api_token}"
   rescue Rack::OAuth2::Client::Error => e
     render plain: "Error: #{e.message}", status: :bad_request
   end
