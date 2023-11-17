@@ -18,7 +18,7 @@ export default class extends Command {
         if (config.auth) {
           console.log(`Logged in as ${colors.bold(config.auth.uid)}.`);
         } else {
-          console.log('Not logged in.')
+          console.log("Not logged in.");
         }
       })
       .command("login")
@@ -27,7 +27,7 @@ export default class extends Command {
       })
       .command("logout")
       .action(async () => {
-        await writeConfig({auth: undefined});
+        await writeConfig({ auth: undefined });
       })
       .reset();
   }
