@@ -13,9 +13,21 @@ export default class extends Command {
 
     return this
       .action(() => this.showHelp())
+      .command("whoami")
+      .action(() => {
+        if (config.auth) {
+          console.log(`Logged in as ${colors.bold(config.auth.uid)}.`);
+        } else {
+          console.log('Not logged in.')
+        }
+      })
       .command("login")
       .action(async () => {
         await openAuthorizationURL(config);
+      })
+      .command("logout")
+      .action(async () => {
+        await writeConfig({auth: undefined});
       })
       .reset();
   }
