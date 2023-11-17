@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   end
 
   scope :api do
+    resource :auth, only: %i() do
+      post :login_by_id_token
+    end
+
     namespace :submissions do
       scope ':db' do
         resource :via_file, only: %i(create), path: 'via-file', constraints: {db: Regexp.union(*dbs)}

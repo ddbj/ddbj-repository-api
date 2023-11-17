@@ -34,22 +34,20 @@ class AuthsController < ApplicationController
     client.authorization_code = params.require(:code)
 
     access_token = client.access_token!(code_verifier:)
-    id_token     = OpenIDConnect::ResponseObject::IdToken.decode(access_token.id_token, OIDC_CONFIG.jwks)
-
-    id_token.verify!(
-      issuer:    OIDC_CONFIG.issuer,
-      client_id: ENV.fetch('OIDC_CLIENT_ID'),
-      nonce:
-    )
-
-    userinfo = access_token.userinfo!
-    user     = DwayUser.find_or_initialize_by(sub: userinfo.sub)
-
-    user.update! uid: userinfo.preferred_username
+    user         = upsert_user_by_id_token(access_token.id_token, nonce:)
 
     render plain: user.api_token
   rescue Rack::OAuth2::Client::Error => e
     render plain: "Error: #{e.message}", status: :bad_request
+  end
+
+  def login_by_id_token
+    user = upsert_user_by_id_token(params.require(:id_token), nonce: params.require(:nonce))
+
+    render json: {
+      uid:       user.uid,
+      api_token: user.api_token
+    }
   end
 
   private
@@ -63,5 +61,21 @@ class AuthsController < ApplicationController
       token_endpoint:         OIDC_CONFIG.token_endpoint,
       userinfo_endpoint:      OIDC_CONFIG.userinfo_endpoint
     )
+  end
+
+  def upsert_user_by_id_token(id_token, nonce:)
+    id_token = OpenIDConnect::ResponseObject::IdToken.decode(id_token, OIDC_CONFIG.jwks)
+
+    id_token.verify!(
+      issuer:    OIDC_CONFIG.issuer,
+      client_id: ENV.fetch('OIDC_CLIENT_ID'),
+      nonce:
+    )
+
+    id_token.raw_attributes => {preferred_username:}
+
+    DwayUser.find_or_initialize_by(sub: id_token.sub).tap {|user|
+      user.update! uid: preferred_username
+    }
   end
 end

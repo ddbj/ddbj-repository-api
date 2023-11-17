@@ -3,24 +3,85 @@ import { delay } from "std/async/mod.ts";
 
 import { Command } from "cliffy/command/mod.ts";
 import { colorize } from "https://deno.land/x/json_colorize@0.1.0/mod.ts";
+import { colors } from "cliffy/ansi/colors.ts";
 
 import dbs from "./db.json" with { type: "json" };
+import type { Config } from "./config.ts";
 
-export const validate = databaseCommands(
-  "validations",
-  dbs,
-  (db) => `Validate ${db.id} files.`,
-)
-  .description("Validate the specified files.")
-  .action(() => validate.showHelp());
+class DatabaseCommand extends Command<{ file: Record<string, string> }> {
+  constructor(
+    config: Config,
+    resource: string,
+    descriptionFn: (db: Db) => string,
+  ) {
+    super();
 
-export const submit = databaseCommands(
-  "submissions",
-  dbs,
-  (db) => `Submit files to ${db.id}.`,
-)
-  .description("Submit files to the specified database.")
-  .action(() => submit.showHelp());
+    // deno-lint-ignore no-this-alias
+    let cmd = this;
+
+    for (const db of dbs) {
+      cmd = cmd
+        .command(db.id.toLowerCase())
+        .description(descriptionFn(db));
+
+      for (const { id, ext, optional, multiple } of db.objects) {
+        cmd = cmd.option(
+          `--file.${id.toLowerCase()} <path:file>`,
+          `Path to ${id} file (${ext})`,
+          { required: optional !== true, collect: multiple === true },
+        );
+      }
+
+      cmd = cmd.action(async ({ file }) => {
+        if (!config.auth) {
+          console.log(
+            `First you need to log in; run ${
+              colors.bold("`ddbj-repository auth login`")
+            }.`,
+          );
+          return;
+        }
+
+        const { request } = await createRequest(
+          config.endpoint,
+          config.auth.api_token,
+          resource,
+          db,
+          file,
+        );
+
+        const payload = await waitForRequestFinished(
+          request.url,
+          config.auth.api_token,
+        );
+
+        colorize(JSON.stringify(payload, null, 2));
+      });
+    }
+
+    return cmd.reset();
+  }
+}
+
+export class ValidateCommand extends DatabaseCommand {
+  constructor(config: Config) {
+    super(config, "validations", (db) => `Validate ${db.id} files.`);
+
+    return this
+      .description("Validate the specified files.")
+      .action(() => this.showHelp());
+  }
+}
+
+export class SubmitCommand extends DatabaseCommand {
+  constructor(config: Config) {
+    super(config, "submissions", (db) => `Submit files to ${db.id}.`);
+
+    return this
+      .description("Submit files to the specified database.")
+      .action(() => this.showHelp());
+  }
+}
 
 type Db = {
   id: string;
@@ -33,47 +94,6 @@ type Obj = {
   optional?: boolean;
   multiple?: boolean;
 };
-
-function databaseCommands(
-  resource: string,
-  dbs: Db[],
-  descriptionFn: (db: Db) => string,
-) {
-  let cmd = new Command<
-    { endpoint: string; token: string; file: Record<string, string | string[]> }
-  >();
-
-  for (const db of dbs) {
-    cmd = cmd
-      .command(db.id.toLowerCase())
-      .description(descriptionFn(db))
-      .option("--token <token:string>", "API token", { required: true });
-
-    for (const { id, ext, optional, multiple } of db.objects) {
-      cmd = cmd.option(
-        `--file.${id.toLowerCase()} <path:file>`,
-        `Path to ${id} file (${ext})`,
-        { required: optional !== true, collect: multiple === true },
-      );
-    }
-
-    cmd = cmd.action(async ({ endpoint, token, file }) => {
-      const { request } = await createRequest(
-        endpoint,
-        token,
-        resource,
-        db,
-        file,
-      );
-
-      const payload = await waitForRequestFinished(request.url, token);
-
-      colorize(JSON.stringify(payload, null, 2));
-    });
-  }
-
-  return cmd.reset();
-}
 
 async function createRequest(
   endpoint: string,
