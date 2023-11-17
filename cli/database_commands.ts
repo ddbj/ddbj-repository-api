@@ -6,7 +6,7 @@ import { colorize } from "https://deno.land/x/json_colorize@0.1.0/mod.ts";
 import { colors } from "cliffy/ansi/colors.ts";
 
 import dbs from "./db.json" with { type: "json" };
-import type { Config } from "./config.ts";
+import { Config } from "./config.ts";
 
 class DatabaseCommand extends Command<{ file: Record<string, string> }> {
   constructor(
