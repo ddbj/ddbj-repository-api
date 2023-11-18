@@ -37,7 +37,7 @@ class DdbjValidator
   private
 
   def client
-    @client ||= Faraday.new(url: ENV.fetch('VALIDATOR_URL')) {|f|
+    @client ||= Faraday.new(url: ENV.fetch('DDBJ_VALIDATOR_URL')) {|f|
       f.request :multipart
 
       f.response :json, parser_options: {symbolize_names: true}

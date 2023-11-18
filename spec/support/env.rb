@@ -3,9 +3,9 @@ RSpec.configure do |config|
     Dir.mktmpdir do |repository_dir|
       Dir.mktmpdir do |user_home_dir|
         env = {
-          REPOSITORY_DIR: repository_dir,
-          USER_HOME_DIR:  user_home_dir,
-          VALIDATOR_URL:  'http://validator.example.com/api',
+          DDBJ_VALIDATOR_URL: 'http://validator.example.com/api',
+          REPOSITORY_DIR:     repository_dir,
+          USER_HOME_DIR:      user_home_dir,
         }
 
         ClimateControl.modify env, &example

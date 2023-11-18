@@ -14,14 +14,14 @@ services:
         RUBY_VERSION:
 
     environment:
-      DATABASE_URL:   postgresql://postgres@postgres/ddbj_repository
+      DATABASE_URL:       postgresql://postgres@postgres/ddbj_repository
+      DDBJ_VALIDATOR_URL: http://host.docker.internal:18840/api
       HTTP_PORT:
-      REDIS_URL:      redis://redis
-      REPOSITORY_DIR: /mnt/repository
+      REDIS_URL:          redis://redis
+      REPOSITORY_DIR:     /mnt/repository
       SECRET_KEY_BASE:
       STAGE:
-      USER_HOME_DIR:  /mnt/home
-      VALIDATOR_URL:  http://host.docker.internal:18840/api
+      USER_HOME_DIR:      /mnt/home
 
     ports:
       - ${HTTP_PORT:?}:3000
