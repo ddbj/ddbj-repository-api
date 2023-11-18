@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     end
 
     resources :requests, only: %i(show)
+
+    resource :me, only: %i(show)
   end
 
   get 'up' => 'rails/health#show', as: :rails_health_check

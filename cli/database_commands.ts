@@ -9,7 +9,7 @@ import dbs from './db.json' with { type: 'json' };
 import { Config } from './config.ts';
 
 class DatabaseCommand extends Command<{ file: Record<string, string> }> {
-  constructor(config: Config, resource: string, descriptionFn: (db: Db) => string) {
+  constructor({ endpoint, api_token }: Config, resource: string, descriptionFn: (db: Db) => string) {
     super();
 
     // deno-lint-ignore no-this-alias
@@ -29,15 +29,15 @@ class DatabaseCommand extends Command<{ file: Record<string, string> }> {
       }
 
       cmd = cmd.action(async ({ file }) => {
-        if (!config.auth) {
+        if (!api_token) {
           console.log(`First you need to log in; run ${colors.bold('`ddbj-repository auth login`')}.`);
 
           return;
         }
 
-        const { request } = await createRequest(config.endpoint, config.auth.api_token, resource, db, file);
+        const { request } = await createRequest(endpoint, api_token, resource, db, file);
 
-        const payload = await waitForRequestFinished(request.url, config.auth.api_token);
+        const payload = await waitForRequestFinished(request.url, api_token);
 
         colorize(JSON.stringify(payload, null, 2));
       });

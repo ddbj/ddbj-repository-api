@@ -8,26 +8,28 @@ import { open } from 'https://deno.land/x/open@v0.0.6/index.ts';
 import { Config, writeConfig } from './config.ts';
 
 export default class extends Command {
-  constructor(config: Config) {
+  constructor({ issuer, endpoint, api_token }: Config) {
     super();
 
     return this
       .action(() => this.showHelp())
       .command('whoami')
-      .action(() => {
-        if (config.auth) {
-          console.log(`Logged in as ${colors.bold(config.auth.uid)}.`);
+      .action(async () => {
+        if (api_token) {
+          const uid = await fetchUid(endpoint, api_token);
+
+          console.log(`Logged in as ${colors.bold(uid)}.`);
         } else {
           console.log('Not logged in.');
         }
       })
       .command('login')
       .action(async () => {
-        await openAuthorizationURL(config);
+        await openAuthorizationURL(issuer, endpoint);
       })
       .command('logout')
       .action(async () => {
-        await writeConfig({ auth: undefined });
+        await writeConfig({ api_token: undefined });
       })
       .reset();
   }
@@ -36,8 +38,8 @@ export default class extends Command {
 const port = 37376;
 const redirectUri = `http://localhost:${port}`;
 
-async function openAuthorizationURL(config: Config) {
-  const issuer = new URL(config.issuer);
+async function openAuthorizationURL(_issuer: string, endpoint: string) {
+  const issuer = new URL(_issuer);
 
   const res = await oauth.discoveryRequest(issuer);
   const as = await oauth.processDiscoveryResponse(issuer, res);
@@ -59,7 +61,7 @@ async function openAuthorizationURL(config: Config) {
         // do nothing. suppress noisy output
       },
     },
-    callbackHandler(as, client, state, nonce, codeVerifier, config, async () => {
+    callbackHandler(as, client, state, nonce, codeVerifier, endpoint, async () => {
       await delay(1000);
       await server.shutdown();
     }),
@@ -79,7 +81,7 @@ async function openAuthorizationURL(config: Config) {
   await open(authorizationUrl.href);
 }
 
-function callbackHandler(as: oauth.AuthorizationServer, client: oauth.Client, state: string, nonce: string, codeVerifier: string, config: Config, done: () => void) {
+function callbackHandler(as: oauth.AuthorizationServer, client: oauth.Client, state: string, nonce: string, codeVerifier: string, endpoint: string, done: () => void) {
   return async (req: Request) => {
     try {
       const url = new URL(req.url);
@@ -92,20 +94,22 @@ function callbackHandler(as: oauth.AuthorizationServer, client: oauth.Client, st
 
       if (oauth.isOAuth2Error(result)) throw result;
 
-      const auth = await obtainAuthResponse(config.endpoint, result.id_token, nonce);
+      const token = await obtainAPIToken(endpoint, result.id_token, nonce);
 
-      writeConfig({ auth });
+      writeConfig({ api_token: token });
 
-      console.log(`Logged in as ${colors.bold(auth.uid)}.`);
+      const uid = await fetchUid(endpoint, token);
 
-      return new Response(`Logged in as ${auth.uid}.`, { status: 200 });
+      console.log(`Logged in as ${colors.bold(uid)}.`);
+
+      return new Response(`Logged in as ${uid}.`, { status: 200 });
     } finally {
       done();
     }
   };
 }
 
-async function obtainAuthResponse(endpoint: string, idToken: string, nonce: string) {
+async function obtainAPIToken(endpoint: string, idToken: string, nonce: string) {
   const res = await fetch(`${endpoint}/auth/login_by_id_token`, {
     method: 'post',
     headers: {
@@ -117,9 +121,23 @@ async function obtainAuthResponse(endpoint: string, idToken: string, nonce: stri
     }),
   });
 
-  if (!res.ok) {
-    throw res;
-  }
+  if (!res.ok) throw res;
 
-  return await res.json();
+  const { api_token } = await res.json();
+
+  return api_token;
+}
+
+async function fetchUid(endpoint: string, apiToken: string) {
+  const res = await fetch(`${endpoint}/me`, {
+    headers: {
+      Authorization: `Bearer ${apiToken}`,
+    },
+  });
+
+  if (!res.ok) throw res;
+
+  const { uid } = await res.json();
+
+  return uid;
 }

@@ -154,6 +154,28 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+  /me:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+
+                properties:
+                  uid:
+                    type: string
+
+                required:
+                  - uid
+
+              example:
+                uid: alice
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
 components:
   securitySchemes:
     BearerAuth:

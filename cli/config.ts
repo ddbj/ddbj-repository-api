@@ -5,11 +5,7 @@ import { expandHome } from 'https://deno.land/x/expandhome@v0.0.5/mod.ts';
 export type Config = {
   endpoint: string;
   issuer: string;
-
-  auth?: {
-    uid: string;
-    api_token: string;
-  };
+  api_token?: string;
 };
 
 export const defaultConfig = {
