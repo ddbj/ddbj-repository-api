@@ -1,6 +1,10 @@
 class AuthsController < ApplicationController
   skip_before_action :authenticate
 
+  def self.oidc_config
+    @oidc_config ||= OpenIDConnect::Discovery::Provider::Config.discover!(ENV.fetch('OIDC_ISSUER_URL'))
+  end
+
   def login
     state         = session[:state]         = SecureRandom.urlsafe_base64(32)
     nonce         = session[:nonce]         = SecureRandom.urlsafe_base64(32)
@@ -11,7 +15,7 @@ class AuthsController < ApplicationController
       padding: false
     )
 
-    redirect_to client.authorization_uri(
+    redirect_to oidc_client.authorization_uri(
       scope:                 %i(openid),
       state:                 ,
       nonce:                 ,
@@ -31,9 +35,9 @@ class AuthsController < ApplicationController
       return
     end
 
-    client.authorization_code = params.require(:code)
+    oidc_client.authorization_code = params.require(:code)
 
-    access_token = client.access_token!(code_verifier:)
+    access_token = oidc_client.access_token!(code_verifier:)
     user         = upsert_user_by_id_token(access_token.id_token, nonce:)
 
     render plain: <<~TEXT
@@ -54,22 +58,11 @@ class AuthsController < ApplicationController
 
   private
 
-  def client
-    @client ||= OpenIDConnect::Client.new(
-      identifier:             ENV.fetch('OIDC_CLIENT_ID'),
-      redirect_uri:           callback_auth_url,
-      jwks_uri:               OIDC_CONFIG.jwks_uri,
-      authorization_endpoint: OIDC_CONFIG.authorization_endpoint,
-      token_endpoint:         OIDC_CONFIG.token_endpoint,
-      userinfo_endpoint:      OIDC_CONFIG.userinfo_endpoint
-    )
-  end
-
   def upsert_user_by_id_token(id_token, nonce:)
-    id_token = OpenIDConnect::ResponseObject::IdToken.decode(id_token, OIDC_CONFIG.jwks)
+    id_token = OpenIDConnect::ResponseObject::IdToken.decode(id_token, self.class.oidc_config.jwks)
 
     id_token.verify!(
-      issuer:    OIDC_CONFIG.issuer,
+      issuer:    self.class.oidc_config.issuer,
       client_id: ENV.fetch('OIDC_CLIENT_ID'),
       nonce:
     )
@@ -79,5 +72,16 @@ class AuthsController < ApplicationController
     DwayUser.find_or_initialize_by(sub: id_token.sub).tap {|user|
       user.update! uid: preferred_username
     }
+  end
+
+  def oidc_client
+    @oidc_client ||= OpenIDConnect::Client.new(
+      identifier:             ENV.fetch('OIDC_CLIENT_ID'),
+      redirect_uri:           callback_auth_url,
+      jwks_uri:               self.class.oidc_config.jwks_uri,
+      authorization_endpoint: self.class.oidc_config.authorization_endpoint,
+      token_endpoint:         self.class.oidc_config.token_endpoint,
+      userinfo_endpoint:      self.class.oidc_config.userinfo_endpoint
+    )
   end
 end
