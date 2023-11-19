@@ -8,15 +8,15 @@ import { open } from 'https://deno.land/x/open@v0.0.6/index.ts';
 import { Config, writeConfig } from './config.ts';
 
 export default class extends Command {
-  constructor({ issuer, endpoint, api_token }: Config) {
+  constructor({ issuer, endpoint, apiToken }: Config) {
     super();
 
     return this
       .action(() => this.showHelp())
       .command('whoami')
       .action(async () => {
-        if (api_token) {
-          const uid = await fetchUid(endpoint, api_token);
+        if (apiToken) {
+          const uid = await fetchUid(endpoint, apiToken);
 
           console.log(`Logged in as ${colors.bold(uid)}.`);
         } else {
@@ -29,7 +29,7 @@ export default class extends Command {
       })
       .command('logout')
       .action(async () => {
-        await writeConfig({ api_token: undefined });
+        await writeConfig({ apiToken: undefined });
       })
       .reset();
   }
@@ -94,11 +94,11 @@ function callbackHandler(as: oauth.AuthorizationServer, client: oauth.Client, st
 
       if (oauth.isOAuth2Error(result)) throw result;
 
-      const token = await obtainAPIToken(endpoint, result.id_token, nonce);
+      const apiToken = await obtainAPIToken(endpoint, result.id_token, nonce);
 
-      writeConfig({ api_token: token });
+      writeConfig({ apiToken });
 
-      const uid = await fetchUid(endpoint, token);
+      const uid = await fetchUid(endpoint, apiToken);
 
       console.log(`Logged in as ${colors.bold(uid)}.`);
 
