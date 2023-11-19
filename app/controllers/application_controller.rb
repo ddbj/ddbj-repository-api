@@ -15,7 +15,7 @@ class ApplicationController < ActionController::API
     return nil if @dway_user == :not_available
 
     @dway_user ||= authenticate_with_http_token {|token|
-      DwayUser.find_by(api_token: token)
+      DwayUser.find_by(api_key: token)
     } || :not_available
   end
 end

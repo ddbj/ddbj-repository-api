@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe 'MetaboBank: submit via file', type: :request do
   let(:default_headers) {
-    {'Authorization': 'Bearer TOKEN'}
+    {'Authorization': 'Bearer API_KEY'}
   }
 
   let(:repository_dir) { Pathname.new(ENV.fetch('REPOSITORY_DIR')) }
 
   before do
-    create :dway_user, uid: 'alice', api_token: 'TOKEN'
+    create :dway_user, uid: 'alice', api_key: 'API_KEY'
   end
 
   example 'without MAF and RawDataFile and ProcessedDataFile, valid' do

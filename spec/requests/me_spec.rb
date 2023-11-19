@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.describe 'me' do
   let(:default_headers) {
     {
-      Authorization: 'Bearer TOKEN'
+      Authorization: 'Bearer API_KEY'
     }
   }
 
   before do
-    create :dway_user, uid: 'alice', api_token: 'TOKEN'
+    create :dway_user, uid: 'alice', api_key: 'API_KEY'
   end
 
   example do

@@ -9,7 +9,7 @@ import dbs from './db.json' with { type: 'json' };
 import { Config } from './config.ts';
 
 class DatabaseCommand extends Command<{ file: Record<string, string> }> {
-  constructor({ endpoint, apiToken }: Config, resource: string, descriptionFn: (db: Db) => string) {
+  constructor({ endpoint, apiKey }: Config, resource: string, descriptionFn: (db: Db) => string) {
     super();
 
     // deno-lint-ignore no-this-alias
@@ -29,14 +29,14 @@ class DatabaseCommand extends Command<{ file: Record<string, string> }> {
       }
 
       cmd = cmd.action(async ({ file }) => {
-        if (!apiToken) {
+        if (!apiKey) {
           console.log(`First you need to log in; run ${colors.bold('`ddbj-repository auth login`')}.`);
 
           return;
         }
 
-        const { request } = await createRequest(endpoint, apiToken, resource, db, file);
-        const payload = await waitForRequestFinished(request.url, apiToken);
+        const { request } = await createRequest(endpoint, apiKey, resource, db, file);
+        const payload = await waitForRequestFinished(request.url, apiKey);
 
         colorize(JSON.stringify(payload, null, 2));
       });
@@ -78,7 +78,7 @@ type Obj = {
   multiple?: boolean;
 };
 
-async function createRequest(endpoint: string, token: string, resource: string, db: Db, files: Record<string, string | string[]>) {
+async function createRequest(endpoint: string, apiKey: string, resource: string, db: Db, files: Record<string, string | string[]>) {
   const body = new FormData();
 
   const promises = Object.entries(files).flatMap(([id, paths]) => {
@@ -98,7 +98,7 @@ async function createRequest(endpoint: string, token: string, resource: string, 
     {
       method: 'post',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${apiKey}`,
       },
       body,
     },
@@ -109,10 +109,10 @@ async function createRequest(endpoint: string, token: string, resource: string, 
   return await res.json();
 }
 
-async function waitForRequestFinished(url: string, token: string) {
+async function waitForRequestFinished(url: string, apiKey: string) {
   const res = await fetch(url, {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${apiKey}`,
     },
   });
 
@@ -124,5 +124,5 @@ async function waitForRequestFinished(url: string, token: string) {
 
   await delay(1000);
 
-  return waitForRequestFinished(url, token);
+  return waitForRequestFinished(url, apiKey);
 }

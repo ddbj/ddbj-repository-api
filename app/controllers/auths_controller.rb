@@ -43,7 +43,7 @@ class AuthsController < ApplicationController
     render plain: <<~TEXT
       Logged in as #{user.uid}.
 
-      Your API token is: #{user.api_token}
+      Your API key is: #{user.api_key}
     TEXT
   rescue Rack::OAuth2::Client::Error => e
     render plain: "Error: #{e.message}", status: :bad_request
@@ -53,7 +53,7 @@ class AuthsController < ApplicationController
     user = upsert_user_by_id_token(params.require(:id_token), nonce: params.require(:nonce))
 
     render json: {
-      api_token: user.api_token
+      api_key: user.api_key
     }
   end
 

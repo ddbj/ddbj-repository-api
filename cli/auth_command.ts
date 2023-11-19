@@ -8,15 +8,15 @@ import { open } from 'https://deno.land/x/open@v0.0.6/index.ts';
 import { Config, writeConfig } from './config.ts';
 
 export default class extends Command {
-  constructor({ issuer, endpoint, apiToken }: Config) {
+  constructor({ issuer, endpoint, apiKey }: Config) {
     super();
 
     return this
       .action(() => this.showHelp())
       .command('whoami')
       .action(async () => {
-        if (apiToken) {
-          const uid = await fetchUid(endpoint, apiToken);
+        if (apiKey) {
+          const uid = await fetchUid(endpoint, apiKey);
 
           console.log(`Logged in as ${colors.bold(uid)}.`);
         } else {
@@ -29,7 +29,7 @@ export default class extends Command {
       })
       .command('logout')
       .action(async () => {
-        await writeConfig({ apiToken: undefined });
+        await writeConfig({ apiKey: undefined });
       })
       .reset();
   }
@@ -94,11 +94,11 @@ function callbackHandler(as: oauth.AuthorizationServer, client: oauth.Client, st
 
       if (oauth.isOAuth2Error(result)) throw result;
 
-      const apiToken = await obtainAPIToken(endpoint, result.id_token, nonce);
+      const apiKey = await obtainAPIKey(endpoint, result.id_token, nonce);
 
-      writeConfig({ apiToken });
+      writeConfig({ apiKey });
 
-      const uid = await fetchUid(endpoint, apiToken);
+      const uid = await fetchUid(endpoint, apiKey);
 
       console.log(`Logged in as ${colors.bold(uid)}.`);
 
@@ -109,7 +109,7 @@ function callbackHandler(as: oauth.AuthorizationServer, client: oauth.Client, st
   };
 }
 
-async function obtainAPIToken(endpoint: string, idToken: string, nonce: string) {
+async function obtainAPIKey(endpoint: string, idToken: string, nonce: string) {
   const res = await fetch(`${endpoint}/auth/login_by_id_token`, {
     method: 'post',
     headers: {
@@ -123,15 +123,15 @@ async function obtainAPIToken(endpoint: string, idToken: string, nonce: string) 
 
   if (!res.ok) throw res;
 
-  const { api_token } = await res.json();
+  const { api_key } = await res.json();
 
-  return api_token;
+  return api_key;
 }
 
-async function fetchUid(endpoint: string, apiToken: string) {
+async function fetchUid(endpoint: string, apiKey: string) {
   const res = await fetch(`${endpoint}/me`, {
     headers: {
-      Authorization: `Bearer ${apiToken}`,
+      Authorization: `Bearer ${apiKey}`,
     },
   });
 
