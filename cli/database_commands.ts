@@ -36,7 +36,6 @@ class DatabaseCommand extends Command<{ file: Record<string, string> }> {
         }
 
         const { request } = await createRequest(endpoint, api_token, resource, db, file);
-
         const payload = await waitForRequestFinished(request.url, api_token);
 
         colorize(JSON.stringify(payload, null, 2));
