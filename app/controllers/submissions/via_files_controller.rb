@@ -1,4 +1,4 @@
-class SubmitViaFileController < ApplicationController
+class Submissions::ViaFilesController < ApplicationController
   include ViaFile
 
   def create

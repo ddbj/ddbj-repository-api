@@ -1,4 +1,4 @@
-class ValidateViaFileController < ApplicationController
+class Validations::ViaFilesController < ApplicationController
   include ViaFile
 
   def create
