@@ -42,6 +42,7 @@ class AuthsController < ApplicationController
 
     render plain: <<~TEXT
       Logged in as #{user.uid}.
+
       Your API token is: #{user.api_token}
     TEXT
   rescue Rack::OAuth2::Client::Error => e
