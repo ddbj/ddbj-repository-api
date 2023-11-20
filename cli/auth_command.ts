@@ -81,8 +81,11 @@ async function openAuthorizationURL(_issuer: string, endpoint: string) {
 
 function callbackHandler(as: oauth.AuthorizationServer, client: oauth.Client, state: string, codeVerifier: string, endpoint: string, done: () => void) {
   return async (req: Request) => {
+    const url = new URL(req.url);
+
+    if (url.pathname !== '/') return new Response('Not Found', { status: 404 });
+
     try {
-      const url = new URL(req.url);
       const params = oauth.validateAuthResponse(as, client, url, state);
 
       if (oauth.isOAuth2Error(params)) throw params;
