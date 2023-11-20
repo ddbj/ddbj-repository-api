@@ -7,7 +7,6 @@ class AuthsController < ApplicationController
 
   def login
     state         = session[:state]         = SecureRandom.urlsafe_base64(32)
-    nonce         = session[:nonce]         = SecureRandom.urlsafe_base64(32)
     code_verifier = session[:code_verifier] = SecureRandom.urlsafe_base64(32)
 
     code_challenge = Base64.urlsafe_encode64(
@@ -18,7 +17,6 @@ class AuthsController < ApplicationController
     redirect_to oidc_client.authorization_uri(
       scope:                 %i(openid),
       state:                 ,
-      nonce:                 ,
       code_challenge:        ,
       code_challenge_method: 'S256'
     ), allow_other_host: true
@@ -26,7 +24,6 @@ class AuthsController < ApplicationController
 
   def callback
     state         = session.delete(:state)
-    nonce         = session.delete(:nonce)
     code_verifier = session.delete(:code_verifier)
 
     unless state == params.require(:state)
@@ -38,7 +35,7 @@ class AuthsController < ApplicationController
     oidc_client.authorization_code = params.require(:code)
 
     access_token = oidc_client.access_token!(code_verifier:)
-    user         = upsert_user_by_id_token(access_token.id_token, nonce:)
+    user         = upsert_user_by_id_token(access_token.id_token)
 
     render plain: <<~TEXT
       Logged in as #{user.uid}.
@@ -50,7 +47,7 @@ class AuthsController < ApplicationController
   end
 
   def login_by_id_token
-    user = upsert_user_by_id_token(params.require(:id_token), nonce: params.require(:nonce))
+    user = upsert_user_by_id_token(request.body.read)
 
     render json: {
       api_key: user.api_key
@@ -59,13 +56,12 @@ class AuthsController < ApplicationController
 
   private
 
-  def upsert_user_by_id_token(id_token, nonce:)
+  def upsert_user_by_id_token(id_token)
     id_token = OpenIDConnect::ResponseObject::IdToken.decode(id_token, self.class.oidc_config.jwks)
 
     id_token.verify!(
       issuer:    self.class.oidc_config.issuer,
-      client_id: ENV.fetch('OIDC_CLIENT_ID'),
-      nonce:
+      client_id: ENV.fetch('OIDC_CLIENT_ID')
     )
 
     id_token.raw_attributes => {preferred_username:}
