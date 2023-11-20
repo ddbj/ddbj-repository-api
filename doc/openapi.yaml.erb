@@ -288,6 +288,12 @@ components:
               id: 42
               url: http://www.example.com/api/requests/42
 
+      links:
+        Request:
+          operationRef: '#/paths/~1requests~1{id}'
+          parameters:
+            id: $response.body#/request.id
+
     CreateResponseBadRequest:
       description: The requested process could not be initiated.
 
