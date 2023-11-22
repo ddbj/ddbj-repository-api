@@ -33,7 +33,7 @@ class Request < ApplicationRecord
     to.tap(&:mkpath).join('validation-report.json').write JSON.pretty_generate(validation_reports)
 
     objs.each do |obj|
-      obj_dir = to.join(obj._id).tap(&:mkpath)
+      obj_dir = to.join(obj._id).then { obj.destination.present? ? _1.join(obj.destination) : _1 }.tap(&:mkpath)
 
       if obj.file.attached?
         filename = obj.file.filename.sanitized

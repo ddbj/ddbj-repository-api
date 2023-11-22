@@ -1,12 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'DRA: submit via file', type: :request do
-  include ActionDispatch::TestProcess::FixtureFile
-
-  def uploaded_file(name:)
-    Rack::Test::UploadedFile.new(StringIO.new, original_filename: name)
-  end
-
   let(:default_headers) {
     {'X-Dway-User-ID': 'alice'}
   }
@@ -16,10 +10,10 @@ RSpec.describe 'DRA: submit via file', type: :request do
   example 'without Analysis, valid' do
     perform_enqueued_jobs do
       post '/api/submissions/dra/via-file', params: {
-        Submission: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml'),
-        Experiment: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml'),
-        Run:        file_fixture_upload('dra/valid/example-0001_dra_Run.xml'),
-        RunFile:    uploaded_file(name: 'runfile.xml')
+        Submission: {file: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml')},
+        Experiment: {file: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml')},
+        Run:        {file: file_fixture_upload('dra/valid/example-0001_dra_Run.xml')},
+        RunFile:    {file: uploaded_file(name: 'runfile.xml')}
       }
     end
 
@@ -96,12 +90,12 @@ RSpec.describe 'DRA: submit via file', type: :request do
   example 'with Analysis, valid' do
     perform_enqueued_jobs do
       post '/api/submissions/dra/via-file', params: {
-        Submission:   file_fixture_upload('dra/valid/example-0002_dra_Submission.xml'),
-        Experiment:   file_fixture_upload('dra/valid/example-0002_dra_Experiment.xml'),
-        Run:          file_fixture_upload('dra/valid/example-0002_dra_Run.xml'),
-        RunFile:      uploaded_file(name: 'runfile.xml'),
-        Analysis:     file_fixture_upload('dra/valid/example-0002_dra_Analysis.xml'),
-        AnalysisFile: uploaded_file(name: 'analysisfile.xml')
+        Submission:   {file: file_fixture_upload('dra/valid/example-0002_dra_Submission.xml')},
+        Experiment:   {file: file_fixture_upload('dra/valid/example-0002_dra_Experiment.xml')},
+        Run:          {file: file_fixture_upload('dra/valid/example-0002_dra_Run.xml')},
+        RunFile:      {file: uploaded_file(name: 'runfile.xml')},
+        Analysis:     {file: file_fixture_upload('dra/valid/example-0002_dra_Analysis.xml')},
+        AnalysisFile: {file: uploaded_file(name: 'analysisfile.xml')}
       }
     end
 
@@ -196,10 +190,10 @@ RSpec.describe 'DRA: submit via file', type: :request do
   example 'without Analysis, invalid' do
     perform_enqueued_jobs do
       post '/api/submissions/dra/via-file', params: {
-        Submission: file_fixture_upload('dra/invalid/example-0001_dra_Submission.xml'),
-        Experiment: file_fixture_upload('dra/invalid/example-0001_dra_Experiment.xml'),
-        Run:        file_fixture_upload('dra/invalid/example-0001_dra_Run.xml'),
-        RunFile:    uploaded_file(name: 'runfile.xml')
+        Submission: {file: file_fixture_upload('dra/invalid/example-0001_dra_Submission.xml')},
+        Experiment: {file: file_fixture_upload('dra/invalid/example-0001_dra_Experiment.xml')},
+        Run:        {file: file_fixture_upload('dra/invalid/example-0001_dra_Run.xml')},
+        RunFile:    {file: uploaded_file(name: 'runfile.xml')}
       }
     end
 
@@ -267,10 +261,10 @@ RSpec.describe 'DRA: submit via file', type: :request do
 
     perform_enqueued_jobs do
       post '/api/submissions/dra/via-file', params: {
-        Submission: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml'),
-        Experiment: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml'),
-        Run:        file_fixture_upload('dra/valid/example-0001_dra_Run.xml'),
-        RunFile:    uploaded_file(name: 'runfile.xml')
+        Submission: {file: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml')},
+        Experiment: {file: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml')},
+        Run:        {file: file_fixture_upload('dra/valid/example-0001_dra_Run.xml')},
+        RunFile:    {file: uploaded_file(name: 'runfile.xml')}
       }
     end
 
@@ -327,13 +321,13 @@ RSpec.describe 'DRA: submit via file', type: :request do
   example 'with multiple RunFile' do
     perform_enqueued_jobs do
       post '/api/submissions/dra/via-file', params: {
-        Submission: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml'),
-        Experiment: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml'),
-        Run:        file_fixture_upload('dra/valid/example-0001_dra_Run.xml'),
+        Submission: {file: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml')},
+        Experiment: {file: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml')},
+        Run:        {file: file_fixture_upload('dra/valid/example-0001_dra_Run.xml')},
 
         RunFile: [
-          uploaded_file(name: 'runfile1.xml'),
-          uploaded_file(name: 'runfile2.xml')
+          {file: uploaded_file(name: 'runfile1.xml')},
+          {file: uploaded_file(name: 'runfile2.xml')}
         ]
       }
     end
