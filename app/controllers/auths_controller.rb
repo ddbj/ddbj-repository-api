@@ -6,13 +6,10 @@ class AuthsController < ApplicationController
   end
 
   def login
-    state         = session[:state]         = SecureRandom.urlsafe_base64(32)
-    code_verifier = session[:code_verifier] = SecureRandom.urlsafe_base64(32)
+    state         = session[:state]         = generate_state
+    code_verifier = session[:code_verifier] = generate_code_verifier
 
-    code_challenge = Base64.urlsafe_encode64(
-      OpenSSL::Digest::SHA256.digest(code_verifier),
-      padding: false
-    )
+    code_challenge = calculate_code_challenge(code_verifier)
 
     redirect_to oidc_client.authorization_uri(
       scope:                 %i(openid),
@@ -35,7 +32,7 @@ class AuthsController < ApplicationController
     oidc_client.authorization_code = params.require(:code)
 
     access_token = oidc_client.access_token!(code_verifier:)
-    user         = upsert_user_by_id_token(access_token.id_token)
+    user         = upsert_user_by_id_token_jwt(access_token.id_token)
 
     render plain: <<~TEXT
       Logged in as #{user.uid}.
@@ -47,7 +44,7 @@ class AuthsController < ApplicationController
   end
 
   def login_by_id_token
-    user = upsert_user_by_id_token(request.body.read)
+    user = upsert_user_by_id_token_jwt(request.body.read)
 
     render json: {
       api_key: user.api_key
@@ -56,8 +53,18 @@ class AuthsController < ApplicationController
 
   private
 
-  def upsert_user_by_id_token(id_token)
-    id_token = OpenIDConnect::ResponseObject::IdToken.decode(id_token, self.class.oidc_config.jwks)
+  def generate_state = SecureRandom.urlsafe_base64(32)
+  def generate_code_verifier = SecureRandom.urlsafe_base64(32)
+
+  def calculate_code_challenge(code_verifier)
+    Base64.urlsafe_encode64(
+      OpenSSL::Digest::SHA256.digest(code_verifier),
+      padding: false
+    )
+  end
+
+  def upsert_user_by_id_token_jwt(jwt)
+    id_token = OpenIDConnect::ResponseObject::IdToken.decode(jwt, self.class.oidc_config.jwks)
 
     id_token.verify!(
       issuer:    self.class.oidc_config.issuer,
@@ -69,6 +76,10 @@ class AuthsController < ApplicationController
     DwayUser.find_or_initialize_by(sub: id_token.sub).tap {|user|
       user.update! uid: preferred_username
     }
+  end
+
+  def decode_id_token_jwt(jwt)
+    OpenIDConnect::ResponseObject::IdToken.decode(jwt, self.class.oidc_config.jwks)
   end
 
   def oidc_client
