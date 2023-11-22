@@ -36,7 +36,7 @@ module ViaFile
 
     case val
     in {file:, **rest}
-      request.objs.create! _id: id, file: file, destination: rest[:destination]
+      request.objs.create! _id: id, file: file, **rest.slice(:destination)
     in {path: relative_path, **rest}
       user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).cleanpath
       path      = user_home.join(relative_path).cleanpath
@@ -44,9 +44,9 @@ module ViaFile
       raise Error, "path must be in #{user_home}" unless path.to_s.start_with?(user_home.to_s)
 
       request.objs.create! _id: id, file: {
-        io:          path.open,
-        filename:    path.basename,
-        destination: rest[:destination]
+        io:       path.open,
+        filename: path.basename,
+        **rest.slice(:destination)
       }
     in ActionController::Parameters
       handle_param request, obj, val.permit(:file, :path, :destination).to_hash.symbolize_keys
