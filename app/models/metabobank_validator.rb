@@ -12,6 +12,12 @@ class MetabobankValidator
           else
             _1
           end
+        }.then {
+          if objs.key?('MAF') || objs.key?('RawDataFile') || objs.key?('ProcessedDataFile')
+            _1 + %w(-d)
+          else
+            _1
+          end
         }
 
         out, status = Open3.capture2e({
