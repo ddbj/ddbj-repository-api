@@ -8,7 +8,7 @@ class MetabobankValidator
 
         cmd = %W(bundle exec mb-validate --machine-readable -i #{idf} -s #{sdrf}).then {
           if bs = objs['BioSample']
-            _1 + %W(-t #{bs.file.filename.sanitized})
+            _1 + %W(-t #{bs.path})
           else
             _1
           end

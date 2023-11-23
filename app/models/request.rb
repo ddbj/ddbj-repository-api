@@ -1,3 +1,5 @@
+using PathnameWithin
+
 class Request < ApplicationRecord
   belongs_to :dway_user,  optional: true
   belongs_to :submission, optional: true
@@ -38,6 +40,9 @@ class Request < ApplicationRecord
         next if only && obj._id != only
 
         path = tmpdir.join(obj.path)
+
+        raise unless path.within?(tmpdir)
+
         path.dirname.mkpath
 
         obj.file.open do |file|
@@ -53,17 +58,22 @@ class Request < ApplicationRecord
     to.tap(&:mkpath).join('validation-report.json').write JSON.pretty_generate(validation_reports)
 
     objs.each do |obj|
-      obj_dir = to.join(obj._id).then { obj.destination.present? ? _1.join(obj.destination) : _1 }.tap(&:mkpath)
+      obj_dir = to.join(obj._id)
 
       if obj.file.attached?
-        filename = obj.file.filename.sanitized
+        path = obj_dir.join(obj.path)
 
-        obj_dir.join("#{filename}-validation-report.json").write JSON.pretty_generate(obj.validation_report)
+        raise unless path.within?(obj_dir)
+
+        path.dirname.mkpath
 
         obj.file.open do |file|
-          FileUtils.mv file.path, obj_dir.join(filename)
+          FileUtils.mv file.path, path
         end
+
+        File.write "#{path}-validation-report.json", JSON.pretty_generate(obj.validation_report)
       else
+        obj_dir.mkpath
         obj_dir.join('validation-report.json').write JSON.pretty_generate(obj.validation_report)
       end
     end

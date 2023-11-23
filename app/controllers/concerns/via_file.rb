@@ -1,3 +1,5 @@
+using PathnameWithin
+
 module ViaFile
   extend ActiveSupport::Concern
 
@@ -38,10 +40,10 @@ module ViaFile
     in {file:, **rest}
       request.objs.create! _id: id, file: file, **rest.slice(:destination)
     in {path: relative_path, **rest}
-      user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid).cleanpath
-      path      = user_home.join(relative_path).cleanpath
+      user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid)
+      path      = user_home.join(relative_path)
 
-      raise Error, "path must be in #{user_home}" unless path.to_s.start_with?(user_home.to_s)
+      raise Error, "path must be in #{user_home}" unless path.within?(user_home)
 
       request.objs.create! _id: id, file: {
         io:       path.open,
