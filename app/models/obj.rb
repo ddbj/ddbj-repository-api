@@ -5,10 +5,14 @@ class Obj < ApplicationRecord
 
   validates :validity, inclusion: {in: %w(valid invalid error)}, allow_nil: true
 
+  def path
+    file.attached? ? [destination, file.filename.sanitized].reject(&:blank?).join('/') : nil
+  end
+
   def validation_report
     {
       object_id: _id,
-      filename:  file.attached? ? file.filename.sanitized : nil,
+      path:      path,
       validity:  validity,
       details:   validation_details
     }

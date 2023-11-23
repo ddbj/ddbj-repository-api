@@ -5,7 +5,7 @@ class SubmitJob < ApplicationJob
 
       submission = request.dway_user.submissions.create!(request:)
 
-      request.write_files to: submission.dir
+      request.write_submission_files to: submission.dir
     end
   end
 end

@@ -67,13 +67,13 @@ RSpec.describe 'BioSample: submit via file', type: :request do
       validation_reports: contain_exactly(
         {
           object_id: '_base',
-          filename:  nil,
+          path:      nil,
           validity:  nil,
           details:   nil
         },
         {
           object_id: 'BioSample',
-          filename:  'mybiosample.xml',
+          path:      'mybiosample.xml',
           validity:  'valid',
 
           details: {

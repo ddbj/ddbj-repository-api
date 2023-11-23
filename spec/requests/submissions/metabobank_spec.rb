@@ -27,7 +27,7 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
 
       validation_reports: include(
         object_id: 'IDF',
-        filename:  'MTBKS231.idf.txt',
+        path:      'MTBKS231.idf.txt',
         validity:  'valid',
 
         details: include(
@@ -71,7 +71,19 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
 
     expect(response.parsed_body.deep_symbolize_keys).to include(
       status:   'finished',
-      validity: 'valid'
+      validity: 'valid',
+
+      validation_reports: include(
+        include(
+          object_id: 'RawDataFile',
+          path:      'raw/raw1.txt'
+        ),
+
+        include(
+          object_id: 'ProcessedDataFile',
+          path:      'processed/processed2.txt'
+        )
+      )
     )
 
     submission_id  = response.parsed_body.dig(:submission, :id)
@@ -125,7 +137,7 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
 
       validation_reports: include(
         object_id: 'IDF',
-        filename:  'MTBKS201.idf.txt',
+        path:      'MTBKS201.idf.txt',
         validity:  'valid',
 
         details: include(
@@ -161,7 +173,7 @@ RSpec.describe 'MetaboBank: submit via file', type: :request do
 
       validation_reports: include(
         object_id: 'BioSample',
-        filename:  'MTBKS231.bs.tsv',
+        path:      'MTBKS231.bs.tsv',
         validity:  'valid',
         details:   nil
       ),

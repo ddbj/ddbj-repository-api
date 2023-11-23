@@ -29,7 +29,27 @@ class Request < ApplicationRecord
     objs.map(&:validation_report)
   end
 
-  def write_files(to:)
+  def write_files_to_tmp(only: nil, &block)
+    Dir.mktmpdir {|tmpdir|
+      tmpdir = Pathname.new(tmpdir)
+
+      objs.each do |obj|
+        next unless obj.file.attached?
+        next if only && obj._id != only
+
+        path = tmpdir.join(obj.path)
+        path.dirname.mkpath
+
+        obj.file.open do |file|
+          FileUtils.mv file.path, path
+        end
+      end
+
+      block.call tmpdir
+    }
+  end
+
+  def write_submission_files(to:)
     to.tap(&:mkpath).join('validation-report.json').write JSON.pretty_generate(validation_reports)
 
     objs.each do |obj|

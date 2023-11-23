@@ -30,31 +30,31 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validation_reports: contain_exactly(
         {
           object_id: '_base',
-          filename:  nil,
+          path:      nil,
           validity:  nil,
           details:   nil
         },
         {
           object_id: 'Submission',
-          filename:  'example-0001_dra_Submission.xml',
+          path:      'example-0001_dra_Submission.xml',
           validity:  'valid',
           details:   nil
         },
         {
           object_id: 'Experiment',
-          filename:  'example-0001_dra_Experiment.xml',
+          path:      'example-0001_dra_Experiment.xml',
           validity:  'valid',
           details:   nil
         },
         {
           object_id: 'Run',
-          filename:  'example-0001_dra_Run.xml',
+          path:      'example-0001_dra_Run.xml',
           validity:  'valid',
           details:   nil
         },
         {
           object_id: 'RunFile',
-          filename:  'runfile.xml',
+          path:      'runfile.xml',
           validity:  nil,
           details:   nil
         }
@@ -112,43 +112,43 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validation_reports: contain_exactly(
         {
           object_id: '_base',
-          filename:  nil,
+          path:      nil,
           validity:  nil,
           details:   nil
         },
         {
           object_id: 'Submission',
-          filename:  'example-0002_dra_Submission.xml',
+          path:      'example-0002_dra_Submission.xml',
           validity:  'valid',
           details:   nil
         },
         {
           object_id: 'Experiment',
-          filename:  'example-0002_dra_Experiment.xml',
+          path:      'example-0002_dra_Experiment.xml',
           validity:  'valid',
           details:   nil
         },
         {
           object_id: 'Run',
-          filename:  'example-0002_dra_Run.xml',
+          path:      'example-0002_dra_Run.xml',
           validity:  'valid',
           details:   nil
         },
         {
           object_id: 'RunFile',
-          filename:  'runfile.xml',
+          path:      'runfile.xml',
           validity:  nil,
           details:   nil
         },
         {
           object_id: 'Analysis',
-          filename:  'example-0002_dra_Analysis.xml',
+          path:      'example-0002_dra_Analysis.xml',
           validity:  'valid',
           details:   nil
         },
         {
           object_id: 'AnalysisFile',
-          filename:  'analysisfile.xml',
+          path:      'analysisfile.xml',
           validity:  nil,
           details:   nil
         }
@@ -210,13 +210,13 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validation_reports: contain_exactly(
         {
           object_id: '_base',
-          filename:  nil,
+          path:      nil,
           validity:  nil,
           details:   nil
         },
         {
           object_id: 'Submission',
-          filename:  'example-0001_dra_Submission.xml',
+          path:      'example-0001_dra_Submission.xml',
           validity:  'invalid',
 
           details: [
@@ -226,7 +226,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
         },
         {
           object_id: 'Experiment',
-          filename:  'example-0001_dra_Experiment.xml',
+          path:      'example-0001_dra_Experiment.xml',
           validity:  'invalid',
 
           details: [
@@ -236,7 +236,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
         },
         {
           object_id: 'Run',
-          filename:  'example-0001_dra_Run.xml',
+          path:      'example-0001_dra_Run.xml',
           validity:  'invalid',
 
           details: [
@@ -246,7 +246,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
         },
         {
           object_id: 'RunFile',
-          filename:  'runfile.xml',
+          path:      'runfile.xml',
           validity:  nil,
           details:   nil
         }
@@ -281,7 +281,7 @@ RSpec.describe 'DRA: submit via file', type: :request do
       validation_reports: contain_exactly(
         {
           object_id: '_base',
-          filename:  nil,
+          path:      nil,
           validity:  'error',
 
           details: {
@@ -290,25 +290,25 @@ RSpec.describe 'DRA: submit via file', type: :request do
         },
         {
           object_id: 'Submission',
-          filename:  'example-0001_dra_Submission.xml',
+          path:      'example-0001_dra_Submission.xml',
           validity:  nil,
           details:   nil
         },
         {
           object_id: 'Experiment',
-          filename:  'example-0001_dra_Experiment.xml',
+          path:      'example-0001_dra_Experiment.xml',
           validity:  nil,
           details:   nil
         },
         {
           object_id: 'Run',
-          filename:  'example-0001_dra_Run.xml',
+          path:      'example-0001_dra_Run.xml',
           validity:  nil,
           details:   nil
         },
         {
           object_id: 'RunFile',
-          filename:  'runfile.xml',
+          path:      'runfile.xml',
           validity:  nil,
           details:   nil
         }
