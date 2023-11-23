@@ -52,9 +52,11 @@ COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
 
 # Run and own only the runtime files as a non-root user for security
-RUN mkdir /repository
-RUN chown -R ${APP_UID}:${APP_GID} db log storage tmp /repository
+RUN mkdir /repository /.local
+RUN chown -R ${APP_UID}:${APP_GID} db log storage tmp /repository /.local
 USER ${APP_UID}:${APP_GID}
+
+RUN bundle exec submission-excel2xml download_xsd
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]

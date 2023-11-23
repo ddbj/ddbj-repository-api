@@ -7,7 +7,7 @@ gem 'rails', '~> 7.1.0'
 gem 'bootsnap', require: false
 gem 'faraday'
 gem 'faraday-multipart'
-gem 'metabobank_tools', github: 'ddbj/metabobank_tools', branch: 'repository'
+gem 'metabobank_tools', github: 'ddbj/metabobank_tools'
 gem 'parallel'
 gem 'pg'
 gem 'puma'
