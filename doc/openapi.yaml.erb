@@ -15,6 +15,87 @@ security:
   - BearerAuth: []
 
 paths:
+  /api-key:
+    get:
+      tags:
+        - Authentication
+
+      security: []
+
+      responses:
+        '200':
+          description: Returns the login URL. Open this URL in your browser.
+
+          content:
+            application/json:
+              schema:
+                type: object
+
+                properties:
+                  login_url:
+                    type: string
+                    format: uri
+
+                required:
+                  - login_url
+
+              example:
+                login_url: https://repository.ddbj.nig.ac.jp/auth/login
+
+  /api-key/regenerate:
+    post:
+      tags:
+        - Authentication
+
+      responses:
+        '200':
+          description: Returns a new API key.
+
+          content:
+            application/json:
+              schema:
+                type: object
+
+                properties:
+                  api_key:
+                    type: string
+
+                required:
+                  - api_key
+
+              example:
+                api_key: ddbj_repository_VbHQePhpFhvrKI7by1kteMvN2ImLfhGVK4mTPFEZ2EO
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /me:
+    get:
+      tags:
+        - Authentication
+
+      responses:
+        '200':
+          description: Returns the user's login ID.
+
+          content:
+            application/json:
+              schema:
+                type: object
+
+                properties:
+                  uid:
+                    type: string
+
+                required:
+                  - uid
+
+              example:
+                uid: alice
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
   <%- dbs.each do |db| -%>
   /validations/<%= db[:id].downcase %>/via-file:
     post:
@@ -150,28 +231,6 @@ paths:
 
                 submission:
                   id: X-84
-
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-
-  /me:
-    get:
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-
-                properties:
-                  uid:
-                    type: string
-
-                required:
-                  - uid
-
-              example:
-                uid: alice
 
         '401':
           $ref: '#/components/responses/Unauthorized'
