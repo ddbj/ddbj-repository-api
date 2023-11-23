@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   end
 
   scope :api do
+    resource :api_key, path: 'api-key', only: %i(show) do
+      post :regenerate
+    end
+
     resource :auth, only: %i() do
       post :login_by_id_token
     end

@@ -69,7 +69,7 @@ RSpec.describe 'authentication', type: :request do
 
       expect(user).to have_attributes(
         uid:     'alice',
-        api_key: match(/\Ask_[[:alnum:]]+\z/)
+        api_key: match(/\Addbj_repository_[[:alnum:]]+\z/)
       )
 
       expect(response.body).to include("Your API key is: #{user.api_key}")

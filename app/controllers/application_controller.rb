@@ -12,10 +12,10 @@ class ApplicationController < ActionController::API
   end
 
   def dway_user
-    return nil if @dway_user == :not_available
+    return @dway_user if defined?(@dway_user)
 
-    @dway_user ||= authenticate_with_http_token {|token|
+    @dway_user = authenticate_with_http_token {|token|
       DwayUser.find_by(api_key: token)
-    } || :not_available
+    }
   end
 end
