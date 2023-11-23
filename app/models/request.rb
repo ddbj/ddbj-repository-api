@@ -35,8 +35,7 @@ class Request < ApplicationRecord
     Dir.mktmpdir {|tmpdir|
       tmpdir = Pathname.new(tmpdir)
 
-      objs.each do |obj|
-        next unless obj.file.attached?
+      objs.without_base.each do |obj|
         next if only && obj._id != only
 
         path = tmpdir.join(obj.path)
@@ -60,7 +59,10 @@ class Request < ApplicationRecord
     objs.each do |obj|
       obj_dir = to.join(obj._id)
 
-      if obj.file.attached?
+      if obj.base?
+        obj_dir.mkpath
+        obj_dir.join('validation-report.json').write JSON.pretty_generate(obj.validation_report)
+      else
         path = obj_dir.join(obj.path)
 
         raise unless path.within?(obj_dir)
@@ -72,9 +74,6 @@ class Request < ApplicationRecord
         end
 
         File.write "#{path}-validation-report.json", JSON.pretty_generate(obj.validation_report)
-      else
-        obj_dir.mkpath
-        obj_dir.join('validation-report.json').write JSON.pretty_generate(obj.validation_report)
       end
     end
   end
