@@ -116,4 +116,19 @@ RSpec.describe 'BioSample: submit via file', type: :request do
       error: /\Apath must be in \S+\z/
     )
   end
+
+  example do
+    post '/api/submissions/biosample/via-file', params: {
+      BioSample: {
+        file:        uploaded_file(name: 'mybiosample.xml'),
+        destination: '..'
+      }
+    }
+
+    expect(response).to have_http_status(:unprocessable_entity)
+
+    expect(response.parsed_body.deep_symbolize_keys).to eq(
+      error: 'Validation failed: Destination is malformed path'
+    )
+  end
 end

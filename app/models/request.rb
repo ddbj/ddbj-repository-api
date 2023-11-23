@@ -39,9 +39,6 @@ class Request < ApplicationRecord
         next if only && obj._id != only
 
         path = tmpdir.join(obj.path)
-
-        raise unless path.within?(tmpdir)
-
         path.dirname.mkpath
 
         obj.file.open do |file|
@@ -64,9 +61,6 @@ class Request < ApplicationRecord
         obj_dir.join('validation-report.json').write JSON.pretty_generate(obj.validation_report)
       else
         path = obj_dir.join(obj.path)
-
-        raise unless path.within?(obj_dir)
-
         path.dirname.mkpath
 
         obj.file.open do |file|

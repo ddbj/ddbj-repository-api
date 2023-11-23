@@ -11,6 +11,12 @@ module ViaFile
         error: e.message
       }, status: :bad_request
     end
+
+    rescue_from ActiveRecord::RecordInvalid do |e|
+      render json: {
+        error: e.message
+      }, status: :unprocessable_entity
+    end
   end
 
   def create_request_from_params
