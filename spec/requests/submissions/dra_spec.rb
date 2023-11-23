@@ -1,10 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'DRA: submit via file', type: :request do
-  let(:default_headers) {
-    {'Authorization': 'Bearer API_KEY'}
-  }
-
+RSpec.describe 'DRA: submit via file', type: :request, authorized: true do
   let(:repository_dir) { Pathname.new(ENV.fetch('REPOSITORY_DIR')) }
 
   before do

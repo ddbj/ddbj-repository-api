@@ -1,10 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'BioSample: validate via file', type: :request do
-  let(:default_headers) {
-    {'Authorization': 'Bearer API_KEY'}
-  }
-
+RSpec.describe 'BioSample: validate via file', type: :request, authorized: true do
   let(:user_home_dir)  { Pathname.new(ENV.fetch('USER_HOME_DIR')) }
   let(:repository_dir) { Pathname.new(ENV.fetch('REPOSITORY_DIR')) }
 

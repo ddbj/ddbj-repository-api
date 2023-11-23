@@ -13,13 +13,7 @@ RSpec.describe 'API key' do
     end
   end
 
-  describe 'POST /api/api-key/regenerate' do
-    let(:default_headers) {
-      {
-        Authorization: 'Bearer API_KEY'
-      }
-    }
-
+  describe 'POST /api/api-key/regenerate', authorized: true do
     let!(:user) { create(:dway_user, api_key: 'API_KEY') }
 
     before do
