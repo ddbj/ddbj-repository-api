@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'BioSample: submit via file', type: :request do
-  def uploaded_file(name:)
-    Rack::Test::UploadedFile.new(StringIO.new, original_filename: name)
-  end
-
   let(:default_headers) {
     {'X-Dway-User-ID': 'alice'}
   }
@@ -47,7 +43,7 @@ RSpec.describe 'BioSample: submit via file', type: :request do
   example do
     perform_enqueued_jobs do
       post '/api/submissions/biosample/via-file', params: {
-        BioSample: uploaded_file(name: 'mybiosample.xml')
+        BioSample: {file: uploaded_file(name: 'mybiosample.xml')}
       }
     end
 
@@ -71,13 +67,13 @@ RSpec.describe 'BioSample: submit via file', type: :request do
       validation_reports: contain_exactly(
         {
           object_id: '_base',
-          filename:  nil,
+          path:      nil,
           validity:  nil,
           details:   nil
         },
         {
           object_id: 'BioSample',
-          filename:  'mybiosample.xml',
+          path:      'mybiosample.xml',
           validity:  'valid',
 
           details: {
@@ -111,25 +107,28 @@ RSpec.describe 'BioSample: submit via file', type: :request do
 
   example do
     post '/api/submissions/biosample/via-file', params: {
-      BioSample: 'foo/mybiosample.xml'
-    }
-
-    expect(response).to have_http_status(:bad_request)
-
-    expect(response.parsed_body.deep_symbolize_keys).to eq(
-      error: 'unexpected parameter format in BioSample: "foo/mybiosample.xml"'
-    )
-  end
-
-  example do
-    post '/api/submissions/biosample/via-file', params: {
-      BioSample: '~/../foo/mybiosample.xml'
+      BioSample: {path: '../foo/mybiosample.xml'}
     }
 
     expect(response).to have_http_status(:bad_request)
 
     expect(response.parsed_body.deep_symbolize_keys).to match(
       error: /\Apath must be in \S+\z/
+    )
+  end
+
+  example do
+    post '/api/submissions/biosample/via-file', params: {
+      BioSample: {
+        file:        uploaded_file(name: 'mybiosample.xml'),
+        destination: '..'
+      }
+    }
+
+    expect(response).to have_http_status(:unprocessable_entity)
+
+    expect(response.parsed_body.deep_symbolize_keys).to eq(
+      error: 'Validation failed: Destination is malformed path'
     )
   end
 end

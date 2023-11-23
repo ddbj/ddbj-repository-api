@@ -6,15 +6,8 @@ class DdbjValidator
   def validate(request)
     obj = request.objs.find_by!(_id: @obj_id)
 
-    res = Dir.mktmpdir {|tmpdir|
-      tmpdir = Pathname.new(tmpdir)
-      path   = tmpdir.join(obj.file.filename.sanitized)
-
-      obj.file.open do |file|
-        FileUtils.mv file.path, path
-      end
-
-      part = Faraday::Multipart::FilePart.new(path.to_s, 'application/octet-stream')
+    res = request.write_files_to_tmp(only: obj._id) {|dir|
+      part = Faraday::Multipart::FilePart.new(dir.join(obj.path).to_s, 'application/octet-stream')
 
       client.post('validation', @obj_id.downcase => part)
     }

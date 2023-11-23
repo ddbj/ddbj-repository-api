@@ -1,3 +1,5 @@
+using PathnameWithin
+
 class Request < ApplicationRecord
   belongs_to :dway_user,  optional: true
   belongs_to :submission, optional: true
@@ -29,22 +31,43 @@ class Request < ApplicationRecord
     objs.map(&:validation_report)
   end
 
-  def write_files(to:)
+  def write_files_to_tmp(only: nil, &block)
+    Dir.mktmpdir {|tmpdir|
+      tmpdir = Pathname.new(tmpdir)
+
+      objs.without_base.each do |obj|
+        next if only && obj._id != only
+
+        path = tmpdir.join(obj.path)
+        path.dirname.mkpath
+
+        obj.file.open do |file|
+          FileUtils.mv file.path, path
+        end
+      end
+
+      block.call tmpdir
+    }
+  end
+
+  def write_submission_files(to:)
     to.tap(&:mkpath).join('validation-report.json').write JSON.pretty_generate(validation_reports)
 
     objs.each do |obj|
-      obj_dir = to.join(obj._id).tap(&:mkpath)
+      obj_dir = to.join(obj._id)
 
-      if obj.file.attached?
-        filename = obj.file.filename.sanitized
-
-        obj_dir.join("#{filename}-validation-report.json").write JSON.pretty_generate(obj.validation_report)
+      if obj.base?
+        obj_dir.mkpath
+        obj_dir.join('validation-report.json').write JSON.pretty_generate(obj.validation_report)
+      else
+        path = obj_dir.join(obj.path)
+        path.dirname.mkpath
 
         obj.file.open do |file|
-          FileUtils.mv file.path, obj_dir.join(filename)
+          FileUtils.mv file.path, path
         end
-      else
-        obj_dir.join('validation-report.json').write JSON.pretty_generate(obj.validation_report)
+
+        File.write "#{path}-validation-report.json", JSON.pretty_generate(obj.validation_report)
       end
     end
   end

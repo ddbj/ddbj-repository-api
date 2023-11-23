@@ -366,11 +366,13 @@ paths:
                 validity: valid
 
                 validation_reports:
-                  _base:
+                  - object_id: _base
+                    path: null
                     validity: null
                     details: null
 
-                  BioSample:
+                  - object_id: BioSample
+                    path: mybiosample.xml
                     validity: valid
 
                     details:
@@ -386,6 +388,40 @@ components:
       type: object
 
       properties:
+        object_id:
+          type: string
+
+          enum:
+            - _base
+            - BioProject
+            - BioSample
+            - Sequence
+            - Annotation
+            - Submission
+            - Experiment
+            - Run
+            - RunFile
+            - Analysis
+            - AnalysisFile
+            - IDF
+            - SDRF
+            - ADF
+            - RawDataFile
+            - ProcessedDataFile
+            - MAF
+            - Study
+            - SampleSet
+            - Sample
+            - Assay
+            - VariantCallSV
+            - VariantRegionSV
+            - VariantCallFile
+
+        path:
+          type:
+            - string
+            - 'null'
+
         validity:
           type:
             - string
@@ -403,6 +439,8 @@ components:
             - 'null'
 
       required:
+        - object_id
+        - path
         - validity
         - details
 
@@ -411,60 +449,96 @@ components:
 
       properties:
         BioProject:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
       required:
         - BioProject
 
-    BioProjectViaFileFormData:
+    BioProjectViaFileFormDataFile:
       type: object
 
       properties:
-        BioProject:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        BioProject[file]:
+          type: string
+          format: binary
+
+        BioProject[destination]:
+          type: string
 
       required:
-        - BioProject
+        - BioProject[file]
+
+    BioProjectViaFileFormDataPath:
+      type: object
+
+      properties:
+        BioProject[path]:
+          type: string
+
+        BioProject[destination]:
+          type: string
+
+      required:
+        - BioProject[path]
 
     BioSampleViaFileJSON:
       type: object
 
       properties:
         BioSample:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
       required:
         - BioSample
 
-    BioSampleViaFileFormData:
+    BioSampleViaFileFormDataFile:
       type: object
 
       properties:
-        BioSample:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        BioSample[file]:
+          type: string
+          format: binary
+
+        BioSample[destination]:
+          type: string
 
       required:
-        - BioSample
+        - BioSample[file]
+
+    BioSampleViaFileFormDataPath:
+      type: object
+
+      properties:
+        BioSample[path]:
+          type: string
+
+        BioSample[destination]:
+          type: string
+
+      required:
+        - BioSample[path]
 
     TradViaFileJSON:
       type: object
@@ -475,120 +549,210 @@ components:
           minItems: 1
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
         Annotation:
           type: array
           minItems: 1
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
       required:
         - Sequence
         - Annotation
 
-    TradViaFileFormData:
+    TradViaFileFormDataFile:
       type: object
 
       properties:
-        Sequence[]:
+        Sequence[][file]:
           type: array
           minItems: 1
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
+            format: binary
 
-        Annotation[]:
+        Sequence[][destination]:
           type: array
           minItems: 1
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
+
+        Annotation[][file]:
+          type: array
+          minItems: 1
+
+          items:
+            type: string
+            format: binary
+
+        Annotation[][destination]:
+          type: array
+          minItems: 1
+
+          items:
+            type: string
 
       required:
-        - Sequence[]
-        - Annotation[]
+        - Sequence[][file]
+        - Annotation[][file]
+
+    TradViaFileFormDataPath:
+      type: object
+
+      properties:
+        Sequence[][path]:
+          type: array
+          minItems: 1
+
+          items:
+            type: string
+
+        Sequence[][destination]:
+          type: array
+          minItems: 1
+
+          items:
+            type: string
+
+        Annotation[][path]:
+          type: array
+          minItems: 1
+
+          items:
+            type: string
+
+        Annotation[][destination]:
+          type: array
+          minItems: 1
+
+          items:
+            type: string
+
+      required:
+        - Sequence[][path]
+        - Annotation[][path]
 
     DRAViaFileJSON:
       type: object
 
       properties:
         Submission:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         Experiment:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         Run:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         RunFile:
           type: array
           minItems: 1
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
         Analysis:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         AnalysisFile:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
       required:
         - Submission
@@ -596,399 +760,720 @@ components:
         - Run
         - RunFile
 
-    DRAViaFileFormData:
+    DRAViaFileFormDataFile:
       type: object
 
       properties:
-        Submission:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        Submission[file]:
+          type: string
+          format: binary
 
-        Experiment:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        Submission[destination]:
+          type: string
 
-        Run:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        Experiment[file]:
+          type: string
+          format: binary
 
-        RunFile[]:
+        Experiment[destination]:
+          type: string
+
+        Run[file]:
+          type: string
+          format: binary
+
+        Run[destination]:
+          type: string
+
+        RunFile[][file]:
           type: array
           minItems: 1
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
+            format: binary
 
-        Analysis:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        RunFile[][destination]:
+          type: array
+          minItems: 1
 
-        AnalysisFile[]:
+          items:
+            type: string
+
+        Analysis[file]:
+          type: string
+          format: binary
+
+        Analysis[destination]:
+          type: string
+
+        AnalysisFile[][file]:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
+            format: binary
+
+        AnalysisFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
 
       required:
-        - Submission
-        - Experiment
-        - Run
-        - RunFile[]
+        - Submission[file]
+        - Experiment[file]
+        - Run[file]
+        - RunFile[][file]
+
+    DRAViaFileFormDataPath:
+      type: object
+
+      properties:
+        Submission[path]:
+          type: string
+
+        Submission[destination]:
+          type: string
+
+        Experiment[path]:
+          type: string
+
+        Experiment[destination]:
+          type: string
+
+        Run[path]:
+          type: string
+
+        Run[destination]:
+          type: string
+
+        RunFile[][path]:
+          type: array
+          minItems: 1
+
+          items:
+            type: string
+
+        RunFile[][destination]:
+          type: array
+          minItems: 1
+
+          items:
+            type: string
+
+        Analysis[path]:
+          type: string
+
+        Analysis[destination]:
+          type: string
+
+        AnalysisFile[][path]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        AnalysisFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+      required:
+        - Submission[path]
+        - Experiment[path]
+        - Run[path]
+        - RunFile[][path]
 
     GEAViaFileJSON:
       type: object
 
       properties:
         IDF:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         SDRF:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         ADF:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
         RawDataFile:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
         ProcessedDataFile:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
       required:
         - IDF
         - SDRF
 
-    GEAViaFileFormData:
+    GEAViaFileFormDataFile:
       type: object
 
       properties:
-        IDF:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        IDF[file]:
+          type: string
+          format: binary
 
-        SDRF:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        IDF[destination]:
+          type: string
 
-        ADF[]:
+        SDRF[file]:
+          type: string
+          format: binary
+
+        SDRF[destination]:
+          type: string
+
+        ADF[][file]:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
+            format: binary
 
-        RawDataFile[]:
+        ADF[][destination]:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
 
-        ProcessedDataFile[]:
+        RawDataFile[][file]:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
+            format: binary
+
+        RawDataFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        ProcessedDataFile[][file]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+            format: binary
+
+        ProcessedDataFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
 
       required:
-        - IDF
-        - SDRF
+        - IDF[file]
+        - SDRF[file]
+
+    GEAViaFileFormDataPath:
+      type: object
+
+      properties:
+        IDF[path]:
+          type: string
+
+        IDF[destination]:
+          type: string
+
+        SDRF[path]:
+          type: string
+
+        SDRF[destination]:
+          type: string
+
+        ADF[][path]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        ADF[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        RawDataFile[][path]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        RawDataFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        ProcessedDataFile[][path]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        ProcessedDataFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+      required:
+        - IDF[path]
+        - SDRF[path]
 
     MetaboBankViaFileJSON:
       type: object
 
       properties:
         IDF:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         SDRF:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         MAF:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
         RawDataFile:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
         ProcessedDataFile:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
         BioSample:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
       required:
         - IDF
         - SDRF
 
-    MetaboBankViaFileFormData:
+    MetaboBankViaFileFormDataFile:
       type: object
 
       properties:
-        IDF:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        IDF[file]:
+          type: string
+          format: binary
 
-        SDRF:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        IDF[destination]:
+          type: string
 
-        MAF[]:
+        SDRF[file]:
+          type: string
+          format: binary
+
+        SDRF[destination]:
+          type: string
+
+        MAF[][file]:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
+            format: binary
 
-        RawDataFile[]:
+        MAF[][destination]:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
 
-        ProcessedDataFile[]:
+        RawDataFile[][file]:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
+            format: binary
 
-        BioSample:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        RawDataFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        ProcessedDataFile[][file]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+            format: binary
+
+        ProcessedDataFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        BioSample[file]:
+          type: string
+          format: binary
+
+        BioSample[destination]:
+          type: string
 
       required:
-        - IDF
-        - SDRF
+        - IDF[file]
+        - SDRF[file]
+
+    MetaboBankViaFileFormDataPath:
+      type: object
+
+      properties:
+        IDF[path]:
+          type: string
+
+        IDF[destination]:
+          type: string
+
+        SDRF[path]:
+          type: string
+
+        SDRF[destination]:
+          type: string
+
+        MAF[][path]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        MAF[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        RawDataFile[][path]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        RawDataFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        ProcessedDataFile[][path]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        ProcessedDataFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        BioSample[path]:
+          type: string
+
+        BioSample[destination]:
+          type: string
+
+      required:
+        - IDF[path]
+        - SDRF[path]
 
     JVarViaFileJSON:
       type: object
 
       properties:
         Study:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         SampleSet:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         Sample:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         Experiment:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         Assay:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         VariantCallSV:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         VariantRegionSV:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
 
         VariantCallFile:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
 
       required:
         - Study
@@ -999,86 +1484,151 @@ components:
         - VariantCallSV
         - VariantRegionSV
 
-    JVarViaFileFormData:
+    JVarViaFileFormDataFile:
       type: object
 
       properties:
-        Study:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        Study[file]:
+          type: string
+          format: binary
 
-        SampleSet:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        Study[destination]:
+          type: string
 
-        Sample:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        SampleSet[file]:
+          type: string
+          format: binary
 
-        Experiment:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        SampleSet[destination]:
+          type: string
 
-        Assay:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        Sample[file]:
+          type: string
+          format: binary
 
-        VariantCallSV:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        Sample[destination]:
+          type: string
 
-        VariantRegionSV:
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+        Experiment[file]:
+          type: string
+          format: binary
 
-        VariantCallFile[]:
+        Experiment[destination]:
+          type: string
+
+        Assay[file]:
+          type: string
+          format: binary
+
+        Assay[destination]:
+          type: string
+
+        VariantCallSV[file]:
+          type: string
+          format: binary
+
+        VariantCallSV[destination]:
+          type: string
+
+        VariantRegionSV[file]:
+          type: string
+          format: binary
+
+        VariantRegionSV[destination]:
+          type: string
+
+        VariantCallFile[][file]:
           type: array
           minItems: 0
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
+            format: binary
+
+        VariantCallFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
 
       required:
-        - Study
-        - SampleSet
-        - Sample
-        - Experiment
-        - Assay
-        - VariantCallSV
-        - VariantRegionSV
+        - Study[file]
+        - SampleSet[file]
+        - Sample[file]
+        - Experiment[file]
+        - Assay[file]
+        - VariantCallSV[file]
+        - VariantRegionSV[file]
+
+    JVarViaFileFormDataPath:
+      type: object
+
+      properties:
+        Study[path]:
+          type: string
+
+        Study[destination]:
+          type: string
+
+        SampleSet[path]:
+          type: string
+
+        SampleSet[destination]:
+          type: string
+
+        Sample[path]:
+          type: string
+
+        Sample[destination]:
+          type: string
+
+        Experiment[path]:
+          type: string
+
+        Experiment[destination]:
+          type: string
+
+        Assay[path]:
+          type: string
+
+        Assay[destination]:
+          type: string
+
+        VariantCallSV[path]:
+          type: string
+
+        VariantCallSV[destination]:
+          type: string
+
+        VariantRegionSV[path]:
+          type: string
+
+        VariantRegionSV[destination]:
+          type: string
+
+        VariantCallFile[][path]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+        VariantCallFile[][destination]:
+          type: array
+          minItems: 0
+
+          items:
+            type: string
+
+      required:
+        - Study[path]
+        - SampleSet[path]
+        - Sample[path]
+        - Experiment[path]
+        - Assay[path]
+        - VariantCallSV[path]
+        - VariantRegionSV[path]
 
   requestBodies:
     BioProjectViaFile:
@@ -1088,14 +1638,15 @@ components:
             $ref: '#/components/schemas/BioProjectViaFileJSON'
 
           example:
-            BioProject: ~/mybioproject.xml
+            BioProject:
+              path: mybioproject.xml
+              destination: path/to/destination
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/BioProjectViaFileFormData'
-
-          example:
-            BioProject: ~/mybioproject.xml
+            oneOf:
+              - $ref: '#/components/schemas/BioProjectViaFileFormDataFile'
+              - $ref: '#/components/schemas/BioProjectViaFileFormDataPath'
 
     BioSampleViaFile:
       content:
@@ -1104,14 +1655,15 @@ components:
             $ref: '#/components/schemas/BioSampleViaFileJSON'
 
           example:
-            BioSample: ~/mybiosample.xml
+            BioSample:
+              path: mybiosample.xml
+              destination: path/to/destination
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/BioSampleViaFileFormData'
-
-          example:
-            BioSample: ~/mybiosample.xml
+            oneOf:
+              - $ref: '#/components/schemas/BioSampleViaFileFormDataFile'
+              - $ref: '#/components/schemas/BioSampleViaFileFormDataPath'
 
     TradViaFile:
       content:
@@ -1120,16 +1672,18 @@ components:
             $ref: '#/components/schemas/TradViaFileJSON'
 
           example:
-            Sequence: ~/mysequence.fasta
-            Annotation: ~/myannotation.ann
+            Sequence:
+              path: mysequence.fasta
+              destination: path/to/destination
+            Annotation:
+              path: myannotation.ann
+              destination: path/to/destination
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/TradViaFileFormData'
-
-          example:
-            Sequence[]: ~/mysequence.fasta
-            Annotation[]: ~/myannotation.ann
+            oneOf:
+              - $ref: '#/components/schemas/TradViaFileFormDataFile'
+              - $ref: '#/components/schemas/TradViaFileFormDataPath'
 
     DRAViaFile:
       content:
@@ -1138,24 +1692,30 @@ components:
             $ref: '#/components/schemas/DRAViaFileJSON'
 
           example:
-            Submission: ~/mysubmission.xml
-            Experiment: ~/myexperiment.xml
-            Run: ~/myrun.xml
-            RunFile: ~/myrunfile.fastq
-            Analysis: ~/myanalysis.xml
-            AnalysisFile: ~/myanalysisfile.raw
+            Submission:
+              path: mysubmission.xml
+              destination: path/to/destination
+            Experiment:
+              path: myexperiment.xml
+              destination: path/to/destination
+            Run:
+              path: myrun.xml
+              destination: path/to/destination
+            RunFile:
+              path: myrunfile.fastq
+              destination: path/to/destination
+            Analysis:
+              path: myanalysis.xml
+              destination: path/to/destination
+            AnalysisFile:
+              path: myanalysisfile.raw
+              destination: path/to/destination
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/DRAViaFileFormData'
-
-          example:
-            Submission: ~/mysubmission.xml
-            Experiment: ~/myexperiment.xml
-            Run: ~/myrun.xml
-            RunFile[]: ~/myrunfile.fastq
-            Analysis: ~/myanalysis.xml
-            AnalysisFile[]: ~/myanalysisfile.raw
+            oneOf:
+              - $ref: '#/components/schemas/DRAViaFileFormDataFile'
+              - $ref: '#/components/schemas/DRAViaFileFormDataPath'
 
     GEAViaFile:
       content:
@@ -1164,22 +1724,27 @@ components:
             $ref: '#/components/schemas/GEAViaFileJSON'
 
           example:
-            IDF: ~/myidf.idf.txt
-            SDRF: ~/mysdrf.sdrf.txt
-            ADF: ~/myadf.adf.txt
-            RawDataFile: ~/myrawdatafile.raw
-            ProcessedDataFile: ~/myprocesseddatafile.raw
+            IDF:
+              path: myidf.idf.txt
+              destination: path/to/destination
+            SDRF:
+              path: mysdrf.sdrf.txt
+              destination: path/to/destination
+            ADF:
+              path: myadf.adf.txt
+              destination: path/to/destination
+            RawDataFile:
+              path: myrawdatafile.raw
+              destination: path/to/destination
+            ProcessedDataFile:
+              path: myprocesseddatafile.raw
+              destination: path/to/destination
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/GEAViaFileFormData'
-
-          example:
-            IDF: ~/myidf.idf.txt
-            SDRF: ~/mysdrf.sdrf.txt
-            ADF[]: ~/myadf.adf.txt
-            RawDataFile[]: ~/myrawdatafile.raw
-            ProcessedDataFile[]: ~/myprocesseddatafile.raw
+            oneOf:
+              - $ref: '#/components/schemas/GEAViaFileFormDataFile'
+              - $ref: '#/components/schemas/GEAViaFileFormDataPath'
 
     MetaboBankViaFile:
       content:
@@ -1188,24 +1753,30 @@ components:
             $ref: '#/components/schemas/MetaboBankViaFileJSON'
 
           example:
-            IDF: ~/myidf.idf.txt
-            SDRF: ~/mysdrf.sdrf.txt
-            MAF: ~/mymaf.maf.txt
-            RawDataFile: ~/myrawdatafile.raw
-            ProcessedDataFile: ~/myprocesseddatafile.raw
-            BioSample: ~/mybiosample.tsv
+            IDF:
+              path: myidf.idf.txt
+              destination: path/to/destination
+            SDRF:
+              path: mysdrf.sdrf.txt
+              destination: path/to/destination
+            MAF:
+              path: mymaf.maf.txt
+              destination: path/to/destination
+            RawDataFile:
+              path: myrawdatafile.raw
+              destination: path/to/destination
+            ProcessedDataFile:
+              path: myprocesseddatafile.raw
+              destination: path/to/destination
+            BioSample:
+              path: mybiosample.tsv
+              destination: path/to/destination
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/MetaboBankViaFileFormData'
-
-          example:
-            IDF: ~/myidf.idf.txt
-            SDRF: ~/mysdrf.sdrf.txt
-            MAF[]: ~/mymaf.maf.txt
-            RawDataFile[]: ~/myrawdatafile.raw
-            ProcessedDataFile[]: ~/myprocesseddatafile.raw
-            BioSample: ~/mybiosample.tsv
+            oneOf:
+              - $ref: '#/components/schemas/MetaboBankViaFileFormDataFile'
+              - $ref: '#/components/schemas/MetaboBankViaFileFormDataPath'
 
     JVarViaFile:
       content:
@@ -1214,28 +1785,36 @@ components:
             $ref: '#/components/schemas/JVarViaFileJSON'
 
           example:
-            Study: ~/mystudy.tsv
-            SampleSet: ~/mysampleset.tsv
-            Sample: ~/mysample.tsv
-            Experiment: ~/myexperiment.tsv
-            Assay: ~/myassay.tsv
-            VariantCallSV: ~/myvariantcallsv.tsv
-            VariantRegionSV: ~/myvariantregionsv.tsv
-            VariantCallFile: ~/myvariantcallfile.vcf
+            Study:
+              path: mystudy.tsv
+              destination: path/to/destination
+            SampleSet:
+              path: mysampleset.tsv
+              destination: path/to/destination
+            Sample:
+              path: mysample.tsv
+              destination: path/to/destination
+            Experiment:
+              path: myexperiment.tsv
+              destination: path/to/destination
+            Assay:
+              path: myassay.tsv
+              destination: path/to/destination
+            VariantCallSV:
+              path: myvariantcallsv.tsv
+              destination: path/to/destination
+            VariantRegionSV:
+              path: myvariantregionsv.tsv
+              destination: path/to/destination
+            VariantCallFile:
+              path: myvariantcallfile.vcf
+              destination: path/to/destination
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/JVarViaFileFormData'
-
-          example:
-            Study: ~/mystudy.tsv
-            SampleSet: ~/mysampleset.tsv
-            Sample: ~/mysample.tsv
-            Experiment: ~/myexperiment.tsv
-            Assay: ~/myassay.tsv
-            VariantCallSV: ~/myvariantcallsv.tsv
-            VariantRegionSV: ~/myvariantregionsv.tsv
-            VariantCallFile[]: ~/myvariantcallfile.vcf
+            oneOf:
+              - $ref: '#/components/schemas/JVarViaFileFormDataFile'
+              - $ref: '#/components/schemas/JVarViaFileFormDataPath'
 
   responses:
     CreateResponseCreated:

@@ -126,11 +126,13 @@ paths:
                 validity: valid
 
                 validation_reports:
-                  _base:
+                  - object_id: _base
+                    path: null
                     validity: null
                     details: null
 
-                  BioSample:
+                  - object_id: BioSample
+                    path: mybiosample.xml
                     validity: valid
 
                     details:
@@ -146,6 +148,20 @@ components:
       type: object
 
       properties:
+        object_id:
+          type: string
+
+          enum:
+            - _base
+            <%- dbs.flat_map { _1[:objects] }.uniq { _1[:id] }.each do |obj| -%>
+            - <%= obj[:id] %>
+            <%- end -%>
+
+        path:
+          type:
+            - string
+            - 'null'
+
         validity:
           type:
             - string
@@ -163,6 +179,8 @@ components:
             - 'null'
 
       required:
+        - object_id
+        - path
         - validity
         - details
 
@@ -178,19 +196,31 @@ components:
           minItems: <%= obj[:optional] ? 0 : 1 %>
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: object
+
+            properties:
+              path:
+                type: string
+                description: Relative path from the user's home directory.
+
+              destination:
+                type: string
+
+            required:
+              - path
           <%- else -%>
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: object
+
+          properties:
+            path:
+              type: string
+              description: Relative path from the user's home directory.
+
+            destination:
+              type: string
+
+          required:
+            - path
           <%- end -%>
 
         <%- end -%>
@@ -199,36 +229,72 @@ components:
         - <%= obj[:id] %>
         <%- end -%>
 
-    <%= db[:id] %>ViaFileFormData:
+    <%= db[:id] %>ViaFileFormDataFile:
       type: object
 
       properties:
         <%- db[:objects].each do |obj| -%>
-        <%= key = obj[:multiple] ? "#{obj[:id]}[]" : obj[:id] %>:
+        <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]:
           <%- if obj[:multiple] -%>
           type: array
           minItems: <%= obj[:optional] ? 0 : 1 %>
 
           items:
-            oneOf:
-              - type: string
-                format: binary
-              - type: string
-                pattern: ^~/.
-                description: Relative path from the user's home directory prefixed by `~/`.
+            type: string
+            format: binary
           <%- else -%>
-          oneOf:
-            - type: string
-              format: binary
-            - type: string
-              pattern: ^~/.
-              description: Relative path from the user's home directory prefixed by `~/`.
+          type: string
+          format: binary
+          <%- end -%>
+
+        <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[destination]:
+          <%- if obj[:multiple] -%>
+          type: array
+          minItems: <%= obj[:optional] ? 0 : 1 %>
+
+          items:
+            type: string
+          <%- else -%>
+          type: string
           <%- end -%>
 
         <%- end -%>
       required:
         <%- db[:objects].reject { _1[:optional] }.each do |obj| -%>
-        - <%= key = obj[:multiple] ? "#{obj[:id]}[]" : obj[:id] %>
+        - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]
+        <%- end -%>
+
+    <%= db[:id] %>ViaFileFormDataPath:
+      type: object
+
+      properties:
+        <%- db[:objects].each do |obj| -%>
+        <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]:
+          <%- if obj[:multiple] -%>
+          type: array
+          minItems: <%= obj[:optional] ? 0 : 1 %>
+
+          items:
+            type: string
+          <%- else -%>
+          type: string
+          <%- end -%>
+
+        <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[destination]:
+          <%- if obj[:multiple] -%>
+          type: array
+          minItems: <%= obj[:optional] ? 0 : 1 %>
+
+          items:
+            type: string
+          <%- else -%>
+          type: string
+          <%- end -%>
+
+        <%- end -%>
+      required:
+        <%- db[:objects].reject { _1[:optional] }.each do |obj| -%>
+        - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]
         <%- end -%>
 
     <%- end -%>
@@ -242,17 +308,16 @@ components:
 
           example:
             <%- db[:objects].each do |obj| -%>
-            <%= obj[:id] %>: ~/my<%= obj[:id].downcase %>.<%= obj[:ext] %>
+            <%= obj[:id] %>:
+              path: my<%= obj[:id].downcase %>.<%= obj[:ext] %>
+              destination: path/to/destination
             <%- end -%>
 
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/<%= db[:id] %>ViaFileFormData'
-
-          example:
-            <%- db[:objects].each do |obj| -%>
-            <%= key = obj[:multiple] ? "#{obj[:id]}[]" : obj[:id] %>: ~/my<%= obj[:id].downcase %>.<%= obj[:ext] %>
-            <%- end -%>
+            oneOf:
+              - $ref: '#/components/schemas/<%= db[:id] %>ViaFileFormDataFile'
+              - $ref: '#/components/schemas/<%= db[:id] %>ViaFileFormDataPath'
 
     <%- end -%>
   responses:
