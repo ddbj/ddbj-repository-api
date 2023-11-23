@@ -366,11 +366,13 @@ paths:
                 validity: valid
 
                 validation_reports:
-                  _base:
+                  - object_id: _base
+                    path: null
                     validity: null
                     details: null
 
-                  BioSample:
+                  - object_id: BioSample
+                    path: mybiosample.xml
                     validity: valid
 
                     details:
@@ -386,6 +388,40 @@ components:
       type: object
 
       properties:
+        object_id:
+          type: string
+
+          enum:
+            - _base
+            - BioProject
+            - BioSample
+            - Sequence
+            - Annotation
+            - Submission
+            - Experiment
+            - Run
+            - RunFile
+            - Analysis
+            - AnalysisFile
+            - IDF
+            - SDRF
+            - ADF
+            - RawDataFile
+            - ProcessedDataFile
+            - MAF
+            - Study
+            - SampleSet
+            - Sample
+            - Assay
+            - VariantCallSV
+            - VariantRegionSV
+            - VariantCallFile
+
+        path:
+          type:
+            - string
+            - 'null'
+
         validity:
           type:
             - string
@@ -403,6 +439,8 @@ components:
             - 'null'
 
       required:
+        - object_id
+        - path
         - validity
         - details
 

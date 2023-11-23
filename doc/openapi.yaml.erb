@@ -126,11 +126,13 @@ paths:
                 validity: valid
 
                 validation_reports:
-                  _base:
+                  - object_id: _base
+                    path: null
                     validity: null
                     details: null
 
-                  BioSample:
+                  - object_id: BioSample
+                    path: mybiosample.xml
                     validity: valid
 
                     details:
@@ -146,6 +148,20 @@ components:
       type: object
 
       properties:
+        object_id:
+          type: string
+
+          enum:
+            - _base
+            <%- dbs.flat_map { _1[:objects] }.uniq { _1[:id] }.each do |obj| -%>
+            - <%= obj[:id] %>
+            <%- end -%>
+
+        path:
+          type:
+            - string
+            - 'null'
+
         validity:
           type:
             - string
@@ -163,6 +179,8 @@ components:
             - 'null'
 
       required:
+        - object_id
+        - path
         - validity
         - details
 
