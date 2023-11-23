@@ -38,5 +38,7 @@ jobs:
         with:
           bundler-cache: true
 
+      - run: bundle exec submission-excel2xml download_xsd
+
       - run: bin/rails db:prepare
       - run: bundle exec rspec
