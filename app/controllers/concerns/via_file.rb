@@ -1,4 +1,4 @@
-using PathnameWithin
+using PathnameContain
 
 module ViaFile
   extend ActiveSupport::Concern
@@ -49,7 +49,7 @@ module ViaFile
       user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(dway_user.uid)
       path      = user_home.join(relative_path)
 
-      raise Error, "path must be in #{user_home}" unless path.within?(user_home)
+      raise Error, "path must be in #{user_home}" unless user_home.contain?(path)
 
       request.objs.create! _id: id, file: {
         io:       path.open,

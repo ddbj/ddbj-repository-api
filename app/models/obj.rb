@@ -1,4 +1,4 @@
-using PathnameWithin
+using PathnameContain
 
 class Obj < ApplicationRecord
   belongs_to :request
@@ -36,6 +36,6 @@ class Obj < ApplicationRecord
 
     tmp = Pathname.new('/tmp')
 
-    errors.add :destination, 'is malformed path' unless tmp.join(destination).within?(tmp)
+    errors.add :destination, 'is malformed path' unless tmp.contain?(tmp.join(destination))
   end
 end

@@ -1,5 +1,3 @@
-using PathnameWithin
-
 class Request < ApplicationRecord
   belongs_to :dway_user,  optional: true
   belongs_to :submission, optional: true
