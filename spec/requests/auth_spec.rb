@@ -26,11 +26,11 @@ RSpec.describe 'authentication', type: :request do
 
   before do
     allow_any_instance_of(AuthsController).to receive(:oidc_client) { oidc_client }
-    allow_any_instance_of(AuthsController).to receive(:decode_id_token_jwt) { id_token }
 
     allow(AuthsController).to receive(:oidc_config) { oidc_config }
     allow(OpenIDConnect::ResponseObject::IdToken).to receive(:decode) { id_token }
     allow(oidc_client).to receive(:authorization_uri) { 'http://example.com/auth/authorization' }
+    allow(DwayUser).to receive(:generate_api_key) { 'API_KEY' }
   end
 
   describe 'login -> callback' do
@@ -69,7 +69,7 @@ RSpec.describe 'authentication', type: :request do
 
       expect(user).to have_attributes(
         uid:     'alice',
-        api_key: match(/\Addbj_repository_[[:alnum:]]+\z/)
+        api_key: 'API_KEY'
       )
 
       expect(response.body).to include("Your API key is: #{user.api_key}")
@@ -94,10 +94,8 @@ RSpec.describe 'authentication', type: :request do
 
       expect(response).to have_http_status(:ok)
 
-      user = DwayUser.find_by!(sub: 'SUB')
-
       expect(response.parsed_body.deep_symbolize_keys).to eq(
-        api_key: user.api_key
+        api_key: 'API_KEY'
       )
 
       expect(OpenIDConnect::ResponseObject::IdToken).to have_received(:decode).with('ID_TOKEN_JWT', 'JWKS')

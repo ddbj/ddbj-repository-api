@@ -53,7 +53,7 @@ class AuthsController < ApplicationController
 
   private
 
-  def generate_state = SecureRandom.urlsafe_base64(32)
+  def generate_state         = SecureRandom.urlsafe_base64(32)
   def generate_code_verifier = SecureRandom.urlsafe_base64(32)
 
   def calculate_code_challenge(code_verifier)
@@ -76,10 +76,6 @@ class AuthsController < ApplicationController
     DwayUser.find_or_initialize_by(sub: id_token.sub).tap {|user|
       user.update! uid: preferred_username
     }
-  end
-
-  def decode_id_token_jwt(jwt)
-    OpenIDConnect::ResponseObject::IdToken.decode(jwt, self.class.oidc_config.jwks)
   end
 
   def oidc_client
