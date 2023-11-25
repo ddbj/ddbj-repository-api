@@ -34,7 +34,7 @@ class Obj < ApplicationRecord
     return if base?
     return unless destination
 
-    tmp = Pathname.new('/tmp')
+    tmp = Pathname.new('/tmp').join(SecureRandom.uuid)
 
     errors.add :destination, 'is malformed path' unless tmp.contain?(tmp.join(destination))
   end
