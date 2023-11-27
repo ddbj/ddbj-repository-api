@@ -200,8 +200,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -213,8 +212,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -229,75 +227,70 @@ components:
         - <%= obj[:id] %>
         <%- end -%>
 
-    <%= db[:id] %>ViaFileFormDataFile:
-      type: object
+    <%- db[:objects].each do |obj| -%>
+    <%= db[:id] %>ViaFileFormData<%= obj[:id] %>:
+      allOf:
+        - oneOf:
+          - type: object
 
-      properties:
-        <%- db[:objects].each do |obj| -%>
-        <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]:
-          <%- if obj[:multiple] -%>
-          type: array
-          minItems: <%= obj[:optional] ? 0 : 1 %>
+            properties:
+              <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]:
+                <%- if obj[:multiple] -%>
+                type: array
+                minItems: <%= obj[:optional] ? 0 : 1 %>
 
-          items:
-            type: string
-            format: binary
-          <%- else -%>
-          type: string
-          format: binary
-          <%- end -%>
+                items:
+                  type: string
+                  format: binary
+                <%- else -%>
+                type: string
+                format: binary
+                <%- end -%>
 
-        <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[destination]:
-          <%- if obj[:multiple] -%>
-          type: array
-          minItems: <%= obj[:optional] ? 0 : 1 %>
+            <%- unless obj[:optional] -%>
+            required:
+              - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]
 
-          items:
-            type: string
-          <%- else -%>
-          type: string
-          <%- end -%>
+            <%- end -%>
+          - type: object
 
-        <%- end -%>
-      required:
-        <%- db[:objects].reject { _1[:optional] }.each do |obj| -%>
-        - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]
-        <%- end -%>
+            properties:
+              <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]:
+                <%- if obj[:multiple] -%>
+                type: array
+                minItems: <%= obj[:optional] ? 0 : 1 %>
 
-    <%= db[:id] %>ViaFileFormDataPath:
-      type: object
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
+                <%- else -%>
+                $ref: '#/components/schemas/UserHomePath'
+                <%- end -%>
 
-      properties:
-        <%- db[:objects].each do |obj| -%>
-        <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]:
-          <%- if obj[:multiple] -%>
-          type: array
-          minItems: <%= obj[:optional] ? 0 : 1 %>
+            <%- unless obj[:optional] -%>
+            required:
+              - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]
 
-          items:
-            type: string
-          <%- else -%>
-          type: string
-          <%- end -%>
+            <%- end -%>
+        - type: object
 
-        <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[destination]:
-          <%- if obj[:multiple] -%>
-          type: array
-          minItems: <%= obj[:optional] ? 0 : 1 %>
+          properties:
+            <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[destination]:
+              <%- if obj[:multiple] -%>
+              type: array
+              minItems: <%= obj[:optional] ? 0 : 1 %>
 
-          items:
-            type: string
-          <%- else -%>
-          type: string
-          <%- end -%>
-
-        <%- end -%>
-      required:
-        <%- db[:objects].reject { _1[:optional] }.each do |obj| -%>
-        - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]
-        <%- end -%>
+              items:
+                type: string
+              <%- else -%>
+              type: string
+              <%- end -%>
 
     <%- end -%>
+    <%- end -%>
+    UserHomePath:
+      type: string
+      description: Relative path from the user's home directory.
+
   requestBodies:
     <%- dbs.each do |db| -%>
     <%= db[:id] %>ViaFile:
@@ -315,9 +308,10 @@ components:
 
         multipart/form-data:
           schema:
-            oneOf:
-              - $ref: '#/components/schemas/<%= db[:id] %>ViaFileFormDataFile'
-              - $ref: '#/components/schemas/<%= db[:id] %>ViaFileFormDataPath'
+            allOf:
+              <%- db[:objects].each do |obj| -%>
+              - $ref: '#/components/schemas/<%= db[:id] %>ViaFileFormData<%= obj[:id] %>'
+              <%- end -%>
 
     <%- end -%>
   responses:
@@ -352,12 +346,6 @@ components:
             request:
               id: 42
               url: http://www.example.com/api/requests/42
-
-      links:
-        Request:
-          operationRef: '#/paths/~1requests~1{id}'
-          parameters:
-            id: $response.body#/request.id
 
     CreateResponseBadRequest:
       description: The requested process could not be initiated.

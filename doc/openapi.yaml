@@ -453,8 +453,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -465,32 +464,33 @@ components:
       required:
         - BioProject
 
-    BioProjectViaFileFormDataFile:
-      type: object
+    BioProjectViaFileFormDataBioProject:
+      allOf:
+        - oneOf:
+          - type: object
 
-      properties:
-        BioProject[file]:
-          type: string
-          format: binary
+            properties:
+              BioProject[file]:
+                type: string
+                format: binary
 
-        BioProject[destination]:
-          type: string
+            required:
+              - BioProject[file]
 
-      required:
-        - BioProject[file]
+          - type: object
 
-    BioProjectViaFileFormDataPath:
-      type: object
+            properties:
+              BioProject[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-      properties:
-        BioProject[path]:
-          type: string
+            required:
+              - BioProject[path]
 
-        BioProject[destination]:
-          type: string
+        - type: object
 
-      required:
-        - BioProject[path]
+          properties:
+            BioProject[destination]:
+              type: string
 
     BioSampleViaFileJSON:
       type: object
@@ -501,8 +501,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -513,32 +512,33 @@ components:
       required:
         - BioSample
 
-    BioSampleViaFileFormDataFile:
-      type: object
+    BioSampleViaFileFormDataBioSample:
+      allOf:
+        - oneOf:
+          - type: object
 
-      properties:
-        BioSample[file]:
-          type: string
-          format: binary
+            properties:
+              BioSample[file]:
+                type: string
+                format: binary
 
-        BioSample[destination]:
-          type: string
+            required:
+              - BioSample[file]
 
-      required:
-        - BioSample[file]
+          - type: object
 
-    BioSampleViaFileFormDataPath:
-      type: object
+            properties:
+              BioSample[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-      properties:
-        BioSample[path]:
-          type: string
+            required:
+              - BioSample[path]
 
-        BioSample[destination]:
-          type: string
+        - type: object
 
-      required:
-        - BioSample[path]
+          properties:
+            BioSample[destination]:
+              type: string
 
     TradViaFileJSON:
       type: object
@@ -553,8 +553,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -571,8 +570,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -584,79 +582,85 @@ components:
         - Sequence
         - Annotation
 
-    TradViaFileFormDataFile:
-      type: object
+    TradViaFileFormDataSequence:
+      allOf:
+        - oneOf:
+          - type: object
 
-      properties:
-        Sequence[][file]:
-          type: array
-          minItems: 1
+            properties:
+              Sequence[][file]:
+                type: array
+                minItems: 1
 
-          items:
-            type: string
-            format: binary
+                items:
+                  type: string
+                  format: binary
 
-        Sequence[][destination]:
-          type: array
-          minItems: 1
+            required:
+              - Sequence[][file]
 
-          items:
-            type: string
+          - type: object
 
-        Annotation[][file]:
-          type: array
-          minItems: 1
+            properties:
+              Sequence[][path]:
+                type: array
+                minItems: 1
 
-          items:
-            type: string
-            format: binary
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
 
-        Annotation[][destination]:
-          type: array
-          minItems: 1
+            required:
+              - Sequence[][path]
 
-          items:
-            type: string
+        - type: object
 
-      required:
-        - Sequence[][file]
-        - Annotation[][file]
+          properties:
+            Sequence[][destination]:
+              type: array
+              minItems: 1
 
-    TradViaFileFormDataPath:
-      type: object
+              items:
+                type: string
 
-      properties:
-        Sequence[][path]:
-          type: array
-          minItems: 1
+    TradViaFileFormDataAnnotation:
+      allOf:
+        - oneOf:
+          - type: object
 
-          items:
-            type: string
+            properties:
+              Annotation[][file]:
+                type: array
+                minItems: 1
 
-        Sequence[][destination]:
-          type: array
-          minItems: 1
+                items:
+                  type: string
+                  format: binary
 
-          items:
-            type: string
+            required:
+              - Annotation[][file]
 
-        Annotation[][path]:
-          type: array
-          minItems: 1
+          - type: object
 
-          items:
-            type: string
+            properties:
+              Annotation[][path]:
+                type: array
+                minItems: 1
 
-        Annotation[][destination]:
-          type: array
-          minItems: 1
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
 
-          items:
-            type: string
+            required:
+              - Annotation[][path]
 
-      required:
-        - Sequence[][path]
-        - Annotation[][path]
+        - type: object
+
+          properties:
+            Annotation[][destination]:
+              type: array
+              minItems: 1
+
+              items:
+                type: string
 
     DRAViaFileJSON:
       type: object
@@ -667,8 +671,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -681,8 +684,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -695,8 +697,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -713,8 +714,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -727,8 +727,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -745,8 +744,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -760,135 +758,185 @@ components:
         - Run
         - RunFile
 
-    DRAViaFileFormDataFile:
-      type: object
+    DRAViaFileFormDataSubmission:
+      allOf:
+        - oneOf:
+          - type: object
 
-      properties:
-        Submission[file]:
-          type: string
-          format: binary
+            properties:
+              Submission[file]:
+                type: string
+                format: binary
 
-        Submission[destination]:
-          type: string
+            required:
+              - Submission[file]
 
-        Experiment[file]:
-          type: string
-          format: binary
+          - type: object
 
-        Experiment[destination]:
-          type: string
+            properties:
+              Submission[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        Run[file]:
-          type: string
-          format: binary
+            required:
+              - Submission[path]
 
-        Run[destination]:
-          type: string
+        - type: object
 
-        RunFile[][file]:
-          type: array
-          minItems: 1
+          properties:
+            Submission[destination]:
+              type: string
 
-          items:
-            type: string
-            format: binary
+    DRAViaFileFormDataExperiment:
+      allOf:
+        - oneOf:
+          - type: object
 
-        RunFile[][destination]:
-          type: array
-          minItems: 1
+            properties:
+              Experiment[file]:
+                type: string
+                format: binary
 
-          items:
-            type: string
+            required:
+              - Experiment[file]
 
-        Analysis[file]:
-          type: string
-          format: binary
+          - type: object
 
-        Analysis[destination]:
-          type: string
+            properties:
+              Experiment[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        AnalysisFile[][file]:
-          type: array
-          minItems: 0
+            required:
+              - Experiment[path]
 
-          items:
-            type: string
-            format: binary
+        - type: object
 
-        AnalysisFile[][destination]:
-          type: array
-          minItems: 0
+          properties:
+            Experiment[destination]:
+              type: string
 
-          items:
-            type: string
+    DRAViaFileFormDataRun:
+      allOf:
+        - oneOf:
+          - type: object
 
-      required:
-        - Submission[file]
-        - Experiment[file]
-        - Run[file]
-        - RunFile[][file]
+            properties:
+              Run[file]:
+                type: string
+                format: binary
 
-    DRAViaFileFormDataPath:
-      type: object
+            required:
+              - Run[file]
 
-      properties:
-        Submission[path]:
-          type: string
+          - type: object
 
-        Submission[destination]:
-          type: string
+            properties:
+              Run[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        Experiment[path]:
-          type: string
+            required:
+              - Run[path]
 
-        Experiment[destination]:
-          type: string
+        - type: object
 
-        Run[path]:
-          type: string
+          properties:
+            Run[destination]:
+              type: string
 
-        Run[destination]:
-          type: string
+    DRAViaFileFormDataRunFile:
+      allOf:
+        - oneOf:
+          - type: object
 
-        RunFile[][path]:
-          type: array
-          minItems: 1
+            properties:
+              RunFile[][file]:
+                type: array
+                minItems: 1
 
-          items:
-            type: string
+                items:
+                  type: string
+                  format: binary
 
-        RunFile[][destination]:
-          type: array
-          minItems: 1
+            required:
+              - RunFile[][file]
 
-          items:
-            type: string
+          - type: object
 
-        Analysis[path]:
-          type: string
+            properties:
+              RunFile[][path]:
+                type: array
+                minItems: 1
 
-        Analysis[destination]:
-          type: string
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
 
-        AnalysisFile[][path]:
-          type: array
-          minItems: 0
+            required:
+              - RunFile[][path]
 
-          items:
-            type: string
+        - type: object
 
-        AnalysisFile[][destination]:
-          type: array
-          minItems: 0
+          properties:
+            RunFile[][destination]:
+              type: array
+              minItems: 1
 
-          items:
-            type: string
+              items:
+                type: string
 
-      required:
-        - Submission[path]
-        - Experiment[path]
-        - Run[path]
-        - RunFile[][path]
+    DRAViaFileFormDataAnalysis:
+      allOf:
+        - oneOf:
+          - type: object
+
+            properties:
+              Analysis[file]:
+                type: string
+                format: binary
+
+          - type: object
+
+            properties:
+              Analysis[path]:
+                $ref: '#/components/schemas/UserHomePath'
+
+        - type: object
+
+          properties:
+            Analysis[destination]:
+              type: string
+
+    DRAViaFileFormDataAnalysisFile:
+      allOf:
+        - oneOf:
+          - type: object
+
+            properties:
+              AnalysisFile[][file]:
+                type: array
+                minItems: 0
+
+                items:
+                  type: string
+                  format: binary
+
+          - type: object
+
+            properties:
+              AnalysisFile[][path]:
+                type: array
+                minItems: 0
+
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
+
+        - type: object
+
+          properties:
+            AnalysisFile[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                type: string
 
     GEAViaFileJSON:
       type: object
@@ -899,8 +947,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -913,8 +960,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -931,8 +977,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -949,8 +994,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -967,8 +1011,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -980,134 +1023,163 @@ components:
         - IDF
         - SDRF
 
-    GEAViaFileFormDataFile:
-      type: object
+    GEAViaFileFormDataIDF:
+      allOf:
+        - oneOf:
+          - type: object
 
-      properties:
-        IDF[file]:
-          type: string
-          format: binary
+            properties:
+              IDF[file]:
+                type: string
+                format: binary
 
-        IDF[destination]:
-          type: string
+            required:
+              - IDF[file]
 
-        SDRF[file]:
-          type: string
-          format: binary
+          - type: object
 
-        SDRF[destination]:
-          type: string
+            properties:
+              IDF[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        ADF[][file]:
-          type: array
-          minItems: 0
+            required:
+              - IDF[path]
 
-          items:
-            type: string
-            format: binary
+        - type: object
 
-        ADF[][destination]:
-          type: array
-          minItems: 0
+          properties:
+            IDF[destination]:
+              type: string
 
-          items:
-            type: string
+    GEAViaFileFormDataSDRF:
+      allOf:
+        - oneOf:
+          - type: object
 
-        RawDataFile[][file]:
-          type: array
-          minItems: 0
+            properties:
+              SDRF[file]:
+                type: string
+                format: binary
 
-          items:
-            type: string
-            format: binary
+            required:
+              - SDRF[file]
 
-        RawDataFile[][destination]:
-          type: array
-          minItems: 0
+          - type: object
 
-          items:
-            type: string
+            properties:
+              SDRF[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        ProcessedDataFile[][file]:
-          type: array
-          minItems: 0
+            required:
+              - SDRF[path]
 
-          items:
-            type: string
-            format: binary
+        - type: object
 
-        ProcessedDataFile[][destination]:
-          type: array
-          minItems: 0
+          properties:
+            SDRF[destination]:
+              type: string
 
-          items:
-            type: string
+    GEAViaFileFormDataADF:
+      allOf:
+        - oneOf:
+          - type: object
 
-      required:
-        - IDF[file]
-        - SDRF[file]
+            properties:
+              ADF[][file]:
+                type: array
+                minItems: 0
 
-    GEAViaFileFormDataPath:
-      type: object
+                items:
+                  type: string
+                  format: binary
 
-      properties:
-        IDF[path]:
-          type: string
+          - type: object
 
-        IDF[destination]:
-          type: string
+            properties:
+              ADF[][path]:
+                type: array
+                minItems: 0
 
-        SDRF[path]:
-          type: string
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
 
-        SDRF[destination]:
-          type: string
+        - type: object
 
-        ADF[][path]:
-          type: array
-          minItems: 0
+          properties:
+            ADF[][destination]:
+              type: array
+              minItems: 0
 
-          items:
-            type: string
+              items:
+                type: string
 
-        ADF[][destination]:
-          type: array
-          minItems: 0
+    GEAViaFileFormDataRawDataFile:
+      allOf:
+        - oneOf:
+          - type: object
 
-          items:
-            type: string
+            properties:
+              RawDataFile[][file]:
+                type: array
+                minItems: 0
 
-        RawDataFile[][path]:
-          type: array
-          minItems: 0
+                items:
+                  type: string
+                  format: binary
 
-          items:
-            type: string
+          - type: object
 
-        RawDataFile[][destination]:
-          type: array
-          minItems: 0
+            properties:
+              RawDataFile[][path]:
+                type: array
+                minItems: 0
 
-          items:
-            type: string
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
 
-        ProcessedDataFile[][path]:
-          type: array
-          minItems: 0
+        - type: object
 
-          items:
-            type: string
+          properties:
+            RawDataFile[][destination]:
+              type: array
+              minItems: 0
 
-        ProcessedDataFile[][destination]:
-          type: array
-          minItems: 0
+              items:
+                type: string
 
-          items:
-            type: string
+    GEAViaFileFormDataProcessedDataFile:
+      allOf:
+        - oneOf:
+          - type: object
 
-      required:
-        - IDF[path]
-        - SDRF[path]
+            properties:
+              ProcessedDataFile[][file]:
+                type: array
+                minItems: 0
+
+                items:
+                  type: string
+                  format: binary
+
+          - type: object
+
+            properties:
+              ProcessedDataFile[][path]:
+                type: array
+                minItems: 0
+
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
+
+        - type: object
+
+          properties:
+            ProcessedDataFile[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                type: string
 
     MetaboBankViaFileJSON:
       type: object
@@ -1118,8 +1190,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -1132,8 +1203,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -1150,8 +1220,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -1168,8 +1237,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -1186,8 +1254,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -1200,8 +1267,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -1213,147 +1279,185 @@ components:
         - IDF
         - SDRF
 
-    MetaboBankViaFileFormDataFile:
-      type: object
+    MetaboBankViaFileFormDataIDF:
+      allOf:
+        - oneOf:
+          - type: object
 
-      properties:
-        IDF[file]:
-          type: string
-          format: binary
+            properties:
+              IDF[file]:
+                type: string
+                format: binary
 
-        IDF[destination]:
-          type: string
+            required:
+              - IDF[file]
 
-        SDRF[file]:
-          type: string
-          format: binary
+          - type: object
 
-        SDRF[destination]:
-          type: string
+            properties:
+              IDF[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        MAF[][file]:
-          type: array
-          minItems: 0
+            required:
+              - IDF[path]
 
-          items:
-            type: string
-            format: binary
+        - type: object
 
-        MAF[][destination]:
-          type: array
-          minItems: 0
+          properties:
+            IDF[destination]:
+              type: string
 
-          items:
-            type: string
+    MetaboBankViaFileFormDataSDRF:
+      allOf:
+        - oneOf:
+          - type: object
 
-        RawDataFile[][file]:
-          type: array
-          minItems: 0
+            properties:
+              SDRF[file]:
+                type: string
+                format: binary
 
-          items:
-            type: string
-            format: binary
+            required:
+              - SDRF[file]
 
-        RawDataFile[][destination]:
-          type: array
-          minItems: 0
+          - type: object
 
-          items:
-            type: string
+            properties:
+              SDRF[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        ProcessedDataFile[][file]:
-          type: array
-          minItems: 0
+            required:
+              - SDRF[path]
 
-          items:
-            type: string
-            format: binary
+        - type: object
 
-        ProcessedDataFile[][destination]:
-          type: array
-          minItems: 0
+          properties:
+            SDRF[destination]:
+              type: string
 
-          items:
-            type: string
+    MetaboBankViaFileFormDataMAF:
+      allOf:
+        - oneOf:
+          - type: object
 
-        BioSample[file]:
-          type: string
-          format: binary
+            properties:
+              MAF[][file]:
+                type: array
+                minItems: 0
 
-        BioSample[destination]:
-          type: string
+                items:
+                  type: string
+                  format: binary
 
-      required:
-        - IDF[file]
-        - SDRF[file]
+          - type: object
 
-    MetaboBankViaFileFormDataPath:
-      type: object
+            properties:
+              MAF[][path]:
+                type: array
+                minItems: 0
 
-      properties:
-        IDF[path]:
-          type: string
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
 
-        IDF[destination]:
-          type: string
+        - type: object
 
-        SDRF[path]:
-          type: string
+          properties:
+            MAF[][destination]:
+              type: array
+              minItems: 0
 
-        SDRF[destination]:
-          type: string
+              items:
+                type: string
 
-        MAF[][path]:
-          type: array
-          minItems: 0
+    MetaboBankViaFileFormDataRawDataFile:
+      allOf:
+        - oneOf:
+          - type: object
 
-          items:
-            type: string
+            properties:
+              RawDataFile[][file]:
+                type: array
+                minItems: 0
 
-        MAF[][destination]:
-          type: array
-          minItems: 0
+                items:
+                  type: string
+                  format: binary
 
-          items:
-            type: string
+          - type: object
 
-        RawDataFile[][path]:
-          type: array
-          minItems: 0
+            properties:
+              RawDataFile[][path]:
+                type: array
+                minItems: 0
 
-          items:
-            type: string
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
 
-        RawDataFile[][destination]:
-          type: array
-          minItems: 0
+        - type: object
 
-          items:
-            type: string
+          properties:
+            RawDataFile[][destination]:
+              type: array
+              minItems: 0
 
-        ProcessedDataFile[][path]:
-          type: array
-          minItems: 0
+              items:
+                type: string
 
-          items:
-            type: string
+    MetaboBankViaFileFormDataProcessedDataFile:
+      allOf:
+        - oneOf:
+          - type: object
 
-        ProcessedDataFile[][destination]:
-          type: array
-          minItems: 0
+            properties:
+              ProcessedDataFile[][file]:
+                type: array
+                minItems: 0
 
-          items:
-            type: string
+                items:
+                  type: string
+                  format: binary
 
-        BioSample[path]:
-          type: string
+          - type: object
 
-        BioSample[destination]:
-          type: string
+            properties:
+              ProcessedDataFile[][path]:
+                type: array
+                minItems: 0
 
-      required:
-        - IDF[path]
-        - SDRF[path]
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
+
+        - type: object
+
+          properties:
+            ProcessedDataFile[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                type: string
+
+    MetaboBankViaFileFormDataBioSample:
+      allOf:
+        - oneOf:
+          - type: object
+
+            properties:
+              BioSample[file]:
+                type: string
+                format: binary
+
+          - type: object
+
+            properties:
+              BioSample[path]:
+                $ref: '#/components/schemas/UserHomePath'
+
+        - type: object
+
+          properties:
+            BioSample[destination]:
+              type: string
 
     JVarViaFileJSON:
       type: object
@@ -1364,8 +1468,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -1378,8 +1481,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -1392,8 +1494,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -1406,8 +1507,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -1420,8 +1520,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -1434,8 +1533,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -1448,8 +1546,7 @@ components:
 
           properties:
             path:
-              type: string
-              description: Relative path from the user's home directory.
+              $ref: '#/components/schemas/UserHomePath'
 
             destination:
               type: string
@@ -1466,8 +1563,7 @@ components:
 
             properties:
               path:
-                type: string
-                description: Relative path from the user's home directory.
+                $ref: '#/components/schemas/UserHomePath'
 
               destination:
                 type: string
@@ -1484,151 +1580,239 @@ components:
         - VariantCallSV
         - VariantRegionSV
 
-    JVarViaFileFormDataFile:
-      type: object
+    JVarViaFileFormDataStudy:
+      allOf:
+        - oneOf:
+          - type: object
 
-      properties:
-        Study[file]:
-          type: string
-          format: binary
+            properties:
+              Study[file]:
+                type: string
+                format: binary
 
-        Study[destination]:
-          type: string
+            required:
+              - Study[file]
 
-        SampleSet[file]:
-          type: string
-          format: binary
+          - type: object
 
-        SampleSet[destination]:
-          type: string
+            properties:
+              Study[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        Sample[file]:
-          type: string
-          format: binary
+            required:
+              - Study[path]
 
-        Sample[destination]:
-          type: string
+        - type: object
 
-        Experiment[file]:
-          type: string
-          format: binary
+          properties:
+            Study[destination]:
+              type: string
 
-        Experiment[destination]:
-          type: string
+    JVarViaFileFormDataSampleSet:
+      allOf:
+        - oneOf:
+          - type: object
 
-        Assay[file]:
-          type: string
-          format: binary
+            properties:
+              SampleSet[file]:
+                type: string
+                format: binary
 
-        Assay[destination]:
-          type: string
+            required:
+              - SampleSet[file]
 
-        VariantCallSV[file]:
-          type: string
-          format: binary
+          - type: object
 
-        VariantCallSV[destination]:
-          type: string
+            properties:
+              SampleSet[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        VariantRegionSV[file]:
-          type: string
-          format: binary
+            required:
+              - SampleSet[path]
 
-        VariantRegionSV[destination]:
-          type: string
+        - type: object
 
-        VariantCallFile[][file]:
-          type: array
-          minItems: 0
+          properties:
+            SampleSet[destination]:
+              type: string
 
-          items:
-            type: string
-            format: binary
+    JVarViaFileFormDataSample:
+      allOf:
+        - oneOf:
+          - type: object
 
-        VariantCallFile[][destination]:
-          type: array
-          minItems: 0
+            properties:
+              Sample[file]:
+                type: string
+                format: binary
 
-          items:
-            type: string
+            required:
+              - Sample[file]
 
-      required:
-        - Study[file]
-        - SampleSet[file]
-        - Sample[file]
-        - Experiment[file]
-        - Assay[file]
-        - VariantCallSV[file]
-        - VariantRegionSV[file]
+          - type: object
 
-    JVarViaFileFormDataPath:
-      type: object
+            properties:
+              Sample[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-      properties:
-        Study[path]:
-          type: string
+            required:
+              - Sample[path]
 
-        Study[destination]:
-          type: string
+        - type: object
 
-        SampleSet[path]:
-          type: string
+          properties:
+            Sample[destination]:
+              type: string
 
-        SampleSet[destination]:
-          type: string
+    JVarViaFileFormDataExperiment:
+      allOf:
+        - oneOf:
+          - type: object
 
-        Sample[path]:
-          type: string
+            properties:
+              Experiment[file]:
+                type: string
+                format: binary
 
-        Sample[destination]:
-          type: string
+            required:
+              - Experiment[file]
 
-        Experiment[path]:
-          type: string
+          - type: object
 
-        Experiment[destination]:
-          type: string
+            properties:
+              Experiment[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        Assay[path]:
-          type: string
+            required:
+              - Experiment[path]
 
-        Assay[destination]:
-          type: string
+        - type: object
 
-        VariantCallSV[path]:
-          type: string
+          properties:
+            Experiment[destination]:
+              type: string
 
-        VariantCallSV[destination]:
-          type: string
+    JVarViaFileFormDataAssay:
+      allOf:
+        - oneOf:
+          - type: object
 
-        VariantRegionSV[path]:
-          type: string
+            properties:
+              Assay[file]:
+                type: string
+                format: binary
 
-        VariantRegionSV[destination]:
-          type: string
+            required:
+              - Assay[file]
 
-        VariantCallFile[][path]:
-          type: array
-          minItems: 0
+          - type: object
 
-          items:
-            type: string
+            properties:
+              Assay[path]:
+                $ref: '#/components/schemas/UserHomePath'
 
-        VariantCallFile[][destination]:
-          type: array
-          minItems: 0
+            required:
+              - Assay[path]
 
-          items:
-            type: string
+        - type: object
 
-      required:
-        - Study[path]
-        - SampleSet[path]
-        - Sample[path]
-        - Experiment[path]
-        - Assay[path]
-        - VariantCallSV[path]
-        - VariantRegionSV[path]
+          properties:
+            Assay[destination]:
+              type: string
+
+    JVarViaFileFormDataVariantCallSV:
+      allOf:
+        - oneOf:
+          - type: object
+
+            properties:
+              VariantCallSV[file]:
+                type: string
+                format: binary
+
+            required:
+              - VariantCallSV[file]
+
+          - type: object
+
+            properties:
+              VariantCallSV[path]:
+                $ref: '#/components/schemas/UserHomePath'
+
+            required:
+              - VariantCallSV[path]
+
+        - type: object
+
+          properties:
+            VariantCallSV[destination]:
+              type: string
+
+    JVarViaFileFormDataVariantRegionSV:
+      allOf:
+        - oneOf:
+          - type: object
+
+            properties:
+              VariantRegionSV[file]:
+                type: string
+                format: binary
+
+            required:
+              - VariantRegionSV[file]
+
+          - type: object
+
+            properties:
+              VariantRegionSV[path]:
+                $ref: '#/components/schemas/UserHomePath'
+
+            required:
+              - VariantRegionSV[path]
+
+        - type: object
+
+          properties:
+            VariantRegionSV[destination]:
+              type: string
+
+    JVarViaFileFormDataVariantCallFile:
+      allOf:
+        - oneOf:
+          - type: object
+
+            properties:
+              VariantCallFile[][file]:
+                type: array
+                minItems: 0
+
+                items:
+                  type: string
+                  format: binary
+
+          - type: object
+
+            properties:
+              VariantCallFile[][path]:
+                type: array
+                minItems: 0
+
+                items:
+                  $ref: '#/components/schemas/UserHomePath'
+
+        - type: object
+
+          properties:
+            VariantCallFile[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                type: string
+
+    UserHomePath:
+      type: string
+      description: Relative path from the user's home directory.
 
   requestBodies:
     BioProjectViaFile:
@@ -1644,9 +1828,8 @@ components:
 
         multipart/form-data:
           schema:
-            oneOf:
-              - $ref: '#/components/schemas/BioProjectViaFileFormDataFile'
-              - $ref: '#/components/schemas/BioProjectViaFileFormDataPath'
+            allOf:
+              - $ref: '#/components/schemas/BioProjectViaFileFormDataBioProject'
 
     BioSampleViaFile:
       content:
@@ -1661,9 +1844,8 @@ components:
 
         multipart/form-data:
           schema:
-            oneOf:
-              - $ref: '#/components/schemas/BioSampleViaFileFormDataFile'
-              - $ref: '#/components/schemas/BioSampleViaFileFormDataPath'
+            allOf:
+              - $ref: '#/components/schemas/BioSampleViaFileFormDataBioSample'
 
     TradViaFile:
       content:
@@ -1681,9 +1863,9 @@ components:
 
         multipart/form-data:
           schema:
-            oneOf:
-              - $ref: '#/components/schemas/TradViaFileFormDataFile'
-              - $ref: '#/components/schemas/TradViaFileFormDataPath'
+            allOf:
+              - $ref: '#/components/schemas/TradViaFileFormDataSequence'
+              - $ref: '#/components/schemas/TradViaFileFormDataAnnotation'
 
     DRAViaFile:
       content:
@@ -1713,9 +1895,13 @@ components:
 
         multipart/form-data:
           schema:
-            oneOf:
-              - $ref: '#/components/schemas/DRAViaFileFormDataFile'
-              - $ref: '#/components/schemas/DRAViaFileFormDataPath'
+            allOf:
+              - $ref: '#/components/schemas/DRAViaFileFormDataSubmission'
+              - $ref: '#/components/schemas/DRAViaFileFormDataExperiment'
+              - $ref: '#/components/schemas/DRAViaFileFormDataRun'
+              - $ref: '#/components/schemas/DRAViaFileFormDataRunFile'
+              - $ref: '#/components/schemas/DRAViaFileFormDataAnalysis'
+              - $ref: '#/components/schemas/DRAViaFileFormDataAnalysisFile'
 
     GEAViaFile:
       content:
@@ -1742,9 +1928,12 @@ components:
 
         multipart/form-data:
           schema:
-            oneOf:
-              - $ref: '#/components/schemas/GEAViaFileFormDataFile'
-              - $ref: '#/components/schemas/GEAViaFileFormDataPath'
+            allOf:
+              - $ref: '#/components/schemas/GEAViaFileFormDataIDF'
+              - $ref: '#/components/schemas/GEAViaFileFormDataSDRF'
+              - $ref: '#/components/schemas/GEAViaFileFormDataADF'
+              - $ref: '#/components/schemas/GEAViaFileFormDataRawDataFile'
+              - $ref: '#/components/schemas/GEAViaFileFormDataProcessedDataFile'
 
     MetaboBankViaFile:
       content:
@@ -1774,9 +1963,13 @@ components:
 
         multipart/form-data:
           schema:
-            oneOf:
-              - $ref: '#/components/schemas/MetaboBankViaFileFormDataFile'
-              - $ref: '#/components/schemas/MetaboBankViaFileFormDataPath'
+            allOf:
+              - $ref: '#/components/schemas/MetaboBankViaFileFormDataIDF'
+              - $ref: '#/components/schemas/MetaboBankViaFileFormDataSDRF'
+              - $ref: '#/components/schemas/MetaboBankViaFileFormDataMAF'
+              - $ref: '#/components/schemas/MetaboBankViaFileFormDataRawDataFile'
+              - $ref: '#/components/schemas/MetaboBankViaFileFormDataProcessedDataFile'
+              - $ref: '#/components/schemas/MetaboBankViaFileFormDataBioSample'
 
     JVarViaFile:
       content:
@@ -1812,9 +2005,15 @@ components:
 
         multipart/form-data:
           schema:
-            oneOf:
-              - $ref: '#/components/schemas/JVarViaFileFormDataFile'
-              - $ref: '#/components/schemas/JVarViaFileFormDataPath'
+            allOf:
+              - $ref: '#/components/schemas/JVarViaFileFormDataStudy'
+              - $ref: '#/components/schemas/JVarViaFileFormDataSampleSet'
+              - $ref: '#/components/schemas/JVarViaFileFormDataSample'
+              - $ref: '#/components/schemas/JVarViaFileFormDataExperiment'
+              - $ref: '#/components/schemas/JVarViaFileFormDataAssay'
+              - $ref: '#/components/schemas/JVarViaFileFormDataVariantCallSV'
+              - $ref: '#/components/schemas/JVarViaFileFormDataVariantRegionSV'
+              - $ref: '#/components/schemas/JVarViaFileFormDataVariantCallFile'
 
   responses:
     CreateResponseCreated:
@@ -1848,12 +2047,6 @@ components:
             request:
               id: 42
               url: http://www.example.com/api/requests/42
-
-      links:
-        Request:
-          operationRef: '#/paths/~1requests~1{id}'
-          parameters:
-            id: $response.body#/request.id
 
     CreateResponseBadRequest:
       description: The requested process could not be initiated.
