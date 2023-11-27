@@ -84,21 +84,10 @@
       optional: true
 
 - id: JVar
+  validator: jvar
   objects:
-    - id: Study
-      ext: tsv
-    - id: SampleSet
-      ext: tsv
-    - id: Sample
-      ext: tsv
-    - id: Experiment
-      ext: tsv
-    - id: Assay
-      ext: tsv
-    - id: VariantCallSV
-      ext: tsv
-    - id: VariantRegionSV
-      ext: tsv
+    - id: Excel
+      ext: xlsx
     - id: VariantCallFile
       ext: vcf
       optional: true
