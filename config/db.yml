@@ -13,6 +13,7 @@
       ext: xml
 
 - id: Trad
+  validator: passthrough
   objects:
     - id: Sequence
       ext: fasta
@@ -42,6 +43,7 @@
       multiple: true
 
 - id: GEA
+  validator: passthrough
   objects:
     - id: IDF
       ext: idf.txt
@@ -84,7 +86,7 @@
       optional: true
 
 - id: JVar
-  validator: jvar
+  validator: passthrough
   objects:
     - id: Excel
       ext: xlsx
