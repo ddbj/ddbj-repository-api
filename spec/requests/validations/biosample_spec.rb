@@ -34,8 +34,6 @@ RSpec.describe 'BioSample: validate via file', type: :request, authorized: true 
     )
 
     create :dway_user, uid: 'alice', api_key: 'API_KEY'
-
-    FileUtils.touch user_home_dir.join('alice/foo').tap(&:mkpath).join('mysubmission.xml')
   end
 
   example do
