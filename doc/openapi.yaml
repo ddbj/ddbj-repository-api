@@ -319,22 +319,7 @@ paths:
                       MAF:
                         $ref: '#/components/schemas/ValidationReport'
 
-                      Study:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      SampleSet:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      Sample:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      Assay:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      VariantCallSV:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      VariantRegionSV:
+                      Excel:
                         $ref: '#/components/schemas/ValidationReport'
 
                       VariantCallFile:
@@ -409,12 +394,7 @@ components:
             - RawDataFile
             - ProcessedDataFile
             - MAF
-            - Study
-            - SampleSet
-            - Sample
-            - Assay
-            - VariantCallSV
-            - VariantRegionSV
+            - Excel
             - VariantCallFile
 
         path:
@@ -1463,85 +1443,7 @@ components:
       type: object
 
       properties:
-        Study:
-          type: object
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-          required:
-            - path
-
-        SampleSet:
-          type: object
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-          required:
-            - path
-
-        Sample:
-          type: object
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-          required:
-            - path
-
-        Experiment:
-          type: object
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-          required:
-            - path
-
-        Assay:
-          type: object
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-          required:
-            - path
-
-        VariantCallSV:
-          type: object
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-          required:
-            - path
-
-        VariantRegionSV:
+        Excel:
           type: object
 
           properties:
@@ -1572,208 +1474,34 @@ components:
               - path
 
       required:
-        - Study
-        - SampleSet
-        - Sample
-        - Experiment
-        - Assay
-        - VariantCallSV
-        - VariantRegionSV
+        - Excel
 
-    JVarViaFileFormDataStudy:
+    JVarViaFileFormDataExcel:
       allOf:
         - oneOf:
           - type: object
 
             properties:
-              Study[file]:
+              Excel[file]:
                 type: string
                 format: binary
 
             required:
-              - Study[file]
+              - Excel[file]
 
           - type: object
 
             properties:
-              Study[path]:
+              Excel[path]:
                 $ref: '#/components/schemas/UserHomePath'
 
             required:
-              - Study[path]
+              - Excel[path]
 
         - type: object
 
           properties:
-            Study[destination]:
-              type: string
-
-    JVarViaFileFormDataSampleSet:
-      allOf:
-        - oneOf:
-          - type: object
-
-            properties:
-              SampleSet[file]:
-                type: string
-                format: binary
-
-            required:
-              - SampleSet[file]
-
-          - type: object
-
-            properties:
-              SampleSet[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - SampleSet[path]
-
-        - type: object
-
-          properties:
-            SampleSet[destination]:
-              type: string
-
-    JVarViaFileFormDataSample:
-      allOf:
-        - oneOf:
-          - type: object
-
-            properties:
-              Sample[file]:
-                type: string
-                format: binary
-
-            required:
-              - Sample[file]
-
-          - type: object
-
-            properties:
-              Sample[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - Sample[path]
-
-        - type: object
-
-          properties:
-            Sample[destination]:
-              type: string
-
-    JVarViaFileFormDataExperiment:
-      allOf:
-        - oneOf:
-          - type: object
-
-            properties:
-              Experiment[file]:
-                type: string
-                format: binary
-
-            required:
-              - Experiment[file]
-
-          - type: object
-
-            properties:
-              Experiment[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - Experiment[path]
-
-        - type: object
-
-          properties:
-            Experiment[destination]:
-              type: string
-
-    JVarViaFileFormDataAssay:
-      allOf:
-        - oneOf:
-          - type: object
-
-            properties:
-              Assay[file]:
-                type: string
-                format: binary
-
-            required:
-              - Assay[file]
-
-          - type: object
-
-            properties:
-              Assay[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - Assay[path]
-
-        - type: object
-
-          properties:
-            Assay[destination]:
-              type: string
-
-    JVarViaFileFormDataVariantCallSV:
-      allOf:
-        - oneOf:
-          - type: object
-
-            properties:
-              VariantCallSV[file]:
-                type: string
-                format: binary
-
-            required:
-              - VariantCallSV[file]
-
-          - type: object
-
-            properties:
-              VariantCallSV[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - VariantCallSV[path]
-
-        - type: object
-
-          properties:
-            VariantCallSV[destination]:
-              type: string
-
-    JVarViaFileFormDataVariantRegionSV:
-      allOf:
-        - oneOf:
-          - type: object
-
-            properties:
-              VariantRegionSV[file]:
-                type: string
-                format: binary
-
-            required:
-              - VariantRegionSV[file]
-
-          - type: object
-
-            properties:
-              VariantRegionSV[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - VariantRegionSV[path]
-
-        - type: object
-
-          properties:
-            VariantRegionSV[destination]:
+            Excel[destination]:
               type: string
 
     JVarViaFileFormDataVariantCallFile:
@@ -1978,26 +1706,8 @@ components:
             $ref: '#/components/schemas/JVarViaFileJSON'
 
           example:
-            Study:
-              path: mystudy.tsv
-              destination: path/to/destination
-            SampleSet:
-              path: mysampleset.tsv
-              destination: path/to/destination
-            Sample:
-              path: mysample.tsv
-              destination: path/to/destination
-            Experiment:
-              path: myexperiment.tsv
-              destination: path/to/destination
-            Assay:
-              path: myassay.tsv
-              destination: path/to/destination
-            VariantCallSV:
-              path: myvariantcallsv.tsv
-              destination: path/to/destination
-            VariantRegionSV:
-              path: myvariantregionsv.tsv
+            Excel:
+              path: myexcel.xlsx
               destination: path/to/destination
             VariantCallFile:
               path: myvariantcallfile.vcf
@@ -2006,13 +1716,7 @@ components:
         multipart/form-data:
           schema:
             allOf:
-              - $ref: '#/components/schemas/JVarViaFileFormDataStudy'
-              - $ref: '#/components/schemas/JVarViaFileFormDataSampleSet'
-              - $ref: '#/components/schemas/JVarViaFileFormDataSample'
-              - $ref: '#/components/schemas/JVarViaFileFormDataExperiment'
-              - $ref: '#/components/schemas/JVarViaFileFormDataAssay'
-              - $ref: '#/components/schemas/JVarViaFileFormDataVariantCallSV'
-              - $ref: '#/components/schemas/JVarViaFileFormDataVariantRegionSV'
+              - $ref: '#/components/schemas/JVarViaFileFormDataExcel'
               - $ref: '#/components/schemas/JVarViaFileFormDataVariantCallFile'
 
   responses:
