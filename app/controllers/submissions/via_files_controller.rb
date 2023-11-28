@@ -2,7 +2,7 @@ class Submissions::ViaFilesController < ApplicationController
   include ViaFile
 
   def create
-    request = create_request_from_params(params, dway_user)
+    request = create_request_from_params(dway_user, params)
 
     SubmitJob.perform_later request
 

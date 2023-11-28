@@ -16,7 +16,7 @@ RSpec.describe ViaFile, type: :controller do
       }
     )
 
-    request = controller.create_request_from_params(params, user)
+    request = controller.create_request_from_params(user, params)
 
     expect(request.objs.map(&:_id)).to contain_exactly('_base', 'BioSample')
   end
@@ -43,7 +43,7 @@ RSpec.describe ViaFile, type: :controller do
       }
     )
 
-    request = controller.create_request_from_params(params, user)
+    request = controller.create_request_from_params(user, params)
 
     expect(request.objs.map(&:_id)).to contain_exactly(
       '_base',

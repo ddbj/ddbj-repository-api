@@ -19,7 +19,7 @@ module ViaFile
     end
   end
 
-  def create_request_from_params(params, user)
+  def create_request_from_params(user, params)
     ActiveRecord::Base.transaction {
       db      = DB.find { _1[:id].downcase == params.require(:db) }
       request = user.requests.create!(db: db[:id])
