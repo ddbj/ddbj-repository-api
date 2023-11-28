@@ -1,3 +1,3 @@
 FactoryBot.define do
-  factory :request
+  factory :obj
 end

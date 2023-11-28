@@ -8,6 +8,8 @@ class Request < ApplicationRecord
     end
   end
 
+  attribute :status, default: 'waiting'
+
   validates :db,     inclusion: {in: DB.map { _1[:id] }}
   validates :status, inclusion: {in: %w(waiting processing finished)}
 
