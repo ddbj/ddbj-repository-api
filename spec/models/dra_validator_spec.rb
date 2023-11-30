@@ -13,41 +13,41 @@ RSpec.describe DraValidator, type: :model do
     Validators.new(request).validate
 
     expect(request).to have_attributes(
-      status: 'finished',
-      validity: 'valid',
+      status:   'finished',
+      validity: 'valid'
+    )
 
-      validation_reports: contain_exactly(
-        {
-          object_id: '_base',
-          path:      nil,
-          validity:  'valid',
-          details:   nil
-        },
-        {
-          object_id: 'Submission',
-          path:      'example-0001_dra_Submission.xml',
-          validity:  'valid',
-          details:   nil
-        },
-        {
-          object_id: 'Experiment',
-          path:      'example-0001_dra_Experiment.xml',
-          validity:  'valid',
-          details:   nil
-        },
-        {
-          object_id: 'Run',
-          path:      'example-0001_dra_Run.xml',
-          validity:  'valid',
-          details:   nil
-        },
-        {
-          object_id: 'RunFile',
-          path:      'runfile.xml',
-          validity:  'valid',
-          details:   nil
-        }
-      )
+    expect(request.validation_reports).to contain_exactly(
+      {
+        object_id: '_base',
+        path:      nil,
+        validity:  'valid',
+        details:   nil
+      },
+      {
+        object_id: 'Submission',
+        path:      'example-0001_dra_Submission.xml',
+        validity:  'valid',
+        details:   nil
+      },
+      {
+        object_id: 'Experiment',
+        path:      'example-0001_dra_Experiment.xml',
+        validity:  'valid',
+        details:   nil
+      },
+      {
+        object_id: 'Run',
+        path:      'example-0001_dra_Run.xml',
+        validity:  'valid',
+        details:   nil
+      },
+      {
+        object_id: 'RunFile',
+        path:      'runfile.xml',
+        validity:  'valid',
+        details:   nil
+      }
     )
   end
 

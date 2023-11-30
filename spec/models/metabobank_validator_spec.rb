@@ -12,34 +12,34 @@ RSpec.describe MetabobankValidator, type: :model do
 
     expect(request).to have_attributes(
       status:   'finished',
-      validity: 'valid',
+      validity: 'valid'
+    )
 
-      validation_reports: contain_exactly(
-        {
-          object_id: '_base',
-          path:      nil,
-          validity:  'valid',
-          details:   nil
-        },
-        {
-          object_id: 'IDF',
-          path:      'MTBKS231.idf.txt',
-          validity:  'valid',
+    expect(request.validation_reports).to contain_exactly(
+      {
+        object_id: '_base',
+        path:      nil,
+        validity:  'valid',
+        details:   nil
+      },
+      {
+        object_id: 'IDF',
+        path:      'MTBKS231.idf.txt',
+        validity:  'valid',
 
-          details: [
-            'object_id' => 'IDF',
-            'code'      => 'MB_IR0037',
-            'severity'  => 'error_ignore',
-            'message'   => instance_of(String)
-          ]
-        },
-        {
-          object_id: 'SDRF',
-          path:      'MTBKS231.sdrf.txt',
-          validity:  'valid',
-          details:   instance_of(Array)
-        }
-      )
+        details: [
+          'object_id' => 'IDF',
+          'code'      => 'MB_IR0037',
+          'severity'  => 'error_ignore',
+          'message'   => instance_of(String)
+        ]
+      },
+      {
+        object_id: 'SDRF',
+        path:      'MTBKS231.sdrf.txt',
+        validity:  'valid',
+        details:   instance_of(Array)
+      }
     )
   end
 
@@ -76,34 +76,34 @@ RSpec.describe MetabobankValidator, type: :model do
 
     expect(request).to have_attributes(
       status:   'finished',
-      validity: 'valid',
+      validity: 'valid'
+    )
 
-      validation_reports: include(
-        {
-          object_id: 'MAF',
-          path:      'MTBKS231.maf.txt',
-          validity:  'valid',
-          details:   nil
-        },
-        {
-          object_id: 'RawDataFile',
-          path:      'raw/010_10_1_010.lcd',
-          validity:  'valid',
-          details:   nil
-        },
-        {
-          object_id: 'RawDataFile',
-          path:      'raw/027_27_18_027.lcd',
-          validity:  'valid',
-          details:   nil
-        },
-        {
-          object_id: 'ProcessedDataFile',
-          path:      'processed/220629_ppg_conc.txt',
-          validity:  'valid',
-          details:   nil
-        }
-      )
+    expect(request.validation_reports).to include(
+      {
+        object_id: 'MAF',
+        path:      'MTBKS231.maf.txt',
+        validity:  'valid',
+        details:   nil
+      },
+      {
+        object_id: 'RawDataFile',
+        path:      'raw/010_10_1_010.lcd',
+        validity:  'valid',
+        details:   nil
+      },
+      {
+        object_id: 'RawDataFile',
+        path:      'raw/027_27_18_027.lcd',
+        validity:  'valid',
+        details:   nil
+      },
+      {
+        object_id: 'ProcessedDataFile',
+        path:      'processed/220629_ppg_conc.txt',
+        validity:  'valid',
+        details:   nil
+      }
     )
 
     expect(request.validation_reports.size).to eq(23)
@@ -121,14 +121,14 @@ RSpec.describe MetabobankValidator, type: :model do
 
     expect(request).to have_attributes(
       status:   'finished',
-      validity: 'valid',
+      validity: 'valid'
+    )
 
-      validation_reports: include(
-        object_id: 'BioSample',
-        path:      'MTBKS231.bs.tsv',
-        validity:  'valid',
-        details:   nil
-      )
+    expect(request.validation_reports).to include(
+      object_id: 'BioSample',
+      path:      'MTBKS231.bs.tsv',
+      validity:  'valid',
+      details:   nil
     )
   end
 
@@ -143,28 +143,28 @@ RSpec.describe MetabobankValidator, type: :model do
 
     expect(request).to have_attributes(
       status:   'finished',
-      validity: 'invalid',
+      validity: 'invalid'
+    )
 
-      validation_reports: contain_exactly(
-        {
-          object_id: '_base',
-          path:      nil,
-          validity:  'valid',
-          details:   nil
-        },
-        {
-          object_id: 'IDF',
-          path:      'MTBKS201.idf.txt',
-          validity:  'valid',
-          details:   instance_of(Array)
-        },
-        {
-          object_id: 'SDRF',
-          path:      'MTBKS201.sdrf.txt',
-          validity:  'invalid',
-          details:   instance_of(Array)
-        }
-      )
+    expect(request.validation_reports).to contain_exactly(
+      {
+        object_id: '_base',
+        path:      nil,
+        validity:  'valid',
+        details:   nil
+      },
+      {
+        object_id: 'IDF',
+        path:      'MTBKS201.idf.txt',
+        validity:  'valid',
+        details:   instance_of(Array)
+      },
+      {
+        object_id: 'SDRF',
+        path:      'MTBKS201.sdrf.txt',
+        validity:  'invalid',
+        details:   instance_of(Array)
+      }
     )
   end
 end
