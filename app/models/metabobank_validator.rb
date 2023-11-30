@@ -1,19 +1,19 @@
 class MetabobankValidator
   def validate(request)
-    obj_by_id = request.objs.index_by(&:_id)
+    objs = request.objs.index_by(&:_id)
 
     request.write_files_to_tmp do |tmpdir|
       Dir.chdir tmpdir do
-        idf, sdrf = obj_by_id.fetch_values('IDF', 'SDRF').map(&:path)
+        idf, sdrf = objs.fetch_values('IDF', 'SDRF').map(&:path)
 
         cmd = %W(bundle exec mb-validate --machine-readable -i #{idf} -s #{sdrf}).then {
-          if bs = obj_by_id['BioSample']
+          if bs = objs['BioSample']
             _1 + %W(-t #{bs.path})
           else
             _1
           end
         }.then {
-          if obj_by_id.key?('MAF') || obj_by_id.key?('RawDataFile') || obj_by_id.key?('ProcessedDataFile')
+          if objs.key?('MAF') || objs.key?('RawDataFile') || objs.key?('ProcessedDataFile')
             _1 + %w(-d)
           else
             _1
