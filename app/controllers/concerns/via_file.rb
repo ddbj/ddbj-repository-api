@@ -53,7 +53,7 @@ module ViaFile
 
       destination = rest[:destination]
 
-      if path.directory?
+      if obj[:multiple] && path.directory?
         path.glob('**/*').reject(&:directory?).each do |fpath|
           relative_fpath = fpath.relative_path_from(path)
 
