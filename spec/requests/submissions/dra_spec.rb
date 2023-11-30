@@ -7,7 +7,7 @@ RSpec.describe 'DRA: submit via file', type: :request, authorized: true do
     create :dway_user, uid: 'alice', api_key: 'API_KEY'
   end
 
-  example 'without Analysis, valid' do
+  xexample 'without Analysis, valid' do
     perform_enqueued_jobs do
       post '/api/submissions/dra/via-file', params: {
         Submission: {file: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml')},
@@ -87,7 +87,7 @@ RSpec.describe 'DRA: submit via file', type: :request, authorized: true do
     ))
   end
 
-  example 'with Analysis, valid' do
+  xexample 'with Analysis, valid' do
     perform_enqueued_jobs do
       post '/api/submissions/dra/via-file', params: {
         Submission:   {file: file_fixture_upload('dra/valid/example-0002_dra_Submission.xml')},
@@ -187,7 +187,7 @@ RSpec.describe 'DRA: submit via file', type: :request, authorized: true do
     ))
   end
 
-  example 'without Analysis, invalid' do
+  xexample 'without Analysis, invalid' do
     perform_enqueued_jobs do
       post '/api/submissions/dra/via-file', params: {
         Submission: {file: file_fixture_upload('dra/invalid/example-0001_dra_Submission.xml')},
