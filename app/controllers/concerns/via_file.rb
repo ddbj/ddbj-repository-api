@@ -43,6 +43,8 @@ module ViaFile
     obj => {id:}
 
     case val
+    in ActionController::Parameters
+      handle_param user, request, obj, val.permit(:file, :path, :destination).to_hash.symbolize_keys
     in {file:, **rest}
       request.objs.create! _id: id, file: file, **rest.slice(:destination)
     in {path: relative_path, **rest}
@@ -55,36 +57,16 @@ module ViaFile
 
       if obj[:multiple] && path.directory?
         path.glob('**/*').reject(&:directory?).each do |fpath|
-          relative_fpath = fpath.relative_path_from(path)
+          destination = [
+            destination,
+            fpath.relative_path_from(path).dirname.to_s
+          ].reject { _1.blank? || _1 == '.' }.join('/').presence
 
-          request.objs.create! **{
-            _id: id,
-
-            file: {
-              io:       fpath.open,
-              filename: fpath.basename,
-            },
-
-            destination: [
-              destination,
-              relative_fpath.dirname.to_s
-            ].reject { _1.blank? || _1 == '.' }.join('/').presence
-          }
+          create_object request, id, fpath, destination
         end
       else
-        request.objs.create! **{
-          _id: id,
-
-          file: {
-            io:       path.open,
-            filename: path.basename,
-          },
-
-          destination:
-        }
+        create_object request, id, path, destination
       end
-    in ActionController::Parameters
-      handle_param user, request, obj, val.permit(:file, :path, :destination).to_hash.symbolize_keys
     in Array if obj[:multiple]
       val.each do |v|
         handle_param user, request, obj, v
@@ -94,5 +76,18 @@ module ViaFile
     in unknown
       raise Error, "unexpected parameter format in #{id}: #{unknown.inspect}"
     end
+  end
+
+  def create_object(request, obj_id, path, destination)
+    request.objs.create! **{
+      _id: obj_id,
+
+      file: {
+        io:       path.open,
+        filename: path.basename,
+      },
+
+      destination:
+    }
   end
 end
