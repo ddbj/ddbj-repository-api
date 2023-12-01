@@ -1,13 +1,12 @@
 GIT
   remote: https://github.com/ddbj/metabobank_tools.git
-  revision: 0e8aa93cd1a5e5d0ec2e74325a554dc76a101ce1
+  revision: bb4e7fedffc5ef85a7b9700a65d50cad1b9ee262
   specs:
     metabobank_tools (0.1.0)
 
 GIT
   remote: https://github.com/ddbj/submission-excel2xml.git
-  revision: fc8ea911f391f721640f73d4ed61df06bfc6b7c1
-  branch: repository
+  revision: a72ab302bda97a19f95cecbbf0033a404efc9e12
   specs:
     submission-excel2xml (0.1.0)
       builder (~> 3)
