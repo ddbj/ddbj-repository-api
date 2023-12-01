@@ -17,6 +17,8 @@ services:
       DATABASE_URL:       postgresql://postgres@postgres/ddbj_repository
       DDBJ_VALIDATOR_URL: http://host.docker.internal:18840/api
       HTTP_PORT:
+      OIDC_CLIENT_ID:
+      OIDC_ISSUER_URL:
       REDIS_URL:          redis://redis
       REPOSITORY_DIR:     /mnt/repository
       SECRET_KEY_BASE:
