@@ -16,6 +16,11 @@ RSpec.describe SubmitJob, type: :job do
 
     SubmitJob.perform_now request
 
+    expect(request).to have_attributes(
+      status:   'finished',
+      validity: 'valid'
+    )
+
     expect(Dir.glob('**/*', base: submission_dir(request.submission))).to match_array(%w(
       _base
       _base/validation-report.json
@@ -59,6 +64,11 @@ RSpec.describe SubmitJob, type: :job do
     }
 
     SubmitJob.perform_now request
+
+    expect(request).to have_attributes(
+      status:   'finished',
+      validity: 'valid'
+    )
 
     expect(Dir.glob('**/*', base: submission_dir(request.submission))).to match_array(%w(
       _base
