@@ -6,12 +6,12 @@ RSpec.describe 'MetaboBank: submit via file', type: :request, authorized: true d
   end
 
   example do
-    post '/api/submissions/metabobank/via-file', params: {
+    post '/api/validations/metabobank/via-file', params: {
       IDF:  {file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')},
       SDRF: {file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')}
     }
 
     expect(response).to have_http_status(:created)
-    expect(SubmitJob).to have_been_enqueued
+    expect(ValidateJob).to have_been_enqueued
   end
 end
