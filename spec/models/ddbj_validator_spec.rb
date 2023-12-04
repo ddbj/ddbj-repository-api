@@ -32,7 +32,6 @@ RSpec.describe DdbjValidator, type: :model do
       )
 
       request = create(:request, db: 'BioSample') {|request|
-        create :obj, request:, _id: '_base'
         create :obj, request:, _id: 'BioSample', file: uploaded_file(name: 'mybiosample.xml')
       }
 

@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe MetabobankValidator, type: :model do
   example 'valid' do
     request = create(:request, db: 'MetaboBank') {|request|
-      create :obj, request:, _id: '_base'
       create :obj, request:, _id: 'IDF',  file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')
     }
@@ -45,7 +44,6 @@ RSpec.describe MetabobankValidator, type: :model do
 
   example 'with MAF and RawDataFile and ProcessedDataFile, valid' do
     request = create(:request, db: 'MetaboBank') {|request|
-      create :obj, request:, _id: '_base'
       create :obj, request:, _id: 'IDF',  file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')
       create :obj, request:, _id: 'MAF',  file: file_fixture_upload('metabobank/valid/MTBKS231.maf.txt')
@@ -111,7 +109,6 @@ RSpec.describe MetabobankValidator, type: :model do
 
   example 'with BioSample, valid' do
     request = create(:request, db: 'MetaboBank') {|request|
-      create :obj, request:, _id: '_base'
       create :obj, request:, _id: 'IDF',       file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')
       create :obj, request:, _id: 'SDRF',      file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')
       create :obj, request:, _id: 'BioSample', file: file_fixture_upload('metabobank/valid/MTBKS231.bs.tsv')
@@ -134,7 +131,6 @@ RSpec.describe MetabobankValidator, type: :model do
 
   example 'invalid' do
     request = create(:request, db: 'MetaboBank') {|request|
-      create :obj, request:, _id: '_base'
       create :obj, request:, _id: 'IDF',  file: file_fixture_upload('metabobank/invalid/MTBKS201.idf.txt')
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/invalid/MTBKS201.sdrf.txt')
     }

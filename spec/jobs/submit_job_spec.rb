@@ -9,7 +9,6 @@ RSpec.describe SubmitJob, type: :job do
 
   example 'simple' do
     request = create(:request, db: 'MetaboBank', dway_user: alice) {|request|
-      create :obj, request:, _id: '_base'
       create :obj, request:, _id: 'IDF',  file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')
     }
@@ -36,7 +35,6 @@ RSpec.describe SubmitJob, type: :job do
 
   example 'complex' do
     request = create(:request, db: 'MetaboBank', dway_user: alice) {|request|
-      create :obj, request:, _id: '_base'
       create :obj, request:, _id: 'IDF',  file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')
       create :obj, request:, _id: 'MAF',  file: file_fixture_upload('metabobank/valid/MTBKS231.maf.txt')

@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe DraValidator, type: :model do
   example 'valid' do
     request = create(:request, db: 'DRA') {|request|
-      create :obj, request:, _id: '_base',      file: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml')
       create :obj, request:, _id: 'Submission', file: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml')
       create :obj, request:, _id: 'Experiment', file: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml')
       create :obj, request:, _id: 'Run',        file: file_fixture_upload('dra/valid/example-0001_dra_Run.xml')
@@ -53,7 +52,6 @@ RSpec.describe DraValidator, type: :model do
 
   example 'invalid' do
     request = create(:request, db: 'DRA') {|request|
-      create :obj, request:, _id: '_base',      file: file_fixture_upload('dra/invalid/example-0001_dra_Submission.xml')
       create :obj, request:, _id: 'Submission', file: file_fixture_upload('dra/invalid/example-0001_dra_Submission.xml')
       create :obj, request:, _id: 'Experiment', file: file_fixture_upload('dra/invalid/example-0001_dra_Experiment.xml')
       create :obj, request:, _id: 'Run',        file: file_fixture_upload('dra/invalid/example-0001_dra_Run.xml')
@@ -107,7 +105,6 @@ RSpec.describe DraValidator, type: :model do
 
   example 'error' do
     request = create(:request, db: 'DRA') {|request|
-      create :obj, request:, _id: '_base'
       create :obj, request:, _id: 'Submission', file: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml')
       create :obj, request:, _id: 'Experiment', file: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml')
       create :obj, request:, _id: 'Run',        file: file_fixture_upload('dra/valid/example-0001_dra_Run.xml')
@@ -138,7 +135,6 @@ RSpec.describe DraValidator, type: :model do
 
   example 'with Analysis and AnalysisFile, valid' do
     request = create(:request, db: 'DRA') {|request|
-      create :obj, request:, _id: '_base'
       create :obj, request:, _id: 'Submission',   file: file_fixture_upload('dra/valid/example-0002_dra_Submission.xml')
       create :obj, request:, _id: 'Experiment',   file: file_fixture_upload('dra/valid/example-0002_dra_Experiment.xml')
       create :obj, request:, _id: 'Run',          file: file_fixture_upload('dra/valid/example-0002_dra_Run.xml')
@@ -172,7 +168,6 @@ RSpec.describe DraValidator, type: :model do
 
   example 'with multiple RunFile, valid' do
     request = create(:request, db: 'DRA') {|request|
-      create :obj, request:, _id: '_base'
       create :obj, request:, _id: 'Submission', file: file_fixture_upload('dra/valid/example-0001_dra_Submission.xml')
       create :obj, request:, _id: 'Experiment', file: file_fixture_upload('dra/valid/example-0001_dra_Experiment.xml')
       create :obj, request:, _id: 'Run',        file: file_fixture_upload('dra/valid/example-0001_dra_Run.xml')

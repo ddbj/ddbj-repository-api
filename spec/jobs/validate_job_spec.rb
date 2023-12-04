@@ -5,7 +5,6 @@ RSpec.describe ValidateJob, type: :job do
 
   example do
     request = create(:request, db: 'MetaboBank', dway_user: alice) {|request|
-      create :obj, request:, _id: '_base'
       create :obj, request:, _id: 'IDF',  file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')
     }
