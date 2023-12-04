@@ -1,10 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'MetaboBank: submit via file', type: :request, authorized: true do
-  let(:repository_dir) { Pathname.new(ENV.fetch('REPOSITORY_DIR')) }
-
   before do
-    create :dway_user, uid: 'alice', api_key: 'API_KEY'
+    create :dway_user, api_key: 'API_KEY'
   end
 
   example do
