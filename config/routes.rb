@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     end
 
     resource :auth, only: %i() do
-      post :login_by_id_token
+      post :login_by_access_token
     end
 
     namespace :submissions do
