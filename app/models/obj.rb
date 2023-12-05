@@ -7,7 +7,7 @@ class Obj < ApplicationRecord
 
   scope :without_base, -> { where.not(_id: '_base') }
 
-  validates :validity, inclusion: {in: %w(valid invalid error)}, allow_nil: true
+  enum :validity, %w(valid invalid error).index_by(&:to_sym), prefix: true
 
   validate :destination_must_not_be_malformed
 

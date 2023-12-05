@@ -41,7 +41,7 @@ class MetabobankValidator
             end
           else
             objs.each do |obj|
-              obj.update! validity: 'valid'
+              obj.validity_valid!
             end
           end
         end
