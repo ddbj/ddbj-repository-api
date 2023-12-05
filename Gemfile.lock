@@ -143,6 +143,7 @@ GEM
     irb (1.10.1)
       rdoc
       reline (>= 0.3.8)
+    jb (0.8.2)
     json-jwt (1.16.3)
       activesupport (>= 4.2)
       aes_key_wrap
@@ -324,6 +325,7 @@ DEPENDENCIES
   factory_bot_rails
   faraday
   faraday-multipart
+  jb
   metabobank_tools!
   openid_connect
   parallel

@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :submissions, only: %i(index show)
     resources :requests, only: %i(show)
 
     resource :me, only: %i(show)

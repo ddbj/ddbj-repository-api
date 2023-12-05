@@ -1,0 +1,16 @@
+objs = submission.request.objs.group_by(&:_id).except('_base')
+
+{
+  id:         submission.public_id,
+  url:        submission_url(submission.public_id),
+  created_at: submission.created_at,
+  db:         submission.request.db,
+
+  objects: objs.map {|id, objs|
+    {
+      id:    ,
+      files: objs.map(&:path)
+    }
+  }
+}
+

@@ -100,7 +100,7 @@ paths:
   /validations/<%= db[:id].downcase %>/via-file:
     post:
       tags:
-        - Validation
+        - Validate
 
       requestBody:
         $ref: '#/components/requestBodies/<%= db[:id] %>ViaFile'
@@ -118,7 +118,7 @@ paths:
   /submissions/<%= db[:id].downcase %>/via-file:
     post:
       tags:
-        - Submission
+        - Submit
 
       requestBody:
         $ref: '#/components/requestBodies/<%= db[:id] %>ViaFile'
@@ -134,6 +134,34 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 
   <%- end -%>
+  /submissions:
+    get:
+      tags:
+        - Submission
+
+      responses:
+        '200':
+          description: Return submissions.
+
+          content:
+            application/json:
+              schema:
+                type: array
+
+                items:
+                  type: object
+                  $ref: '#/components/schemas/Submission'
+
+
+              example:
+                uid: alice
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+
+  /submissions/{id}:
+
   /requests/{id}:
     get:
       tags:
@@ -202,8 +230,13 @@ paths:
                       id:
                         type: string
 
+                      url:
+                        type: string
+                        format: uri
+
                     required:
                       - id
+                      - url
 
                 required:
                   - status
@@ -231,6 +264,7 @@ paths:
 
                 submission:
                   id: X-84
+                  url: https://repository.ddbj.nig.ac.jp/api/submissions/X-84
 
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -242,6 +276,26 @@ components:
       scheme: bearer
 
   schemas:
+    Submission:
+      type: object
+
+      properties:
+        id:
+          type: string
+
+        url:
+          type: string
+          format: uri
+
+        created_at:
+          type: string
+          format: date-time
+
+      required:
+        - id
+        - url
+        - created_at
+
     ValidationReport:
       type: object
 

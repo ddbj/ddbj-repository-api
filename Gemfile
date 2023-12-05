@@ -8,6 +8,7 @@ gem 'base62-rb'
 gem 'bootsnap', require: false
 gem 'faraday'
 gem 'faraday-multipart'
+gem 'jb'
 gem 'metabobank_tools', github: 'ddbj/metabobank_tools'
 gem 'openid_connect'
 gem 'parallel'
