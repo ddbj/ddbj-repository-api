@@ -13,14 +13,14 @@ class Request < ApplicationRecord
   validates :db, inclusion: {in: DB.map { _1[:id] }}
 
   def validity
-    return nil unless finished?
-
-    if objs.any?(&:validity_error?)
+    if objs.all?(&:validity_valid?)
+      'valid'
+    elsif objs.any?(&:validity_error?)
       'error'
     elsif objs.any?(&:validity_invalid?)
       'invalid'
     else
-      'valid'
+      nil
     end
   end
 
