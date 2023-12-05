@@ -31,13 +31,11 @@ class Request < ApplicationRecord
     objs.map(&:validation_report)
   end
 
-  def write_files_to_tmp(only: nil, &block)
+  def write_files_to_tmp(&block)
     Dir.mktmpdir {|tmpdir|
       tmpdir = Pathname.new(tmpdir)
 
       objs.without_base.each do |obj|
-        next if only && obj._id != only
-
         path = tmpdir.join(obj.path)
         path.dirname.mkpath
 

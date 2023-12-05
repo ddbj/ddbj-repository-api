@@ -1,30 +1,27 @@
 class DdbjValidator
-  def initialize(obj_id:)
-    @obj_id = obj_id
-  end
-
   def validate(request)
-    obj = request.objs.find_by!(_id: @obj_id)
+    request.write_files_to_tmp do |dir|
+      request.objs.without_base.each do |obj|
+        part = Faraday::Multipart::FilePart.new(dir.join(obj.path).to_s, 'application/octet-stream')
 
-    res = request.write_files_to_tmp(only: obj._id) {|dir|
-      part = Faraday::Multipart::FilePart.new(dir.join(obj.path).to_s, 'application/octet-stream')
+        begin
+          res = client.post('validation', obj._id.downcase => part)
+          validated, details = wait_for_finish(res.body.fetch(:uuid))
+        rescue => e
+          obj.update! validity: 'error', validation_details: {error: e.message}
 
-      client.post('validation', @obj_id.downcase => part)
-    }
+          Rails.logger.error e
+        else
+          validity = if validated
+                       details.fetch(:validity) ? 'valid' : 'invalid'
+                     else
+                       'error'
+                     end
 
-    validated, details = wait_for_finish(res.body.fetch(:uuid))
-
-    validity = if validated
-                 details.fetch(:validity) ? 'valid' : 'invalid'
-               else
-                 'error'
-               end
-
-    obj.update! validity: validity, validation_details: details
-  rescue => e
-    obj.update! validity: 'error', validation_details: {error: e.message}
-
-    Rails.logger.error e
+          obj.update! validity:, validation_details: details
+        end
+      end
+    end
   end
 
   private
