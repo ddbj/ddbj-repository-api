@@ -9,8 +9,11 @@ objs = submission.request.objs.group_by(&:_id).except('_base')
   objects: objs.map {|id, objs|
     {
       id:    ,
-      files: objs.map(&:path)
+      files: objs.map {|obj|
+        {
+          path: obj.path
+        }
+      }
     }
   }
 }
-

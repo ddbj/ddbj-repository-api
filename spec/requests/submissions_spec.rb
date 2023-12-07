@@ -26,7 +26,7 @@ RSpec.describe 'submissions', type: :request, authorized: true do
           id: 'Excel',
 
           files: [
-            'dest/myexcel.xlsx'
+            path: 'dest/myexcel.xlsx'
           ]
         ]
       }
@@ -48,7 +48,7 @@ RSpec.describe 'submissions', type: :request, authorized: true do
         id: 'Excel',
 
         files: [
-          'dest/myexcel.xlsx'
+          path: 'dest/myexcel.xlsx'
         ]
       ]
     )
