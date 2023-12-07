@@ -100,7 +100,7 @@ paths:
   /validations/<%= db[:id].downcase %>/via-file:
     post:
       tags:
-        - Validate
+        - Run
 
       requestBody:
         $ref: '#/components/requestBodies/<%= db[:id] %>ViaFile'
@@ -118,7 +118,7 @@ paths:
   /submissions/<%= db[:id].downcase %>/via-file:
     post:
       tags:
-        - Submit
+        - Run
 
       requestBody:
         $ref: '#/components/requestBodies/<%= db[:id] %>ViaFile'
@@ -134,34 +134,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 
   <%- end -%>
-  /submissions:
-    get:
-      tags:
-        - Submission
-
-      responses:
-        '200':
-          description: Return submissions.
-
-          content:
-            application/json:
-              schema:
-                type: array
-
-                items:
-                  type: object
-                  $ref: '#/components/schemas/Submission'
-
-
-              example:
-                uid: alice
-
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-
-
-  /submissions/{id}:
-
   /requests/{id}:
     get:
       tags:
@@ -269,6 +241,43 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+  /submissions:
+    get:
+      tags:
+        - Submission
+
+      responses:
+        '200':
+          description: Return your submissions.
+
+          content:
+            application/json:
+              schema:
+                type: array
+
+                items:
+                  $ref: '#/components/schemas/Submission'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /submissions/{id}:
+    get:
+      tags:
+        - Submission
+
+      responses:
+        '200':
+          description: Return the submission.
+
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Submission'
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -278,6 +287,7 @@ components:
   schemas:
     Submission:
       type: object
+      required: [id, url, created_at, db, objects]
 
       properties:
         id:
@@ -291,10 +301,40 @@ components:
           type: string
           format: date-time
 
-      required:
-        - id
-        - url
-        - created_at
+        db:
+          type: string
+
+          enum:
+            <%- dbs.each do |db| -%>
+            - <%= db[:id] %>
+            <%- end -%>
+
+        objects:
+          type: array
+
+          items:
+            type: object
+            required: [id, files]
+
+            properties:
+              id:
+                type: string
+
+                enum:
+                  <%- dbs.flat_map { _1[:objects] }.map { _1[:id] }.uniq.each do |obj_id| -%>
+                  - <%= obj_id %>
+                  <%- end -%>
+
+              files:
+                type: array
+
+                items:
+                  type: object
+                  required: [path]
+
+                  properties:
+                    path:
+                      type: string
 
     ValidationReport:
       type: object
