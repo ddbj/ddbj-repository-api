@@ -88,7 +88,7 @@ async function createRequest(endpoint: string, apiKey: string, resource: string,
     const key = obj?.multiple ? `${obj.id}[]` : obj!.id;
     const file = await fetch(toFileUrl(resolve(path)));
 
-    body.append(key, await file.blob(), basename(path));
+    body.append(`${key}[file]`, await file.blob(), basename(path));
   });
 
   await Promise.all(promises);

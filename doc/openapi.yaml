@@ -539,6 +539,18 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+  /submissions/{id}/files/{object_id}/{path}:
+    get:
+      tags:
+        - Submission
+
+      responses:
+        '302':
+          description: Redirect to the file.
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -610,11 +622,15 @@ components:
 
                 items:
                   type: object
-                  required: [path]
+                  required: [path, url]
 
                   properties:
                     path:
                       type: string
+
+                    url:
+                      type: string
+                      format: uri
 
     ValidationReport:
       type: object

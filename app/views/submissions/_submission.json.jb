@@ -11,7 +11,8 @@ objs = submission.request.objs.group_by(&:_id).except('_base')
       id:    ,
       files: objs.map {|obj|
         {
-          path: obj.path
+          path: obj.path,
+          url:  submission_file_url(submission.public_id, obj._id, obj.path)
         }
       }
     }

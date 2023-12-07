@@ -15,6 +15,8 @@ Rails.application.routes.draw do
       post :login_by_access_token
     end
 
+    resource :me, only: %i(show)
+
     namespace :submissions do
       scope ':db' do
         resource :via_file, only: %i(create), path: 'via-file', constraints: {db: Regexp.union(*dbs)}
@@ -27,10 +29,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :submissions, only: %i(index show)
     resources :requests, only: %i(show)
 
-    resource :me, only: %i(show)
+    resources :submissions, only: %i(index show) do
+      resources :files, only: %i(show), path: 'files/:object_id', param: :path, constraints: {path: /.+/}
+    end
   end
 
   get 'up' => 'rails/health#show', as: :rails_health_check
