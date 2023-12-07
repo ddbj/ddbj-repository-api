@@ -8,19 +8,16 @@ class Request < ApplicationRecord
     end
   end
 
-  attribute :status, default: 'waiting'
+  enum :status, %w(waiting processing finished).index_by(&:to_sym)
 
-  validates :db,     inclusion: {in: DB.map { _1[:id] }}
-  validates :status, inclusion: {in: %w(waiting processing finished)}
+  validates :db, inclusion: {in: DB.map { _1[:id] }}
 
   def validity
-    return nil unless status == 'finished'
+    return nil unless finished?
 
-    validities = Set.new(objs.pluck(:validity))
-
-    if validities.include?('error')
+    if objs.any?(&:validity_error?)
       'error'
-    elsif validities.include?('invalid')
+    elsif objs.any?(&:validity_invalid?)
       'invalid'
     else
       'valid'

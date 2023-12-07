@@ -13,7 +13,7 @@ class Validators
 
   def validate(&on_finish)
     begin
-      @request.update! status: 'processing'
+      @request.processing!
 
       db = DB.find { _1[:id] == @request.db }
       db => {validator:}
@@ -26,7 +26,7 @@ class Validators
         Rails.logger.error e
       end
     ensure
-      @request.update! status: 'finished'
+      @request.finished!
     end
 
     on_finish&.call
