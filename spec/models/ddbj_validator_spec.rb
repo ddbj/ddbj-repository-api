@@ -46,7 +46,7 @@ RSpec.describe DdbjValidator, type: :model do
         {
           object_id: '_base',
           path:      nil,
-          validity:  nil,
+          validity:  'valid',
           details:   nil
         },
         {

@@ -24,6 +24,8 @@ class Validators
         @request.objs.base.update! validity: 'error', validation_details: {error: e.message}
 
         Rails.logger.error e
+      else
+        @request.objs.base.validity_valid! unless @request.objs.base.validity
       end
     ensure
       @request.finished!
