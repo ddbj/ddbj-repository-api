@@ -1,7 +1,6 @@
 class Validators
   VALIDATOR = {
-    bioproject:  DdbjValidator.new(obj_id: 'BioProject'),
-    biosample:   DdbjValidator.new(obj_id: 'BioSample'),
+    ddbj:        DdbjValidator.new,
     dra:         DraValidator.new,
     metabobank:  MetabobankValidator.new,
     passthrough: PassthroughValidator.new,

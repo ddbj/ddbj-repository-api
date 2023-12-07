@@ -1,12 +1,12 @@
 - id: BioProject
-  validator: bioproject
+  validator: ddbj
 
   objects:
     - id: BioProject
       ext: xml
 
 - id: BioSample
-  validator: biosample
+  validator: ddbj
 
   objects:
     - id: BioSample
