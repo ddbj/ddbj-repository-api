@@ -28,14 +28,12 @@ paths:
             application/json:
               schema:
                 type: object
+                required: [login_url]
 
                 properties:
                   login_url:
                     type: string
                     format: uri
-
-                required:
-                  - login_url
 
               example:
                 login_url: https://repository.ddbj.nig.ac.jp/auth/login
@@ -53,13 +51,11 @@ paths:
             application/json:
               schema:
                 type: object
+                required: [api_key]
 
                 properties:
                   api_key:
                     type: string
-
-                required:
-                  - api_key
 
               example:
                 api_key: ddbj_repository_VbHQePhpFhvrKI7by1kteMvN2ImLfhGVK4mTPFEZ2EO
@@ -80,13 +76,11 @@ paths:
             application/json:
               schema:
                 type: object
+                required: [uid]
 
                 properties:
                   uid:
                     type: string
-
-                required:
-                  - uid
 
               example:
                 uid: alice
@@ -369,6 +363,7 @@ paths:
             application/json:
               schema:
                 type: object
+                required: [status, validity, validation_reports, submission]
 
                 properties:
                   status:
@@ -392,6 +387,7 @@ paths:
 
                   validation_reports:
                     type: object
+                    required: [_base]
 
                     properties:
                       _base:
@@ -451,13 +447,13 @@ paths:
                       VariantCallFile:
                         $ref: '#/components/schemas/ValidationReport'
 
-                    required:
-                      - _base
 
                   submission:
                     type:
                       - object
                       - 'null'
+
+                    required: [id, url]
 
                     properties:
                       id:
@@ -466,16 +462,6 @@ paths:
                       url:
                         type: string
                         format: uri
-
-                    required:
-                      - id
-                      - url
-
-                required:
-                  - status
-                  - validity
-                  - validation_reports
-                  - submission
 
               example:
                 status: finished
@@ -634,6 +620,7 @@ components:
 
     ValidationReport:
       type: object
+      required: [object_id, path, validity, details]
 
       properties:
         object_id:
@@ -681,18 +668,16 @@ components:
             - object
             - 'null'
 
-      required:
-        - object_id
-        - path
-        - validity
-        - details
-
     BioProjectViaFileJSON:
       type: object
+
+      required:
+        - BioProject
 
       properties:
         BioProject:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -701,33 +686,26 @@ components:
             destination:
               type: string
 
-          required:
-            - path
-
-      required:
-        - BioProject
-
     BioProjectViaFileFormDataBioProject:
       allOf:
         - oneOf:
           - type: object
+
+            required:
+              - BioProject[file]
 
             properties:
               BioProject[file]:
                 type: string
                 format: binary
 
-            required:
-              - BioProject[file]
-
           - type: object
+            required:
+              - BioProject[path]
 
             properties:
               BioProject[path]:
                 $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - BioProject[path]
 
         - type: object
 
@@ -738,9 +716,13 @@ components:
     BioSampleViaFileJSON:
       type: object
 
+      required:
+        - BioSample
+
       properties:
         BioSample:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -749,33 +731,26 @@ components:
             destination:
               type: string
 
-          required:
-            - path
-
-      required:
-        - BioSample
-
     BioSampleViaFileFormDataBioSample:
       allOf:
         - oneOf:
           - type: object
+
+            required:
+              - BioSample[file]
 
             properties:
               BioSample[file]:
                 type: string
                 format: binary
 
-            required:
-              - BioSample[file]
-
           - type: object
+            required:
+              - BioSample[path]
 
             properties:
               BioSample[path]:
                 $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - BioSample[path]
 
         - type: object
 
@@ -786,6 +761,10 @@ components:
     TradViaFileJSON:
       type: object
 
+      required:
+        - Sequence
+        - Annotation
+
       properties:
         Sequence:
           type: array
@@ -793,6 +772,7 @@ components:
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -800,9 +780,6 @@ components:
 
               destination:
                 type: string
-
-            required:
-              - path
 
         Annotation:
           type: array
@@ -810,6 +787,7 @@ components:
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -818,17 +796,13 @@ components:
               destination:
                 type: string
 
-            required:
-              - path
-
-      required:
-        - Sequence
-        - Annotation
-
     TradViaFileFormDataSequence:
       allOf:
         - oneOf:
           - type: object
+
+            required:
+              - Sequence[][file]
 
             properties:
               Sequence[][file]:
@@ -839,10 +813,9 @@ components:
                   type: string
                   format: binary
 
-            required:
-              - Sequence[][file]
-
           - type: object
+            required:
+              - Sequence[][path]
 
             properties:
               Sequence[][path]:
@@ -851,9 +824,6 @@ components:
 
                 items:
                   $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - Sequence[][path]
 
         - type: object
 
@@ -870,6 +840,9 @@ components:
         - oneOf:
           - type: object
 
+            required:
+              - Annotation[][file]
+
             properties:
               Annotation[][file]:
                 type: array
@@ -879,10 +852,9 @@ components:
                   type: string
                   format: binary
 
-            required:
-              - Annotation[][file]
-
           - type: object
+            required:
+              - Annotation[][path]
 
             properties:
               Annotation[][path]:
@@ -891,9 +863,6 @@ components:
 
                 items:
                   $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - Annotation[][path]
 
         - type: object
 
@@ -908,9 +877,16 @@ components:
     DRAViaFileJSON:
       type: object
 
+      required:
+        - Submission
+        - Experiment
+        - Run
+        - RunFile
+
       properties:
         Submission:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -918,12 +894,10 @@ components:
 
             destination:
               type: string
-
-          required:
-            - path
 
         Experiment:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -931,12 +905,10 @@ components:
 
             destination:
               type: string
-
-          required:
-            - path
 
         Run:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -944,9 +916,6 @@ components:
 
             destination:
               type: string
-
-          required:
-            - path
 
         RunFile:
           type: array
@@ -954,6 +923,7 @@ components:
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -962,11 +932,9 @@ components:
               destination:
                 type: string
 
-            required:
-              - path
-
         Analysis:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -975,15 +943,13 @@ components:
             destination:
               type: string
 
-          required:
-            - path
-
         AnalysisFile:
           type: array
           minItems: 0
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -992,36 +958,26 @@ components:
               destination:
                 type: string
 
-            required:
-              - path
-
-      required:
-        - Submission
-        - Experiment
-        - Run
-        - RunFile
-
     DRAViaFileFormDataSubmission:
       allOf:
         - oneOf:
           - type: object
+
+            required:
+              - Submission[file]
 
             properties:
               Submission[file]:
                 type: string
                 format: binary
 
-            required:
-              - Submission[file]
-
           - type: object
+            required:
+              - Submission[path]
 
             properties:
               Submission[path]:
                 $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - Submission[path]
 
         - type: object
 
@@ -1034,22 +990,21 @@ components:
         - oneOf:
           - type: object
 
+            required:
+              - Experiment[file]
+
             properties:
               Experiment[file]:
                 type: string
                 format: binary
 
-            required:
-              - Experiment[file]
-
           - type: object
+            required:
+              - Experiment[path]
 
             properties:
               Experiment[path]:
                 $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - Experiment[path]
 
         - type: object
 
@@ -1062,22 +1017,21 @@ components:
         - oneOf:
           - type: object
 
+            required:
+              - Run[file]
+
             properties:
               Run[file]:
                 type: string
                 format: binary
 
-            required:
-              - Run[file]
-
           - type: object
+            required:
+              - Run[path]
 
             properties:
               Run[path]:
                 $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - Run[path]
 
         - type: object
 
@@ -1090,6 +1044,9 @@ components:
         - oneOf:
           - type: object
 
+            required:
+              - RunFile[][file]
+
             properties:
               RunFile[][file]:
                 type: array
@@ -1099,10 +1056,9 @@ components:
                   type: string
                   format: binary
 
-            required:
-              - RunFile[][file]
-
           - type: object
+            required:
+              - RunFile[][path]
 
             properties:
               RunFile[][path]:
@@ -1111,9 +1067,6 @@ components:
 
                 items:
                   $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - RunFile[][path]
 
         - type: object
 
@@ -1184,9 +1137,14 @@ components:
     GEAViaFileJSON:
       type: object
 
+      required:
+        - IDF
+        - SDRF
+
       properties:
         IDF:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -1194,12 +1152,10 @@ components:
 
             destination:
               type: string
-
-          required:
-            - path
 
         SDRF:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -1207,9 +1163,6 @@ components:
 
             destination:
               type: string
-
-          required:
-            - path
 
         ADF:
           type: array
@@ -1217,6 +1170,7 @@ components:
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -1224,9 +1178,6 @@ components:
 
               destination:
                 type: string
-
-            required:
-              - path
 
         RawDataFile:
           type: array
@@ -1234,6 +1185,7 @@ components:
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -1241,9 +1193,6 @@ components:
 
               destination:
                 type: string
-
-            required:
-              - path
 
         ProcessedDataFile:
           type: array
@@ -1251,6 +1200,7 @@ components:
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -1259,34 +1209,26 @@ components:
               destination:
                 type: string
 
-            required:
-              - path
-
-      required:
-        - IDF
-        - SDRF
-
     GEAViaFileFormDataIDF:
       allOf:
         - oneOf:
           - type: object
+
+            required:
+              - IDF[file]
 
             properties:
               IDF[file]:
                 type: string
                 format: binary
 
-            required:
-              - IDF[file]
-
           - type: object
+            required:
+              - IDF[path]
 
             properties:
               IDF[path]:
                 $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - IDF[path]
 
         - type: object
 
@@ -1299,22 +1241,21 @@ components:
         - oneOf:
           - type: object
 
+            required:
+              - SDRF[file]
+
             properties:
               SDRF[file]:
                 type: string
                 format: binary
 
-            required:
-              - SDRF[file]
-
           - type: object
+            required:
+              - SDRF[path]
 
             properties:
               SDRF[path]:
                 $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - SDRF[path]
 
         - type: object
 
@@ -1427,9 +1368,14 @@ components:
     MetaboBankViaFileJSON:
       type: object
 
+      required:
+        - IDF
+        - SDRF
+
       properties:
         IDF:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -1437,12 +1383,10 @@ components:
 
             destination:
               type: string
-
-          required:
-            - path
 
         SDRF:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -1450,9 +1394,6 @@ components:
 
             destination:
               type: string
-
-          required:
-            - path
 
         MAF:
           type: array
@@ -1460,6 +1401,7 @@ components:
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -1467,9 +1409,6 @@ components:
 
               destination:
                 type: string
-
-            required:
-              - path
 
         RawDataFile:
           type: array
@@ -1477,6 +1416,7 @@ components:
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -1484,9 +1424,6 @@ components:
 
               destination:
                 type: string
-
-            required:
-              - path
 
         ProcessedDataFile:
           type: array
@@ -1494,6 +1431,7 @@ components:
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -1502,11 +1440,9 @@ components:
               destination:
                 type: string
 
-            required:
-              - path
-
         BioSample:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -1515,34 +1451,26 @@ components:
             destination:
               type: string
 
-          required:
-            - path
-
-      required:
-        - IDF
-        - SDRF
-
     MetaboBankViaFileFormDataIDF:
       allOf:
         - oneOf:
           - type: object
+
+            required:
+              - IDF[file]
 
             properties:
               IDF[file]:
                 type: string
                 format: binary
 
-            required:
-              - IDF[file]
-
           - type: object
+            required:
+              - IDF[path]
 
             properties:
               IDF[path]:
                 $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - IDF[path]
 
         - type: object
 
@@ -1555,22 +1483,21 @@ components:
         - oneOf:
           - type: object
 
+            required:
+              - SDRF[file]
+
             properties:
               SDRF[file]:
                 type: string
                 format: binary
 
-            required:
-              - SDRF[file]
-
           - type: object
+            required:
+              - SDRF[path]
 
             properties:
               SDRF[path]:
                 $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - SDRF[path]
 
         - type: object
 
@@ -1705,9 +1632,13 @@ components:
     JVarViaFileJSON:
       type: object
 
+      required:
+        - Excel
+
       properties:
         Excel:
           type: object
+          required: [path]
 
           properties:
             path:
@@ -1716,15 +1647,13 @@ components:
             destination:
               type: string
 
-          required:
-            - path
-
         VariantCallFile:
           type: array
           minItems: 0
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -1733,33 +1662,26 @@ components:
               destination:
                 type: string
 
-            required:
-              - path
-
-      required:
-        - Excel
-
     JVarViaFileFormDataExcel:
       allOf:
         - oneOf:
           - type: object
+
+            required:
+              - Excel[file]
 
             properties:
               Excel[file]:
                 type: string
                 format: binary
 
-            required:
-              - Excel[file]
-
           - type: object
+            required:
+              - Excel[path]
 
             properties:
               Excel[path]:
                 $ref: '#/components/schemas/UserHomePath'
-
-            required:
-              - Excel[path]
 
         - type: object
 
@@ -1990,10 +1912,12 @@ components:
         application/json:
           schema:
             type: object
+            required: [request]
 
             properties:
               request:
                 type: object
+                required: [id, url]
 
                 properties:
                   id:
@@ -2002,13 +1926,6 @@ components:
                   url:
                     type: string
                     format: uri
-
-                required:
-                  - id
-                  - url
-
-            required:
-              - request
 
           example:
             request:
@@ -2022,13 +1939,11 @@ components:
         application/json:
           schema:
             type: object
+            required: [error]
 
             properties:
               error:
                 type: string
-
-            required:
-              - error
 
           example:
             error: path must be in /home/alice
@@ -2040,13 +1955,11 @@ components:
         application/json:
           schema:
             type: object
+            required: [error]
 
             properties:
               error:
                 type: string
-
-            required:
-              - error
 
           example:
             error: Unauthorized

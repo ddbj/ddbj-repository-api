@@ -30,14 +30,12 @@ paths:
             application/json:
               schema:
                 type: object
+                required: [login_url]
 
                 properties:
                   login_url:
                     type: string
                     format: uri
-
-                required:
-                  - login_url
 
               example:
                 login_url: https://repository.ddbj.nig.ac.jp/auth/login
@@ -55,13 +53,11 @@ paths:
             application/json:
               schema:
                 type: object
+                required: [api_key]
 
                 properties:
                   api_key:
                     type: string
-
-                required:
-                  - api_key
 
               example:
                 api_key: ddbj_repository_VbHQePhpFhvrKI7by1kteMvN2ImLfhGVK4mTPFEZ2EO
@@ -82,13 +78,11 @@ paths:
             application/json:
               schema:
                 type: object
+                required: [uid]
 
                 properties:
                   uid:
                     type: string
-
-                required:
-                  - uid
 
               example:
                 uid: alice
@@ -157,6 +151,7 @@ paths:
             application/json:
               schema:
                 type: object
+                required: [status, validity, validation_reports, submission]
 
                 properties:
                   status:
@@ -180,6 +175,7 @@ paths:
 
                   validation_reports:
                     type: object
+                    required: [_base]
 
                     properties:
                       _base:
@@ -190,13 +186,13 @@ paths:
                         $ref: '#/components/schemas/ValidationReport'
 
                       <%- end -%>
-                    required:
-                      - _base
 
                   submission:
                     type:
                       - object
                       - 'null'
+
+                    required: [id, url]
 
                     properties:
                       id:
@@ -205,16 +201,6 @@ paths:
                       url:
                         type: string
                         format: uri
-
-                    required:
-                      - id
-                      - url
-
-                required:
-                  - status
-                  - validity
-                  - validation_reports
-                  - submission
 
               example:
                 status: finished
@@ -354,6 +340,7 @@ components:
 
     ValidationReport:
       type: object
+      required: [object_id, path, validity, details]
 
       properties:
         object_id:
@@ -386,15 +373,14 @@ components:
             - object
             - 'null'
 
-      required:
-        - object_id
-        - path
-        - validity
-        - details
-
     <%- dbs.each do |db| -%>
     <%= db[:id] %>ViaFileJSON:
       type: object
+
+      required:
+        <%- db[:objects].reject { _1[:optional] }.each do |obj| -%>
+        - <%= obj[:id] %>
+        <%- end -%>
 
       properties:
         <%- db[:objects].each do |obj| -%>
@@ -405,6 +391,7 @@ components:
 
           items:
             type: object
+            required: [path]
 
             properties:
               path:
@@ -412,11 +399,9 @@ components:
 
               destination:
                 type: string
-
-            required:
-              - path
           <%- else -%>
           type: object
+          required: [path]
 
           properties:
             path:
@@ -424,22 +409,19 @@ components:
 
             destination:
               type: string
-
-          required:
-            - path
           <%- end -%>
 
         <%- end -%>
-      required:
-        <%- db[:objects].reject { _1[:optional] }.each do |obj| -%>
-        - <%= obj[:id] %>
-        <%- end -%>
-
     <%- db[:objects].each do |obj| -%>
     <%= db[:id] %>ViaFileFormData<%= obj[:id] %>:
       allOf:
         - oneOf:
           - type: object
+            <%- unless obj[:optional] -%>
+
+            required:
+              - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]
+            <%- end -%>
 
             properties:
               <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]:
@@ -455,12 +437,11 @@ components:
                 format: binary
                 <%- end -%>
 
+          - type: object
             <%- unless obj[:optional] -%>
             required:
-              - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]
-
+              - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]
             <%- end -%>
-          - type: object
 
             properties:
               <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]:
@@ -474,11 +455,6 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
                 <%- end -%>
 
-            <%- unless obj[:optional] -%>
-            required:
-              - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]
-
-            <%- end -%>
         - type: object
 
           properties:
@@ -530,10 +506,12 @@ components:
         application/json:
           schema:
             type: object
+            required: [request]
 
             properties:
               request:
                 type: object
+                required: [id, url]
 
                 properties:
                   id:
@@ -542,13 +520,6 @@ components:
                   url:
                     type: string
                     format: uri
-
-                required:
-                  - id
-                  - url
-
-            required:
-              - request
 
           example:
             request:
@@ -562,13 +533,11 @@ components:
         application/json:
           schema:
             type: object
+            required: [error]
 
             properties:
               error:
                 type: string
-
-            required:
-              - error
 
           example:
             error: path must be in /home/alice
@@ -580,13 +549,11 @@ components:
         application/json:
           schema:
             type: object
+            required: [error]
 
             properties:
               error:
                 type: string
-
-            required:
-              - error
 
           example:
             error: Unauthorized
