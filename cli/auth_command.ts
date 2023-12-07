@@ -95,7 +95,7 @@ function callbackHandler(as: oauth.AuthorizationServer, client: oauth.Client, st
 
       if (oauth.isOAuth2Error(result)) throw result;
 
-      const apiKey = await obtainAPIKey(endpoint, result.id_token);
+      const apiKey = await obtainAPIKey(endpoint, result.access_token);
 
       writeConfig({ apiKey });
 
@@ -110,13 +110,13 @@ function callbackHandler(as: oauth.AuthorizationServer, client: oauth.Client, st
   };
 }
 
-async function obtainAPIKey(endpoint: string, idToken: string) {
-  const res = await fetch(`${endpoint}/auth/login_by_id_token`, {
+async function obtainAPIKey(endpoint: string, accessToken: string) {
+  const res = await fetch(`${endpoint}/auth/login_by_access_token`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/jwt',
     },
-    body: idToken,
+    body: accessToken,
   });
 
   if (!res.ok) throw res;

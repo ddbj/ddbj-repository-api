@@ -32,7 +32,7 @@ class AuthsController < ApplicationController
     oidc_client.authorization_code = params.require(:code)
 
     access_token = oidc_client.access_token!(code_verifier:)
-    user         = upsert_user_by_id_token_jwt(access_token.id_token)
+    user         = upsert_user_by_access_token(access_token)
 
     render plain: <<~TEXT
       Logged in as #{user.uid}.
@@ -43,8 +43,13 @@ class AuthsController < ApplicationController
     render plain: "Error: #{e.message}", status: :bad_request
   end
 
-  def login_by_id_token
-    user = upsert_user_by_id_token_jwt(request.body.read)
+  def login_by_access_token
+    access_token = OpenIDConnect::AccessToken.new(
+      access_token: request.body.read,
+      client:       oidc_client
+    )
+
+    user = upsert_user_by_access_token(access_token)
 
     render json: {
       api_key: user.api_key
@@ -63,18 +68,14 @@ class AuthsController < ApplicationController
     )
   end
 
-  def upsert_user_by_id_token_jwt(jwt)
-    id_token = OpenIDConnect::ResponseObject::IdToken.decode(jwt, self.class.oidc_config.jwks)
+  def upsert_user_by_access_token(access_token)
+    userinfo = access_token.userinfo!
 
-    id_token.verify!(
-      issuer:    self.class.oidc_config.issuer,
-      client_id: ENV.fetch('OIDC_CLIENT_ID')
-    )
-
-    id_token.raw_attributes => {preferred_username:}
-
-    DwayUser.find_or_initialize_by(sub: id_token.sub).tap {|user|
-      user.update! uid: preferred_username
+    DwayUser.find_or_initialize_by(sub: userinfo.sub).tap {|user|
+      user.update! **{
+        uid:         userinfo.preferred_username,
+        ddbj_member: userinfo.raw_attributes['account_type_number'] == 3
+      }
     }
   end
 

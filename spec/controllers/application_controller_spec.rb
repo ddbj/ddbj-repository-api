@@ -1,0 +1,52 @@
+require 'rails_helper'
+
+RSpec.describe ApplicationController, type: :controller do
+  controller do
+    def index
+      render plain: 'hello'
+    end
+  end
+
+  example 'unauthorized' do
+    get :index
+
+    expect(response).to have_http_status(:unauthorized)
+  end
+
+  example 'authorized' do
+    create :dway_user, uid: 'alice', api_key: 'API_KEY'
+
+    request.headers['Authorization'] = 'Bearer API_KEY'
+
+    get :index
+
+    expect(response).to have_http_status(:ok)
+    expect(controller.dway_user.uid).to eq('alice')
+  end
+
+  example 'DDBJ member can login as proxy' do
+    create :dway_user, uid: 'alice', api_key: 'API_KEY', ddbj_member: true
+    create :dway_user, uid: 'bob'
+
+    request.headers['Authorization']  = 'Bearer API_KEY'
+    request.headers['X-Dway-User-Id'] = 'bob'
+
+    get :index
+
+    expect(response).to have_http_status(:ok)
+    expect(controller.dway_user.uid).to eq('bob')
+  end
+
+  example 'other user cannot login as proxy' do
+    create :dway_user, uid: 'alice', api_key: 'API_KEY', ddbj_member: false
+    create :dway_user, uid: 'bob'
+
+    request.headers['Authorization']  = 'Bearer API_KEY'
+    request.headers['X-Dway-User-Id'] = 'bob'
+
+    get :index
+
+    expect(response).to have_http_status(:ok)
+    expect(controller.dway_user.uid).to eq('alice')
+  end
+end
