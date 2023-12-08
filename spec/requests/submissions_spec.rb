@@ -15,7 +15,7 @@ RSpec.describe 'submissions', type: :request, authorized: true do
 
     expect(response).to have_http_status(:ok)
 
-    expect(response.parsed_body.map(&:deep_symbolize_keys)).to contain_exactly(
+    expect(response.parsed_body.map(&:deep_symbolize_keys)).to eq([
       {
         id:         'X-42',
         url:        'http://www.example.com/api/submissions/X-42',
@@ -31,7 +31,7 @@ RSpec.describe 'submissions', type: :request, authorized: true do
           ]
         ]
       }
-    )
+    ])
   end
 
   example 'GET /api/submissions/:id' do

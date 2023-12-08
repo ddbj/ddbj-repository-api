@@ -1,0 +1,18 @@
+{
+  id:                 request.id,
+  url:                request_url(request),
+  status:             request.status,
+  validity:           request.validity,
+  validation_reports: request.validation_reports,
+
+  submission: request.submission.then {|submission|
+    if submission
+      {
+        id:  submission.public_id,
+        url: submission_url(submission.public_id)
+      }
+    else
+      nil
+    end
+  }
+}
