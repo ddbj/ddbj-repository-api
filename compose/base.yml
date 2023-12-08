@@ -30,7 +30,6 @@ services:
       args:
         APP_GID:
         APP_UID:
-        GITHUB_PAT:
         RUBY_VERSION:
 
     environment:
