@@ -1,6 +1,6 @@
 class SubmissionsController < ApplicationController
   def index
-    @submissions = submissions
+    @submissions = submissions.order(:id)
   end
 
   def show

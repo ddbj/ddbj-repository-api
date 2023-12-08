@@ -340,6 +340,60 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+  /requests:
+    get:
+      tags:
+        - Request
+
+      responses:
+        '200':
+          description: Return your requests.
+
+          content:
+            application/json:
+              schema:
+                type: array
+
+                items:
+                  $ref: '#/components/schemas/Request'
+
+              example:
+                - id: 100
+                  url: https://repository.ddbj.nig.ac.jp/api/requests/100
+                  status: finished
+                  validity: valid
+
+                  validation_reports:
+                    - object_id: _base
+                      path: null
+                      validity: valid
+                      details: null
+
+                    - object_id: BioSample
+                      path: mybiosample.xml
+                      validity: valid
+
+                      details:
+                        validity: true
+                        answer: 42
+
+                  submission:
+                    id: X-200
+                    url: https://repository.ddbj.nig.ac.jp/api/submissions/X-200
+
+                - id: 101
+                  url: https://repository.ddbj.nig.ac.jp/api/requests/101
+                  status: waiting
+                  validity: null
+
+                  validation_reports:
+                    - object_id: _base
+                      path: null
+                      validity: null
+                      details: null
+
+                  submission: null
+
   /requests/{id}:
     get:
       tags:
@@ -357,113 +411,16 @@ paths:
 
       responses:
         '200':
-          description: Return the request resource.
+          description: Return the request.
 
           content:
             application/json:
               schema:
-                type: object
-                required: [status, validity, validation_reports, submission]
-
-                properties:
-                  status:
-                    type: string
-
-                    enum:
-                      - waiting
-                      - processing
-                      - finished
-
-                  validity:
-                    type:
-                      - string
-                      - 'null'
-
-                    enum:
-                      - valid
-                      - invalid
-                      - error
-                      - null
-
-                  validation_reports:
-                    type: object
-                    required: [_base]
-
-                    properties:
-                      _base:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      BioProject:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      BioSample:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      Sequence:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      Annotation:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      Submission:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      Experiment:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      Run:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      RunFile:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      Analysis:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      AnalysisFile:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      IDF:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      SDRF:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      ADF:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      RawDataFile:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      ProcessedDataFile:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      MAF:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      Excel:
-                        $ref: '#/components/schemas/ValidationReport'
-
-                      VariantCallFile:
-                        $ref: '#/components/schemas/ValidationReport'
-
-
-                  submission:
-                    type:
-                      - object
-                      - 'null'
-
-                    required: [id, url]
-
-                    properties:
-                      id:
-                        type: string
-
-                      url:
-                        type: string
-                        format: uri
+                $ref: '#/components/schemas/Request'
 
               example:
+                id: 42
+                url: https://repository.ddbj.nig.ac.jp/api/requests/42
                 status: finished
                 validity: valid
 
@@ -513,6 +470,16 @@ paths:
       tags:
         - Submission
 
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+          example: 42
+
       responses:
         '200':
           description: Return the submission.
@@ -530,6 +497,51 @@ paths:
       tags:
         - Submission
 
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+          example: 42
+
+        - name: object_id
+          in: path
+          required: true
+
+          schema:
+            type: string
+            enum:
+              - BioProject
+              - BioSample
+              - Sequence
+              - Annotation
+              - Submission
+              - Experiment
+              - Run
+              - RunFile
+              - Analysis
+              - AnalysisFile
+              - IDF
+              - SDRF
+              - ADF
+              - RawDataFile
+              - ProcessedDataFile
+              - MAF
+              - Excel
+              - VariantCallFile
+
+        - name: path
+          in: path
+          required: true
+
+          schema:
+            type: string
+
+          example: dest/mybiosample.xml
+
       responses:
         '302':
           description: Redirect to the file.
@@ -544,6 +556,58 @@ components:
       scheme: bearer
 
   schemas:
+    Request:
+      type: object
+      required: [id, url, status, validity, validation_reports, submission]
+
+      properties:
+        id:
+          type: integer
+
+        url:
+          type: string
+          format: uri
+
+        status:
+          type: string
+
+          enum:
+            - waiting
+            - processing
+            - finished
+
+        validity:
+          type:
+            - string
+            - 'null'
+
+          enum:
+            - valid
+            - invalid
+            - error
+            - null
+
+        validation_reports:
+          type: array
+
+          items:
+            $ref: '#/components/schemas/ValidationReport'
+
+        submission:
+          type:
+            - object
+            - 'null'
+
+          required: [id, url]
+
+          properties:
+            id:
+              type: string
+
+            url:
+              type: string
+              format: uri
+
     Submission:
       type: object
       required: [id, url, created_at, db, objects]
