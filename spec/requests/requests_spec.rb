@@ -14,7 +14,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
 
     expect(response.parsed_body.deep_symbolize_keys).to eq(
       status:   'finished',
-      validity: 'valid',
+      validity: nil,
 
       validation_reports: [
         {
