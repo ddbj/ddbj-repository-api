@@ -3,9 +3,21 @@ volumes:
 
 services:
   rails: &rails-local
+    environment:
+      DISABLE_SSL: 'true'
+
+    extra_hosts:
+      - keycloak.localhost:host-gateway
+      - ddbj-repository.localhost:host-gateway
+
     volumes:
-      - ./tmp/home:/mnt/home
-      - ./tmp/repository:/mnt/repository
+      - ../tmp/home:/data/home
+      - repository:/data/repository
 
   sidekiq:
     <<: *rails-local
+
+  minio:
+    ports:
+      - 9000:9000
+      - 9001:9001

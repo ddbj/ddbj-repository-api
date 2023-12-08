@@ -1,8 +1,28 @@
 volumes:
   postgres:
   redis:
+  minio:
 
 services:
+  varnish:
+    build: ../docker/varnish
+    user: root # https://github.com/varnish/docker-varnish/issues/53
+
+    environment:
+      VARNISH_HTTP_PORT: 8080
+
+    ports:
+      - ${VARNISH_PORT:?}:8080
+
+    tmpfs:
+      - /var/lib/varnish/varnishd:exec
+
+    depends_on:
+      rails:
+        condition: service_started
+      minio-setup:
+        condition: service_completed_successfully
+
   rails: &rails
     build:
       context: ..
@@ -14,25 +34,28 @@ services:
         RUBY_VERSION:
 
     environment:
-      DATABASE_URL:       postgresql://postgres@postgres/ddbj_repository
-      DDBJ_VALIDATOR_URL: http://host.docker.internal:18840/api
-      HTTP_PORT:
+      DATABASE_URL:            postgresql://postgres@postgres/ddbj_repository
+      DDBJ_VALIDATOR_URL:      http://host.docker.internal:18840/api
+      MINIO_ACCESS_KEY_ID:
+      MINIO_BUCKET:            uploads
+      MINIO_ENDPOINT:
+      MINIO_SECRET_ACCESS_KEY:
       OIDC_CLIENT_ID:
       OIDC_ISSUER_URL:
-      REDIS_URL:          redis://redis
-      REPOSITORY_DIR:     /mnt/repository
+      REDIS_URL:               redis://redis
+      REPOSITORY_DIR:          /data/repository
+      RUBY_YJIT_ENABLE:        'true'
       SECRET_KEY_BASE:
       STAGE:
-      USER_HOME_DIR:      /mnt/home
-
-    ports:
-      - ${HTTP_PORT:?}:3000
+      USER_HOME_DIR:           /data/home
 
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_started
+      minio-setup:
+        condition: service_completed_successfully
 
     extra_hosts:
       - host.docker.internal:host-gateway
@@ -70,3 +93,44 @@ services:
       interval: 1s
       timeout: 3s
       retries: 30
+
+  minio:
+    image: minio/minio:RELEASE.2023-12-07T04-16-00Z
+    command: [server, /data, --console-address, ':9001']
+
+    environment:
+      MINIO_ROOT_PASSWORD:
+      MINIO_ROOT_USER:
+
+    volumes:
+      - minio:/data
+
+    healthcheck:
+      test: [CMD, mc, ready, local]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  minio-setup:
+    image: minio/mc:RELEASE.2023-02-28T00-12-59Z # https://min.io/docs/minio/linux/reference/minio-mc-admin/mc-admin-policy.html
+
+    entrypoint:
+      - bash
+      - -xc
+      - |
+          set -e
+
+          mc alias set minio http://minio:9000 $${MINIO_ROOT_USER:?} $${MINIO_ROOT_PASSWORD:?}
+          mc mb --ignore-existing minio/uploads
+          mc admin user add minio $${MINIO_ACCESS_KEY_ID:?} $${MINIO_SECRET_ACCESS_KEY:?}
+          mc admin policy set minio readwrite user=$${MINIO_ACCESS_KEY_ID:?}
+
+    environment:
+      MINIO_ACCESS_KEY_ID:
+      MINIO_ROOT_PASSWORD:
+      MINIO_ROOT_USER:
+      MINIO_SECRET_ACCESS_KEY:
+
+    depends_on:
+      minio:
+        condition: service_healthy

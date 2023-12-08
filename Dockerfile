@@ -52,8 +52,8 @@ COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
 
 # Run and own only the runtime files as a non-root user for security
-RUN mkdir /repository /.local
-RUN chown -R ${APP_UID}:${APP_GID} db log storage tmp /repository /.local
+RUN mkdir /.local
+RUN chown -R ${APP_UID}:${APP_GID} db log tmp /.local
 USER ${APP_UID}:${APP_GID}
 
 RUN bundle exec submission-excel2xml download_xsd

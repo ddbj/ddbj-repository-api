@@ -1,0 +1,1 @@
+render partial: 'submission', collection: @submissions, as: :submission
