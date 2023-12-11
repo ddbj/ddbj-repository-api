@@ -15,6 +15,8 @@ security:
 paths:
   /api-key:
     get:
+      description: Get login URL.
+
       tags:
         - Authentication
 
@@ -40,6 +42,8 @@ paths:
 
   /api-key/regenerate:
     post:
+      description: Re-generate API key.
+
       tags:
         - Authentication
 
@@ -65,6 +69,8 @@ paths:
 
   /me:
     get:
+      description: Get your login ID.
+
       tags:
         - Authentication
 
@@ -90,6 +96,8 @@ paths:
 
   /validations/bioproject/via-file:
     post:
+      description: Run validation for BioProject.
+
       tags:
         - Run
 
@@ -108,6 +116,8 @@ paths:
 
   /submissions/bioproject/via-file:
     post:
+      description: Submit files to BioProject.
+
       tags:
         - Run
 
@@ -126,6 +136,8 @@ paths:
 
   /validations/biosample/via-file:
     post:
+      description: Run validation for BioSample.
+
       tags:
         - Run
 
@@ -144,6 +156,8 @@ paths:
 
   /submissions/biosample/via-file:
     post:
+      description: Submit files to BioSample.
+
       tags:
         - Run
 
@@ -162,6 +176,8 @@ paths:
 
   /validations/trad/via-file:
     post:
+      description: Run validation for Trad.
+
       tags:
         - Run
 
@@ -180,6 +196,8 @@ paths:
 
   /submissions/trad/via-file:
     post:
+      description: Submit files to Trad.
+
       tags:
         - Run
 
@@ -198,6 +216,8 @@ paths:
 
   /validations/dra/via-file:
     post:
+      description: Run validation for DRA.
+
       tags:
         - Run
 
@@ -216,6 +236,8 @@ paths:
 
   /submissions/dra/via-file:
     post:
+      description: Submit files to DRA.
+
       tags:
         - Run
 
@@ -234,6 +256,8 @@ paths:
 
   /validations/gea/via-file:
     post:
+      description: Run validation for GEA.
+
       tags:
         - Run
 
@@ -252,6 +276,8 @@ paths:
 
   /submissions/gea/via-file:
     post:
+      description: Submit files to GEA.
+
       tags:
         - Run
 
@@ -270,6 +296,8 @@ paths:
 
   /validations/metabobank/via-file:
     post:
+      description: Run validation for MetaboBank.
+
       tags:
         - Run
 
@@ -288,6 +316,8 @@ paths:
 
   /submissions/metabobank/via-file:
     post:
+      description: Submit files to MetaboBank.
+
       tags:
         - Run
 
@@ -306,6 +336,8 @@ paths:
 
   /validations/jvar/via-file:
     post:
+      description: Run validation for JVar.
+
       tags:
         - Run
 
@@ -324,6 +356,8 @@ paths:
 
   /submissions/jvar/via-file:
     post:
+      description: Submit files to JVar.
+
       tags:
         - Run
 
@@ -342,6 +376,8 @@ paths:
 
   /requests:
     get:
+      description: Get your requests.
+
       tags:
         - Request
 
@@ -396,6 +432,8 @@ paths:
 
   /requests/{id}:
     get:
+      description: Get the request.
+
       tags:
         - Request
 
@@ -473,6 +511,8 @@ paths:
 
   /submissions:
     get:
+      description: Get your submissions.
+
       tags:
         - Submission
 
@@ -493,6 +533,8 @@ paths:
 
   /submissions/{id}:
     get:
+      description: Get the submission.
+
       tags:
         - Submission
 
@@ -520,6 +562,8 @@ paths:
 
   /submissions/{id}/files/{object_id}/{path}:
     get:
+      description: Get the submission file content.
+
       tags:
         - Submission
 

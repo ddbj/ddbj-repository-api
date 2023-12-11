@@ -17,6 +17,8 @@ security:
 paths:
   /api-key:
     get:
+      description: Get login URL.
+
       tags:
         - Authentication
 
@@ -42,6 +44,8 @@ paths:
 
   /api-key/regenerate:
     post:
+      description: Re-generate API key.
+
       tags:
         - Authentication
 
@@ -67,6 +71,8 @@ paths:
 
   /me:
     get:
+      description: Get your login ID.
+
       tags:
         - Authentication
 
@@ -93,6 +99,8 @@ paths:
   <%- dbs.each do |db| -%>
   /validations/<%= db[:id].downcase %>/via-file:
     post:
+      description: Run validation for <%= db[:id] %>.
+
       tags:
         - Run
 
@@ -111,6 +119,8 @@ paths:
 
   /submissions/<%= db[:id].downcase %>/via-file:
     post:
+      description: Submit files to <%= db[:id] %>.
+
       tags:
         - Run
 
@@ -130,6 +140,8 @@ paths:
   <%- end -%>
   /requests:
     get:
+      description: Get your requests.
+
       tags:
         - Request
 
@@ -184,6 +196,8 @@ paths:
 
   /requests/{id}:
     get:
+      description: Get the request.
+
       tags:
         - Request
 
@@ -261,6 +275,8 @@ paths:
 
   /submissions:
     get:
+      description: Get your submissions.
+
       tags:
         - Submission
 
@@ -281,6 +297,8 @@ paths:
 
   /submissions/{id}:
     get:
+      description: Get the submission.
+
       tags:
         - Submission
 
@@ -308,6 +326,8 @@ paths:
 
   /submissions/{id}/files/{object_id}/{path}:
     get:
+      description: Get the submission file content.
+
       tags:
         - Submission
 
