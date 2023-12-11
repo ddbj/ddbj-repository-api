@@ -11,7 +11,7 @@ class Validators
   end
 
   def validate(&on_finish)
-    begin
+    ActiveRecord::Base.transaction do
       @request.processing!
 
       db = DB.find { _1[:id] == @request.db }
@@ -26,10 +26,14 @@ class Validators
       else
         @request.objs.base.validity_valid! unless @request.objs.base.validity
       end
-    ensure
-      @request.finished!
-    end
 
-    on_finish&.call
+      raise ActiveRecord::Rollback if @request.reload.canceled?
+    ensure
+      unless @request.canceled?
+        @request.finished!
+
+        on_finish&.call
+      end
+    end
   end
 end

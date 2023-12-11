@@ -7,6 +7,18 @@ class RequestsController < ApplicationController
     @request = requests.find(params[:id])
   end
 
+  def destroy
+    request = requests.find(params[:id])
+
+    if request.finished? || request.canceled?
+      head :conflict
+    else
+      request.canceled!
+
+      head :no_content
+    end
+  end
+
   private
 
   def requests

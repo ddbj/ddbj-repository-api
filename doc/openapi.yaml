@@ -445,6 +445,32 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+    delete:
+      description: Cancel the request.
+
+      tags:
+        - Request
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+          example: 42
+
+      responses:
+        '204':
+          description: Request canceled successfully.
+
+        '409':
+          description: Request already canceled or finished.
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
   /submissions:
     get:
       tags:
@@ -575,6 +601,7 @@ components:
             - waiting
             - processing
             - finished
+            - canceled
 
         validity:
           type:
