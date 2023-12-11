@@ -17,6 +17,7 @@ gem 'pg'
 gem 'puma'
 gem 'rack-cors'
 gem 'sidekiq'
+gem 'sidekiq-scheduler'
 gem 'submission-excel2xml', github: 'ddbj/submission-excel2xml'
 
 group :development do
