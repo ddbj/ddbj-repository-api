@@ -83,4 +83,18 @@ RSpec.describe 'requests', type: :request, authorized: true do
       }
     )
   end
+
+  describe 'DELETE /api/requests/:id' do
+    example 'if request is waiting' do
+      delete '/api/requests/101'
+
+      expect(response).to have_http_status(:no_content)
+    end
+
+    example 'if request is finished' do
+      delete '/api/requests/100'
+
+      expect(response).to have_http_status(:conflict)
+    end
+  end
 end

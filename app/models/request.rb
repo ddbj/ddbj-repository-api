@@ -8,7 +8,7 @@ class Request < ApplicationRecord
     end
   end
 
-  enum :status, %w(waiting processing finished).index_by(&:to_sym)
+  enum :status, %w(waiting processing finished canceled).index_by(&:to_sym)
 
   validates :db, inclusion: {in: DB.map { _1[:id] }}
 

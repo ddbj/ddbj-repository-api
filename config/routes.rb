@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :requests, only: %i(index show)
+    resources :requests, only: %i(index show destroy)
 
     resources :submissions, only: %i(index show) do
       resources :files, only: %i(show), path: 'files/:object_id', param: :path, constraints: {path: /.+/}
