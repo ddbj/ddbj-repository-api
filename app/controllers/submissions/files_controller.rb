@@ -1,4 +1,4 @@
-class FilesController < ApplicationController
+class Submissions::FilesController < ApplicationController
   class NotFound < StandardError; end
 
   include ActiveStorage::SetCurrent if Rails.env.test?

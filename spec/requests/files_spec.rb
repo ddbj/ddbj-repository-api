@@ -9,7 +9,7 @@ RSpec.describe 'download submission files', type: :request, authorized: true do
       create :submission, request:, dway_user:, id: 42, created_at: '2023-12-05'
     end
 
-    get '/api/submissions/X-42/files/Excel/dest%2Fmyexcel.xlsx'
+    get '/api/submissions/X-42/files/Excel/dest/myexcel.xlsx'
 
     expect(response).to redirect_to(%r(\Ahttp://www.example.com/rails/active_storage/disk/))
   end
