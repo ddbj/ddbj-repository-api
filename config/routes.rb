@@ -1,6 +1,14 @@
 dbs = DB.map { _1[:id].downcase }
 
 Rails.application.routes.draw do
+  concern :via_file do
+    collection do
+      scope ':db', db: Regexp.union(*dbs) do
+        resource :via_file, only: %i(create), path: 'via-file'
+      end
+    end
+  end
+
   resource :auth, only: %i() do
     get :login
     get :callback
@@ -17,23 +25,21 @@ Rails.application.routes.draw do
 
     resource :me, only: %i(show)
 
-    namespace :submissions do
-      scope ':db' do
-        resource :via_file, only: %i(create), path: 'via-file', constraints: {db: Regexp.union(*dbs)}
+    resources :validations, only: %i() do
+      scope module: 'validations' do
+        concerns :via_file
       end
     end
 
-    namespace :validations do
-      scope ':db' do
-        resource :via_file, only: %i(create), path: 'via-file', constraints: {db: Regexp.union(*dbs)}
+    resources :submissions, only: %i(index show) do
+      scope module: 'submissions' do
+        concerns :via_file
+
+        get 'files/:object_id/*path' => 'files#show', format: false, as: 'file'
       end
     end
 
     resources :requests, only: %i(index show destroy)
-
-    resources :submissions, only: %i(index show) do
-      resources :files, only: %i(show), path: 'files/:object_id', param: :path, constraints: {path: /.+/}
-    end
   end
 
   get 'up' => 'rails/health#show', as: :rails_health_check
