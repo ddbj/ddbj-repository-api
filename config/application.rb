@@ -42,3 +42,5 @@ module DdbjRepository
     config.api_only = true
   end
 end
+
+require 'exception_notification/rails'

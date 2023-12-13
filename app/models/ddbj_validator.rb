@@ -7,7 +7,7 @@ class DdbjValidator
         begin
           res = client.post('validation', obj._id.downcase => part)
           validated, details = wait_for_finish(res.body.fetch(:uuid))
-        rescue => e
+        rescue Faraday::Error => e
           obj.update! validity: 'error', validation_details: {error: e.message}
 
           Rails.logger.error e
@@ -30,6 +30,7 @@ class DdbjValidator
     @client ||= Faraday.new(url: ENV.fetch('DDBJ_VALIDATOR_URL')) {|f|
       f.request :multipart
 
+      f.response :raise_error
       f.response :json, parser_options: {symbolize_names: true}
       f.response :logger unless Rails.env.test?
     }
