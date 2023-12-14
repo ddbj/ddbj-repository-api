@@ -27,7 +27,7 @@ RSpec.describe 'submissions', type: :request, authorized: true do
 
           files: [
             path: 'dest/myexcel.xlsx',
-            url:  'http://www.example.com/api/submissions/X-42/files/Excel/dest/myexcel.xlsx'
+            url:  'http://www.example.com/api/submissions/X-42/files/dest/myexcel.xlsx'
           ]
         ]
       }
@@ -50,7 +50,7 @@ RSpec.describe 'submissions', type: :request, authorized: true do
 
         files: [
           path: 'dest/myexcel.xlsx',
-          url:  'http://www.example.com/api/submissions/X-42/files/Excel/dest/myexcel.xlsx'
+          url:  'http://www.example.com/api/submissions/X-42/files/dest/myexcel.xlsx'
         ]
       ]
     )
