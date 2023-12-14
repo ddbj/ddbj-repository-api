@@ -7,6 +7,7 @@ gem 'rails', '~> 7.1.0'
 gem 'aws-sdk-s3'
 gem 'base62-rb'
 gem 'bootsnap', require: false
+gem 'exception_notification'
 gem 'faraday'
 gem 'faraday-multipart'
 gem 'jb'

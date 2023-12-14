@@ -1,13 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Validators, type: :model do
-  example 'cancel request' do
-    request   = create(:request, db: 'BioProject')
-    validator = double(:validator)
+  let(:request) {
+    create(:request, db: 'BioProject') {|request|
+      create :obj, request:, _id: 'BioProject', file: uploaded_file(name: 'mybioproject.xml')
+    }
+  }
 
-    allow(validator).to receive(:validate) { request.canceled! }
+  let(:validator) { double(:validator) }
 
+  before do
     stub_const 'Validators::VALIDATOR', 'ddbj' => validator
+  end
+
+  example 'cancel request' do
+    allow(validator).to receive(:validate) { request.canceled! }
 
     on_finish_called = false
 
@@ -15,8 +22,42 @@ RSpec.describe Validators, type: :model do
       on_finish_called = true
     end
 
-    expect(request.status).to eq('canceled')
-    expect(request.validity).to be_nil
+    expect(request).to have_attributes(
+      status:   'canceled',
+      validity: nil
+    )
+
     expect(on_finish_called).to eq(false)
+  end
+
+  example 'if error occured during validation, validity is error' do
+    allow(validator).to receive(:validate).and_raise(StandardError.new('something went wrong'))
+
+    expect_any_instance_of(ErrorSubscriber).to receive(:report)
+
+    Validators.new(request).validate
+
+    expect(request).to have_attributes(
+      status:   'finished',
+      validity: 'error'
+    )
+
+    expect(request.validation_reports).to contain_exactly(
+      {
+        object_id: '_base',
+        path:      nil,
+        validity:  'error',
+
+        details: {
+          'error' => 'something went wrong'
+        }
+      },
+      {
+        object_id: 'BioProject',
+        path:      'mybioproject.xml',
+        validity:  nil,
+        details:   nil
+      }
+    )
   end
 end
