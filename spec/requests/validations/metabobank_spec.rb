@@ -5,7 +5,7 @@ RSpec.describe 'MetaboBank: submit via file', type: :request, authorized: true d
     create :dway_user, api_key: 'API_KEY'
   end
 
-  example do
+  example 'happy case' do
     post '/api/validations/metabobank/via-file', params: {
       IDF:  {file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')},
       SDRF: {file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')}

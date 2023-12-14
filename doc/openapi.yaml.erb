@@ -117,6 +117,9 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
   /submissions/<%= db[:id].downcase %>/via-file:
     post:
       description: Submit files to <%= db[:id] %>.
@@ -136,6 +139,9 @@ paths:
 
         '401':
           $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
   <%- end -%>
   /requests:
@@ -324,7 +330,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /submissions/{id}/files/{object_id}/{path}:
+  /submissions/{id}/files/{path}:
     get:
       description: Get the submission file content.
 
@@ -341,20 +347,11 @@ paths:
 
           example: 42
 
-        - name: object_id
-          in: path
-          required: true
-
-          schema:
-            type: string
-            enum:
-              <%- dbs.flat_map { _1[:objects] }.map { _1[:id] }.uniq.each do |obj_id| -%>
-              - <%= obj_id %>
-              <%- end -%>
-
         - name: path
           in: path
           required: true
+          style: matrix
+          explode: true
 
           schema:
             type: string
@@ -620,6 +617,14 @@ components:
       type: string
       description: Relative path from the user's home directory.
 
+    Error:
+      type: object
+      required: [error]
+
+      properties:
+        error:
+          type: string
+
   requestBodies:
     <%- dbs.each do |db| -%>
     <%= db[:id] %>ViaFile:
@@ -677,12 +682,7 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            required: [error]
-
-            properties:
-              error:
-                type: string
+            $ref: '#/components/schemas/Error'
 
           example:
             error: path must be in /home/alice
@@ -693,12 +693,18 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            required: [error]
-
-            properties:
-              error:
-                type: string
+            $ref: '#/components/schemas/Error'
 
           example:
             error: Unauthorized
+
+    UnprocessableEntity:
+      description: Invalid parameter or payload was specified.
+
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+          example:
+            error: 'Validation failed: Path is duplicated: mybiosample.xml'

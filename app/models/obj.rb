@@ -10,6 +10,7 @@ class Obj < ApplicationRecord
   enum :validity, %w(valid invalid error).index_by(&:to_sym), prefix: true
 
   validate :destination_must_not_be_malformed
+  validate :path_must_be_unique_in_request
 
   def path
     base? ? nil : [destination, file.filename.sanitized].reject(&:blank?).join('/')
@@ -37,5 +38,13 @@ class Obj < ApplicationRecord
     tmp = Pathname.new('/tmp').join(SecureRandom.uuid)
 
     errors.add :destination, 'is malformed path' unless tmp.contain?(tmp.join(destination))
+  end
+
+  def path_must_be_unique_in_request
+    return if base?
+
+    if request.objs.to_a.without(self).any? { path == _1.path }
+      errors.add :path, "is duplicated: #{path}"
+    end
   end
 end

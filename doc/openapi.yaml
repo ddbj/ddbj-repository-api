@@ -114,6 +114,9 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
   /submissions/bioproject/via-file:
     post:
       description: Submit files to BioProject.
@@ -133,6 +136,9 @@ paths:
 
         '401':
           $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
   /validations/biosample/via-file:
     post:
@@ -154,6 +160,9 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
   /submissions/biosample/via-file:
     post:
       description: Submit files to BioSample.
@@ -173,6 +182,9 @@ paths:
 
         '401':
           $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
   /validations/trad/via-file:
     post:
@@ -194,6 +206,9 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
   /submissions/trad/via-file:
     post:
       description: Submit files to Trad.
@@ -213,6 +228,9 @@ paths:
 
         '401':
           $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
   /validations/dra/via-file:
     post:
@@ -234,6 +252,9 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
   /submissions/dra/via-file:
     post:
       description: Submit files to DRA.
@@ -253,6 +274,9 @@ paths:
 
         '401':
           $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
   /validations/gea/via-file:
     post:
@@ -274,6 +298,9 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
   /submissions/gea/via-file:
     post:
       description: Submit files to GEA.
@@ -293,6 +320,9 @@ paths:
 
         '401':
           $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
   /validations/metabobank/via-file:
     post:
@@ -314,6 +344,9 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
   /submissions/metabobank/via-file:
     post:
       description: Submit files to MetaboBank.
@@ -333,6 +366,9 @@ paths:
 
         '401':
           $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
   /validations/jvar/via-file:
     post:
@@ -354,6 +390,9 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
   /submissions/jvar/via-file:
     post:
       description: Submit files to JVar.
@@ -373,6 +412,9 @@ paths:
 
         '401':
           $ref: '#/components/responses/Unauthorized'
+
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
 
   /requests:
     get:
@@ -560,7 +602,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /submissions/{id}/files/{object_id}/{path}:
+  /submissions/{id}/files/{path}:
     get:
       description: Get the submission file content.
 
@@ -577,35 +619,11 @@ paths:
 
           example: 42
 
-        - name: object_id
-          in: path
-          required: true
-
-          schema:
-            type: string
-            enum:
-              - BioProject
-              - BioSample
-              - Sequence
-              - Annotation
-              - Submission
-              - Experiment
-              - Run
-              - RunFile
-              - Analysis
-              - AnalysisFile
-              - IDF
-              - SDRF
-              - ADF
-              - RawDataFile
-              - ProcessedDataFile
-              - MAF
-              - Excel
-              - VariantCallFile
-
         - name: path
           in: path
           required: true
+          style: matrix
+          explode: true
 
           schema:
             type: string
@@ -1862,6 +1880,14 @@ components:
       type: string
       description: Relative path from the user's home directory.
 
+    Error:
+      type: object
+      required: [error]
+
+      properties:
+        error:
+          type: string
+
   requestBodies:
     BioProjectViaFile:
       content:
@@ -2073,12 +2099,7 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            required: [error]
-
-            properties:
-              error:
-                type: string
+            $ref: '#/components/schemas/Error'
 
           example:
             error: path must be in /home/alice
@@ -2089,12 +2110,18 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            required: [error]
-
-            properties:
-              error:
-                type: string
+            $ref: '#/components/schemas/Error'
 
           example:
             error: Unauthorized
+
+    UnprocessableEntity:
+      description: Invalid parameter or payload was specified.
+
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+          example:
+            error: 'Validation failed: Path is duplicated: mybiosample.xml'

@@ -65,4 +65,16 @@ RSpec.describe ViaFile, type: :controller do
       'dest/baz/qux'
     )
   end
+
+  example 'if path is duplicated' do
+    params = ActionController::Parameters.new(
+      db:   'metabobank',
+      IDF:  {file: uploaded_file(name: 'idf.txt')},
+      SDRF: {file: uploaded_file(name: 'idf.txt')}
+    )
+
+    expect {
+      controller.create_request_from_params(user, params)
+    }.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Path is duplicated: idf.txt')
+  end
 end

@@ -35,7 +35,7 @@ Rails.application.routes.draw do
       scope module: 'submissions' do
         concerns :via_file
 
-        get 'files/:object_id/*path' => 'files#show', format: false, as: 'file'
+        get 'files/*path' => 'files#show', format: false, as: 'file'
       end
     end
 
