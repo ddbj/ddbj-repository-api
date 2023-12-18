@@ -16,12 +16,13 @@ RSpec.describe 'requests', type: :request, authorized: true do
 
     expect(response).to have_http_status(:ok)
 
-    expect(response.parsed_body.map(&:deep_symbolize_keys)).to eq([
+    expect(response.parsed_body.map(&:deep_symbolize_keys)).to match([
       {
-        id:       100,
-        url:      'http://www.example.com/api/requests/100',
-        status:   'finished',
-        validity: nil,
+        id:         100,
+        url:        'http://www.example.com/api/requests/100',
+        created_at: instance_of(String),
+        status:     'finished',
+        validity:   nil,
 
         validation_reports: [
           {
@@ -38,10 +39,11 @@ RSpec.describe 'requests', type: :request, authorized: true do
         }
       },
       {
-        id:       101,
-        url:      'http://www.example.com/api/requests/101',
-        status:   'waiting',
-        validity: nil,
+        id:         101,
+        url:        'http://www.example.com/api/requests/101',
+        created_at: instance_of(String),
+        status:     'waiting',
+        validity:   nil,
 
         validation_reports: [
           {
@@ -62,11 +64,12 @@ RSpec.describe 'requests', type: :request, authorized: true do
 
     expect(response).to have_http_status(:ok)
 
-    expect(response.parsed_body.deep_symbolize_keys).to eq(
-      id:       100,
-      url:      'http://www.example.com/api/requests/100',
-      status:   'finished',
-      validity: nil,
+    expect(response.parsed_body.deep_symbolize_keys).to match(
+      id:         100,
+      url:        'http://www.example.com/api/requests/100',
+      created_at: instance_of(String),
+      status:     'finished',
+      validity:   nil,
 
       validation_reports: [
         {
