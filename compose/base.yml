@@ -35,6 +35,8 @@ services:
     environment:
       DATABASE_URL:            postgresql://postgres@postgres/ddbj_repository
       DDBJ_VALIDATOR_URL:      http://host.docker.internal:18840/api
+      EXCEPTION_RECIPIENTS:
+      EXCEPTION_SENDER:        mass@ddbj.nig.ac.jp
       MINIO_ACCESS_KEY_ID:
       MINIO_BUCKET:            uploads
       MINIO_ENDPOINT:
@@ -45,6 +47,12 @@ services:
       REPOSITORY_DIR:          /data/repository
       RUBY_YJIT_ENABLE:        'true'
       SECRET_KEY_BASE:
+      SMTP_ADDRESS:
+      SMTP_AUTHENTICATION:
+      SMTP_DOMAIN:
+      SMTP_PASSWORD:
+      SMTP_PORT:
+      SMTP_USERNAME:
       STAGE:
       USER_HOME_DIR:           /data/home
 
