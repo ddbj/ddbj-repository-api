@@ -25,18 +25,18 @@ class DatabaseCommand extends Command {
           `--${id.toLowerCase()}.file <path:file>`,
           `Path to ${id} file (${ext})`,
           {
-            required:  optional !== true,
-            collect:   multiple === true
-          }
+            required: optional !== true,
+            collect: multiple === true,
+          },
         );
 
         cmd = cmd.option(
           `--${id.toLowerCase()}.destination <path:string>`,
           'Destination path of this file',
           {
-            collect: multiple === true
-          }
-        )
+            collect: multiple === true,
+          },
+        );
       }
 
       cmd = cmd.action(async (opts) => {
@@ -92,7 +92,7 @@ type Obj = {
 async function createRequest(endpoint: string, apiKey: string, resource: string, db: Db, opts: Record<string, any>) {
   const body = new FormData();
 
-  const promises = db.objects.map(obj => {
+  const promises = db.objects.map((obj) => {
     return [obj, opts[obj.id.toLowerCase()]];
   }).filter(([_obj, entry]) => entry).map(async ([obj, entry]) => {
     const key = obj.multiple ? `${obj.id}[]` : obj!.id;
