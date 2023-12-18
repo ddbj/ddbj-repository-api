@@ -89,16 +89,12 @@ type Obj = {
   multiple?: boolean;
 };
 
-function zip(array1, array2) {
-  return array1.map((e, i) => [e, array2[i]]);
-}
-
 async function createRequest(endpoint: string, apiKey: string, resource: string, db: Db, opts: Record<string, any>) {
   const body = new FormData();
 
   const promises = db.objects.map(obj => {
     return [obj, opts[obj.id.toLowerCase()]];
-  }).filter(([obj, entry]) => entry).map(async ([obj, entry]) => {
+  }).filter(([_obj, entry]) => entry).map(async ([obj, entry]) => {
     const key = obj.multiple ? `${obj.id}[]` : obj!.id;
 
     for (const [path, destination] of zip([entry.file].flat(), [entry.destination].flat())) {
@@ -145,4 +141,8 @@ async function waitForRequestFinished(url: string, apiKey: string) {
   await delay(1000);
 
   return waitForRequestFinished(url, apiKey);
+}
+
+function zip<T, U>(lhs: T[], rhs: U[]) {
+  return lhs.map((e, i) => [e, rhs[i]]);
 }
