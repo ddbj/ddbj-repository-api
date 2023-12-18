@@ -8,7 +8,7 @@ import { colors } from 'cliffy/ansi/colors.ts';
 import dbs from './db.json' with { type: 'json' };
 import { Config } from './config.ts';
 
-class DatabaseCommand extends Command<{ file: Record<string, string> }> {
+class DatabaseCommand extends Command {
   constructor({ endpoint, apiKey }: Config, resource: string, descriptionFn: (db: Db) => string) {
     super();
 
@@ -22,20 +22,31 @@ class DatabaseCommand extends Command<{ file: Record<string, string> }> {
 
       for (const { id, ext, optional, multiple } of db.objects) {
         cmd = cmd.option(
-          `--file.${id.toLowerCase()} <path:file>`,
+          `--${id.toLowerCase()}.file <path:file>`,
           `Path to ${id} file (${ext})`,
-          { required: optional !== true, collect: multiple === true },
+          {
+            required:  optional !== true,
+            collect:   multiple === true
+          }
         );
+
+        cmd = cmd.option(
+          `--${id.toLowerCase()}.destination <path:string>`,
+          'Destination path of this file',
+          {
+            collect: multiple === true
+          }
+        )
       }
 
-      cmd = cmd.action(async ({ file }) => {
+      cmd = cmd.action(async (opts) => {
         if (!apiKey) {
           console.log(`First you need to log in; run ${colors.bold('`ddbj-repository auth login`')}.`);
 
           return;
         }
 
-        const { request } = await createRequest(endpoint, apiKey, resource, db, file);
+        const { request } = await createRequest(endpoint, apiKey, resource, db, opts);
         const payload = await waitForRequestFinished(request.url, apiKey);
 
         colorize(JSON.stringify(payload, null, 2));
@@ -78,17 +89,26 @@ type Obj = {
   multiple?: boolean;
 };
 
-async function createRequest(endpoint: string, apiKey: string, resource: string, db: Db, files: Record<string, string | string[]>) {
+function zip(array1, array2) {
+  return array1.map((e, i) => [e, array2[i]]);
+}
+
+async function createRequest(endpoint: string, apiKey: string, resource: string, db: Db, opts: Record<string, any>) {
   const body = new FormData();
 
-  const promises = Object.entries(files).flatMap(([id, paths]) => {
-    return [paths].flat().map((path) => [id, path]);
-  }).map(async ([id, path]) => {
-    const obj = db.objects.find((obj) => obj.id.toLowerCase() === id);
-    const key = obj?.multiple ? `${obj.id}[]` : obj!.id;
-    const file = await fetch(toFileUrl(resolve(path)));
+  const promises = db.objects.map(obj => {
+    return [obj, opts[obj.id.toLowerCase()]];
+  }).filter(([obj, entry]) => entry).map(async ([obj, entry]) => {
+    const key = obj.multiple ? `${obj.id}[]` : obj!.id;
 
-    body.append(`${key}[file]`, await file.blob(), basename(path));
+    for (const [path, destination] of zip([entry.file].flat(), [entry.destination].flat())) {
+      const file = await fetch(toFileUrl(resolve(path)));
+      body.append(`${key}[file]`, await file.blob(), basename(path));
+
+      if (destination) {
+        body.append(`${key}[destination]`, destination);
+      }
+    }
   });
 
   await Promise.all(promises);
