@@ -83,8 +83,18 @@ Rails.application.configure do
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
-  config.active_job.queue_adapter = :sidekiq
-  config.active_storage.service   = :minio
-  config.assume_ssl               = ENV['DISABLE_SSL'] != 'true'
-  config.force_ssl                = ENV['DISABLE_SSL'] != 'true'
+  config.action_mailer.delivery_method = :smtp
+  config.active_job.queue_adapter      = :sidekiq
+  config.active_storage.service        = :minio
+  config.assume_ssl                    = ENV['DISABLE_SSL'] != 'true'
+  config.force_ssl                     = ENV['DISABLE_SSL'] != 'true'
+
+  config.action_mailer.smtp_settings = {
+    address:        ENV.fetch('SMTP_ADDRESS'),
+    port:           ENV.fetch('SMTP_PORT'),
+    domain:         ENV.fetch('SMTP_DOMAIN'),
+    user_name:      ENV.fetch('SMTP_USERNAME'),
+    password:       ENV.fetch('SMTP_PASSWORD'),
+    authentication: ENV.fetch('SMTP_AUTHENTICATION')
+  }
 end
