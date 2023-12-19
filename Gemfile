@@ -30,5 +30,6 @@ group :test do
   gem 'factory_bot_rails', group: :development
   gem 'rspec-default_http_header'
   gem 'rspec-rails', group: :development
+  gem 'test-prof'
   gem 'webmock', require: 'webmock/rspec'
 end
