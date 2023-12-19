@@ -5,10 +5,10 @@ RSpec.describe SubmitJob, type: :job do
     Pathname.new(ENV.fetch('REPOSITORY_DIR')).join('alice/submissions', submission.public_id)
   end
 
-  let(:alice) { create(:dway_user, uid: 'alice') }
+  let(:alice) { create(:user, uid: 'alice') }
 
   example 'simple' do
-    request = create(:request, db: 'MetaboBank', dway_user: alice) {|request|
+    request = create(:request, db: 'MetaboBank', user: alice) {|request|
       create :obj, request:, _id: 'IDF',  file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')
     }
@@ -34,7 +34,7 @@ RSpec.describe SubmitJob, type: :job do
   end
 
   example 'complex' do
-    request = create(:request, db: 'MetaboBank', dway_user: alice) {|request|
+    request = create(:request, db: 'MetaboBank', user: alice) {|request|
       create :obj, request:, _id: 'IDF',  file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')
       create :obj, request:, _id: 'MAF',  file: file_fixture_upload('metabobank/valid/MTBKS231.maf.txt')

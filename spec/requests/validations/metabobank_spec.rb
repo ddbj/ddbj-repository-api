@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'MetaboBank: submit via file', type: :request, authorized: true do
   before do
-    create :dway_user, api_key: 'API_KEY'
+    create :user, api_key: 'API_KEY'
   end
 
   example 'happy case' do

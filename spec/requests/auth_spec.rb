@@ -25,7 +25,7 @@ RSpec.describe 'authentication', type: :request do
   before do
     allow_any_instance_of(AuthsController).to receive(:oidc_client) { oidc_client }
 
-    allow(DwayUser).to receive(:generate_api_key) { 'API_KEY' }
+    allow(User).to receive(:generate_api_key) { 'API_KEY' }
     allow(oidc_client).to receive(:authorization_uri) { 'http://example.com/auth/authorization' }
   end
 
@@ -59,7 +59,7 @@ RSpec.describe 'authentication', type: :request do
 
         expect(response).to have_http_status(:ok)
 
-        user = DwayUser.find_by!(sub: 'SUB')
+        user = User.find_by!(sub: 'SUB')
 
         expect(user).to have_attributes(
           uid:         'alice',
@@ -92,7 +92,7 @@ RSpec.describe 'authentication', type: :request do
           api_key: 'API_KEY'
         )
 
-        user = DwayUser.find_by!(sub: 'SUB')
+        user = User.find_by!(sub: 'SUB')
 
         expect(user).to have_attributes(
           uid:         'alice',

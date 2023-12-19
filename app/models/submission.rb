@@ -1,5 +1,5 @@
 class Submission < ApplicationRecord
-  belongs_to :dway_user, optional: true
+  belongs_to :user, optional: true
 
   has_one :request
 
@@ -12,6 +12,6 @@ class Submission < ApplicationRecord
   end
 
   def dir
-    Pathname.new(ENV.fetch('REPOSITORY_DIR')).join(dway_user.uid, 'submissions', public_id)
+    Pathname.new(ENV.fetch('REPOSITORY_DIR')).join(user.uid, 'submissions', public_id)
   end
 end

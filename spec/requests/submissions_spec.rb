@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe 'submissions', type: :request, authorized: true do
   before do
-    dway_user = create(:dway_user, api_key: 'API_KEY')
+    user = create(:user, api_key: 'API_KEY')
 
     create :request, db: 'JVar' do |request|
       create :obj, request:, _id: 'Excel', file: uploaded_file(name: 'myexcel.xlsx'), destination: 'dest'
-      create :submission, request:, dway_user:, id: 42, created_at: '2023-12-05'
+      create :submission, request:, user:, id: 42, created_at: '2023-12-05'
     end
   end
 

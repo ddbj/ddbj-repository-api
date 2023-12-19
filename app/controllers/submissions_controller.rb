@@ -10,6 +10,6 @@ class SubmissionsController < ApplicationController
   private
 
   def submissions
-    dway_user.submissions.includes(request: {objs: :file_blob})
+    current_user.submissions.includes(request: {objs: :file_blob})
   end
 end

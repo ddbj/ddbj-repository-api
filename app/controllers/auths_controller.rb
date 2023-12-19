@@ -71,7 +71,7 @@ class AuthsController < ApplicationController
   def upsert_user_by_access_token(access_token)
     userinfo = access_token.userinfo!
 
-    DwayUser.find_or_initialize_by(sub: userinfo.sub).tap {|user|
+    User.find_or_initialize_by(sub: userinfo.sub).tap {|user|
       user.update! **{
         uid:         userinfo.preferred_username,
         ddbj_member: userinfo.raw_attributes['account_type_number'] == 3

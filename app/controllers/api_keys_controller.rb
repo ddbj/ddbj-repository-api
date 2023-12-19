@@ -8,10 +8,10 @@ class ApiKeysController < ApplicationController
   end
 
   def regenerate
-    dway_user.update! api_key: DwayUser.generate_api_key
+    current_user.update! api_key: User.generate_api_key
 
     render json: {
-      api_key: dway_user.api_key
+      api_key: current_user.api_key
     }
   end
 end

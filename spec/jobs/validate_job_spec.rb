@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe ValidateJob, type: :job do
-  let(:alice) { create(:dway_user, uid: 'alice') }
+  let(:alice) { create(:user, uid: 'alice') }
 
   example do
-    request = create(:request, db: 'MetaboBank', dway_user: alice) {|request|
+    request = create(:request, db: 'MetaboBank', user: alice) {|request|
       create :obj, request:, _id: 'IDF',  file: file_fixture_upload('metabobank/valid/MTBKS231.idf.txt')
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')
     }

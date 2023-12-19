@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe 'requests', type: :request, authorized: true do
   before do
-    dway_user = create(:dway_user, api_key: 'API_KEY')
+    user = create(:user, api_key: 'API_KEY')
 
-    create :request, dway_user:, id: 100, status: 'finished' do |request|
-      create :submission, request:, dway_user:, id: 200
+    create :request, user:, id: 100, status: 'finished' do |request|
+      create :submission, request:, user:, id: 200
     end
 
-    create :request, dway_user:, id: 101, status: 'waiting'
+    create :request, user:, id: 101, status: 'waiting'
   end
 
   example 'GET /api/requests' do
