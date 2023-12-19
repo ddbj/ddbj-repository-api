@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe 'authentication', type: :request do
   def userinfo(account_type_number:)
     double(:userinfo, {
-      sub:                'SUB',
       preferred_username: 'alice',
 
       raw_attributes: {
@@ -59,10 +58,9 @@ RSpec.describe 'authentication', type: :request do
 
         expect(response).to have_http_status(:ok)
 
-        user = User.find_by!(sub: 'SUB')
+        user = User.find_by!(uid: 'alice')
 
         expect(user).to have_attributes(
-          uid:         'alice',
           api_key:     'API_KEY',
           ddbj_member: false
         )
@@ -92,10 +90,9 @@ RSpec.describe 'authentication', type: :request do
           api_key: 'API_KEY'
         )
 
-        user = User.find_by!(sub: 'SUB')
+        user = User.find_by!(uid: 'alice')
 
         expect(user).to have_attributes(
-          uid:         'alice',
           api_key:     'API_KEY',
           ddbj_member: true
         )

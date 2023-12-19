@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_19_044058) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_19_162228) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -75,11 +75,10 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_19_044058) do
     t.string "uid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "sub", null: false
     t.string "api_key", null: false
     t.boolean "ddbj_member", default: false, null: false
     t.index ["api_key"], name: "index_users_on_api_key", unique: true
-    t.index ["sub"], name: "index_users_on_sub", unique: true
+    t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
