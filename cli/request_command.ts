@@ -1,7 +1,7 @@
 import { Command } from 'cliffy/command/mod.ts';
-import { Table } from "cliffy/table/mod.ts";
+import { Table } from 'cliffy/table/mod.ts';
 import { colorize } from 'json_colorize/mod.ts';
-import { colors } from "cliffy/ansi/colors.ts";
+import { colors } from 'cliffy/ansi/colors.ts';
 
 import { Config } from './config.ts';
 import { requireLogin } from './util.ts';
@@ -27,7 +27,7 @@ export default class extends Command {
         if (!apiKey) requireLogin();
 
         showRequest(endpoint, apiKey!, id);
-      })
+      });
   }
 }
 
@@ -56,17 +56,17 @@ async function listRequests(endpoint: string, apiKey: string) {
   const headers = ['ID', 'Created', 'Status', 'Validity', 'Submission'];
   const table = Table.from([headers.map(colors.bold.yellow)]);
 
-  table.push(headers.map(header => colors.bold.yellow('-'.repeat(header.length))));
+  table.push(headers.map((header) => colors.bold.yellow('-'.repeat(header.length))));
 
-  requests.forEach(req => {
+  requests.forEach((req) => {
     table.push([
       colors.bold(req.id.toString()),
       req.created_at,
       req.status,
       req.validity,
-      req.submission?.id || ''
+      req.submission?.id || '',
     ]);
-  })
+  });
 
   table.render();
 }

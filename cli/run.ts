@@ -15,7 +15,7 @@ const main: Command = new Command()
   .command('auth', new AuthCommand(config))
   .command('validate', new ValidateCommand(config))
   .command('submit', new SubmitCommand(config))
-  .command('request',new RequestCommand(config))
+  .command('request', new RequestCommand(config))
   .command('completion', new CompletionsCommand())
   .reset();
 
