@@ -1,7 +1,5 @@
 class Submission < ApplicationRecord
-  belongs_to :dway_user, optional: true
-
-  has_one :request
+  belongs_to :request
 
   after_destroy do |submission|
     submission.dir.rmtree
@@ -12,6 +10,6 @@ class Submission < ApplicationRecord
   end
 
   def dir
-    Pathname.new(ENV.fetch('REPOSITORY_DIR')).join(dway_user.uid, 'submissions', public_id)
+    Pathname.new(ENV.fetch('REPOSITORY_DIR')).join(request.user.uid, 'submissions', public_id)
   end
 end

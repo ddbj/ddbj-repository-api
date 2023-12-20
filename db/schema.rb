@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_04_061829) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_19_170419) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,17 +42,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_061829) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "dway_users", force: :cascade do |t|
-    t.string "uid", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "sub", null: false
-    t.string "api_key", null: false
-    t.boolean "ddbj_member", default: false, null: false
-    t.index ["api_key"], name: "index_dway_users_on_api_key", unique: true
-    t.index ["sub"], name: "index_dway_users_on_sub", unique: true
-  end
-
   create_table "objs", force: :cascade do |t|
     t.bigint "request_id", null: false
     t.string "_id", null: false
@@ -65,27 +54,34 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_061829) do
   end
 
   create_table "requests", force: :cascade do |t|
-    t.bigint "dway_user_id"
-    t.bigint "submission_id"
+    t.bigint "user_id", null: false
     t.string "db", null: false
     t.string "status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["dway_user_id"], name: "index_requests_on_dway_user_id"
-    t.index ["submission_id"], name: "index_requests_on_submission_id"
+    t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
   create_table "submissions", force: :cascade do |t|
-    t.bigint "dway_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["dway_user_id"], name: "index_submissions_on_dway_user_id"
+    t.bigint "request_id", null: false
+    t.index ["request_id"], name: "index_submissions_on_request_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "uid", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "api_key", null: false
+    t.boolean "ddbj_member", default: false, null: false
+    t.index ["api_key"], name: "index_users_on_api_key", unique: true
+    t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "objs", "requests"
-  add_foreign_key "requests", "dway_users"
-  add_foreign_key "requests", "submissions"
-  add_foreign_key "submissions", "dway_users"
+  add_foreign_key "requests", "users"
+  add_foreign_key "submissions", "requests"
 end

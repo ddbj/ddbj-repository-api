@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'me', type: :request, authorized: true do
   before do
-    create :dway_user, uid: 'alice', api_key: 'API_KEY'
+    create :user, uid: 'alice', api_key: 'API_KEY'
   end
 
   example do

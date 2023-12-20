@@ -14,10 +14,10 @@ RSpec.describe 'API key' do
   end
 
   describe 'POST /api/api-key/regenerate', authorized: true do
-    let!(:user) { create(:dway_user, api_key: 'API_KEY') }
+    let!(:user) { create(:user, api_key: 'API_KEY') }
 
     before do
-      allow(DwayUser).to receive(:generate_api_key) { 'NEW_API_KEY' }
+      allow(User).to receive(:generate_api_key) { 'NEW_API_KEY' }
     end
 
     example do

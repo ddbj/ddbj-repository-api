@@ -22,6 +22,6 @@ class RequestsController < ApplicationController
   private
 
   def requests
-    dway_user.requests.where(created_at: 1.month.ago..).includes(:submission)
+    current_user.requests.includes(:submission)
   end
 end

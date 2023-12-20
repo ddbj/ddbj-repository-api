@@ -1,6 +1,6 @@
-class DwayUser < ApplicationRecord
-  has_many :requests,    dependent: :nullify
-  has_many :submissions, dependent: :nullify
+class User < ApplicationRecord
+  has_many :requests
+  has_many :submissions, through: :requests
 
   before_create do |user|
     user.api_key ||= self.class.generate_api_key

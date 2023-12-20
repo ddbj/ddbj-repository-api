@@ -1,6 +1,6 @@
 class Request < ApplicationRecord
-  belongs_to :dway_user,  optional: true
-  belongs_to :submission, optional: true
+  belongs_to :user
+  has_one :submission, dependent: :restrict_with_exception
 
   has_many :objs, dependent: :destroy do
     def base

@@ -2,7 +2,7 @@ class Validations::ViaFilesController < ApplicationController
   include ViaFile
 
   def create
-    request = create_request_from_params(dway_user, params)
+    request = create_request_from_params(current_user, params)
 
     ValidateJob.perform_later request
 

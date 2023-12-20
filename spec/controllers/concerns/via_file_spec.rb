@@ -5,7 +5,7 @@ RSpec.describe ViaFile, type: :controller do
     include ViaFile
   end
 
-  let(:user) { create(:dway_user, uid: 'alice') }
+  let(:user) { create(:user, uid: 'alice') }
 
   example 'simple' do
     params = ActionController::Parameters.new(

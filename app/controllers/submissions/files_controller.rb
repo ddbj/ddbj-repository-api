@@ -10,7 +10,7 @@ class Submissions::FilesController < ApplicationController
   end
 
   def show
-    submission = dway_user.submissions.find(params[:submission_id].delete_prefix('X-'))
+    submission = current_user.submissions.find(params[:submission_id].delete_prefix('X-'))
 
     raise NotFound unless obj = submission.request.objs.find { _1.path == params[:path] }
 
