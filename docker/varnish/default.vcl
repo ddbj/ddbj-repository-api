@@ -11,7 +11,10 @@ backend minio {
 sub vcl_recv {
   if (req.url ~ "^/uploads/") {
     set req.backend_hint = minio;
-    unset req.http.Authorization;
+
+    if (req.url ~ "X-Amz-Signature=") {
+      unset req.http.Authorization;
+    }
 
     return (pipe);
   } else {

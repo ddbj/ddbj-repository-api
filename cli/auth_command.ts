@@ -120,7 +120,7 @@ async function obtainAPIKey(endpoint: string, accessToken: string) {
     body: accessToken,
   });
 
-  ensureSuccess(res);
+  await ensureSuccess(res);
 
   const { api_key } = await res.json();
 
@@ -134,7 +134,7 @@ async function fetchUid(endpoint: string, apiKey: string) {
     },
   });
 
-  ensureSuccess(res);
+  await ensureSuccess(res);
 
   const { uid } = await res.json();
 
