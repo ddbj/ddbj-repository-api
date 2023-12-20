@@ -1,9 +1,10 @@
 import { Command } from 'cliffy/command/mod.ts';
-import { colorize } from 'https://deno.land/x/json_colorize@0.1.0/mod.ts';
-import { colors } from 'cliffy/ansi/colors.ts';
-import { Table } from "https://deno.land/x/cliffy@v1.0.0-rc.3/table/mod.ts";
+import { Table } from "cliffy/table/mod.ts";
+import { colorize } from 'json_colorize/mod.ts';
+import { colors } from "cliffy/ansi/colors.ts";
 
 import { Config } from './config.ts';
+import { requireLogin } from './util.ts';
 
 export default class extends Command {
   constructor({ endpoint, apiKey }: Config) {
@@ -14,20 +15,72 @@ export default class extends Command {
       .action(() => this.showHelp())
       .command('list')
       .description('Get your requests.')
-      .action(async () => {
-        const res = await fetch(`${endpoint}/requests`, {
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-          },
-        });
+      .action(() => {
+        if (!apiKey) requireLogin();
 
-        if (!res.ok) throw new Error();
+        listRequests(endpoint, apiKey!);
+      })
+      .command('show')
+      .description('Get the request.')
+      .arguments('<id:number>')
+      .action((_opts, id) => {
+        if (!apiKey) requireLogin();
 
-        // colorize(JSON.stringify(await res.json(), null, 2));
-        const header = ['id', 'status', 'validity', 'submission'];
-        const requests = Table.from([header]);
-        (await res.json()).forEach(req => requests.push([req.id, req.status, req.validity, req.submission]));
-        requests.render();
+        showRequest(endpoint, apiKey!, id);
       })
   }
+}
+
+type Request = {
+  id: number;
+  created_at: string;
+  status: string;
+  validity: string;
+
+  submission?: {
+    id: string;
+  };
+};
+
+async function listRequests(endpoint: string, apiKey: string) {
+  const res = await fetch(`${endpoint}/requests`, {
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+    },
+  });
+
+  if (!res.ok) throw new Error();
+
+  const requests: Request[] = await res.json();
+
+  const headers = ['ID', 'Created', 'Status', 'Validity', 'Submission'];
+  const table = Table.from([headers.map(colors.bold.yellow)]);
+
+  table.push(headers.map(header => colors.bold.yellow('-'.repeat(header.length))));
+
+  requests.forEach(req => {
+    table.push([
+      colors.bold(req.id.toString()),
+      req.created_at,
+      req.status,
+      req.validity,
+      req.submission?.id || ''
+    ]);
+  })
+
+  table.render();
+}
+
+async function showRequest(endpoint: string, apiKey: string, id: number) {
+  const res = await fetch(`${endpoint}/requests/${id}`, {
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+    },
+  });
+
+  if (!res.ok) throw new Error();
+
+  const request = await res.json();
+
+  colorize(JSON.stringify(request, null, 2));
 }
