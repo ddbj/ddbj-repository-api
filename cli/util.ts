@@ -17,7 +17,7 @@ export async function ensureSuccess(res: Response) {
 
     colorize(JSON.stringify(payload, null, 2));
   } else {
-    console.error(`Error: ${res.status} ${await res.text()}`)
+    console.error(`Error: ${res.status} ${await res.text()}`);
   }
 
   Deno.exit(1);
