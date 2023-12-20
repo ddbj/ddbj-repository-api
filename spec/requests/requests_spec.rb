@@ -5,7 +5,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
     user = create(:user, api_key: 'API_KEY')
 
     create :request, user:, id: 100, status: 'finished' do |request|
-      create :submission, request:, user:, id: 200
+      create :submission, request:, id: 200
     end
 
     create :request, user:, id: 101, status: 'waiting'

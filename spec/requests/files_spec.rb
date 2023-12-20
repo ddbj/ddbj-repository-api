@@ -6,7 +6,7 @@ RSpec.describe 'download submission files', type: :request, authorized: true do
 
     create :request, user:, db: 'JVar' do |request|
       create :obj, request:, _id: 'Excel', file: uploaded_file(name: 'myexcel.xlsx'), destination: 'dest'
-      create :submission, request:, user:, id: 42, created_at: '2023-12-05'
+      create :submission, request:, id: 42, created_at: '2023-12-05'
     end
 
     get '/api/submissions/X-42/files/dest/myexcel.xlsx'

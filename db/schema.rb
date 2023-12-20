@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_19_164239) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_19_170419) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,20 +55,18 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_19_164239) do
 
   create_table "requests", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "submission_id"
     t.string "db", null: false
     t.string "status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["submission_id"], name: "index_requests_on_submission_id"
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
   create_table "submissions", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_submissions_on_user_id"
+    t.bigint "request_id", null: false
+    t.index ["request_id"], name: "index_submissions_on_request_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -84,7 +82,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_19_164239) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "objs", "requests"
-  add_foreign_key "requests", "submissions"
   add_foreign_key "requests", "users"
-  add_foreign_key "submissions", "users"
+  add_foreign_key "submissions", "requests"
 end

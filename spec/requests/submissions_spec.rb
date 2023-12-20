@@ -4,9 +4,9 @@ RSpec.describe 'submissions', type: :request, authorized: true do
   before do
     user = create(:user, api_key: 'API_KEY')
 
-    create :request, db: 'JVar' do |request|
+    create :request, user:, db: 'JVar' do |request|
       create :obj, request:, _id: 'Excel', file: uploaded_file(name: 'myexcel.xlsx'), destination: 'dest'
-      create :submission, request:, user:, id: 42, created_at: '2023-12-05'
+      create :submission, request:, id: 42, created_at: '2023-12-05'
     end
   end
 

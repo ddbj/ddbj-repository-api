@@ -1,5 +1,3 @@
 FactoryBot.define do
-  factory :submission do
-    user
-  end
+  factory :submission
 end

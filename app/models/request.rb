@@ -1,6 +1,6 @@
 class Request < ApplicationRecord
   belongs_to :user
-  belongs_to :submission, optional: true
+  has_one :submission, dependent: :destroy
 
   has_many :objs, dependent: :destroy do
     def base
