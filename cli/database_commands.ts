@@ -2,11 +2,11 @@ import { basename, resolve, toFileUrl } from 'std/path/mod.ts';
 import { delay } from 'std/async/mod.ts';
 
 import { Command } from 'cliffy/command/mod.ts';
-import { colorize } from 'https://deno.land/x/json_colorize@0.1.0/mod.ts';
-import { colors } from 'cliffy/ansi/colors.ts';
+import { colorize } from 'json_colorize/mod.ts';
 
 import dbs from './db.json' with { type: 'json' };
 import { Config } from './config.ts';
+import { ensureSuccess } from './util.ts';
 
 class DatabaseCommand extends Command {
   constructor({ endpoint, apiKey }: Config, resource: string, descriptionFn: (db: Db) => string) {
@@ -40,14 +40,10 @@ class DatabaseCommand extends Command {
       }
 
       cmd = cmd.action(async (opts) => {
-        if (!apiKey) {
-          console.log(`First you need to log in; run ${colors.bold('`ddbj-repository auth login`')}.`);
+        if (!apiKey) requireLogin();
 
-          return;
-        }
-
-        const { request } = await createRequest(endpoint, apiKey, resource, db, opts);
-        const payload = await waitForRequestFinished(request.url, apiKey);
+        const { request } = await createRequest(endpoint, apiKey!, resource, db, opts);
+        const payload = await waitForRequestFinished(request.url, apiKey!);
 
         colorize(JSON.stringify(payload, null, 2));
       });
@@ -120,7 +116,7 @@ async function createRequest(endpoint: string, apiKey: string, resource: string,
     },
   );
 
-  if (!res.ok) throw new Error(res.statusText);
+  ensureSuccess(res);
 
   return await res.json();
 }
@@ -132,7 +128,7 @@ async function waitForRequestFinished(url: string, apiKey: string) {
     },
   });
 
-  if (!res.ok) throw new Error(res.statusText);
+  ensureSuccess(res);
 
   const payload = await res.json();
 

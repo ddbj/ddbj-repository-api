@@ -6,6 +6,7 @@
   },
   "imports": {
     "cliffy/": "https://deno.land/x/cliffy@v1.0.0-rc.3/",
+    "json_colorize/": "https://deno.land/x/json_colorize@0.1.0/",
     "std/": "https://deno.land/std@0.206.0/"
   },
   "fmt": {

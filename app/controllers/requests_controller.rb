@@ -11,11 +11,15 @@ class RequestsController < ApplicationController
     request = requests.find(params[:id])
 
     if request.finished? || request.canceled?
-      head :conflict
+      render json: {
+        error: "Request already #{request.status}."
+      }, status: :conflict
     else
       request.canceled!
 
-      head :no_content
+      render json: {
+        message: 'Request canceled successfully.'
+      }
     end
   end
 

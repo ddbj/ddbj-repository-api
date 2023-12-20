@@ -6,6 +6,7 @@ import { colors } from 'cliffy/ansi/colors.ts';
 import { open } from 'https://deno.land/x/open@v0.0.6/index.ts';
 
 import { Config, writeConfig } from './config.ts';
+import { ensureSuccess } from './util.ts';
 
 export default class extends Command {
   constructor({ issuer, endpoint, apiKey }: Config) {
@@ -119,7 +120,7 @@ async function obtainAPIKey(endpoint: string, accessToken: string) {
     body: accessToken,
   });
 
-  if (!res.ok) throw res;
+  ensureSuccess(res);
 
   const { api_key } = await res.json();
 
@@ -133,7 +134,7 @@ async function fetchUid(endpoint: string, apiKey: string) {
     },
   });
 
-  if (!res.ok) throw res;
+  ensureSuccess(res);
 
   const { uid } = await res.json();
 
