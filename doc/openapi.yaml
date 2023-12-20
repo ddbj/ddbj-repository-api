@@ -542,14 +542,29 @@ paths:
           example: 42
 
       responses:
-        '204':
+        '200':
           description: Request canceled successfully.
+
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [message]
+
+                properties:
+                  message:
+                    type: string
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
         '409':
           description: Request already canceled or finished.
 
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /submissions:
     get:
