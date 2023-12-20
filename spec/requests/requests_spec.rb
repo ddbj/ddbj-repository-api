@@ -91,7 +91,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
     example 'if request is waiting' do
       delete '/api/requests/101'
 
-      expect(response).to have_http_status(:no_content)
+      expect(response).to have_http_status(:ok)
     end
 
     example 'if request is finished' do
