@@ -6,6 +6,7 @@ import { colorize } from 'json_colorize/mod.ts';
 
 import dbs from './db.json' with { type: 'json' };
 import { Config } from './config.ts';
+import { ensureSuccess } from './util.ts';
 
 class DatabaseCommand extends Command {
   constructor({ endpoint, apiKey }: Config, resource: string, descriptionFn: (db: Db) => string) {
@@ -115,7 +116,7 @@ async function createRequest(endpoint: string, apiKey: string, resource: string,
     },
   );
 
-  if (!res.ok) throw new Error(res.statusText);
+  ensureSuccess(res);
 
   return await res.json();
 }
@@ -127,7 +128,7 @@ async function waitForRequestFinished(url: string, apiKey: string) {
     },
   });
 
-  if (!res.ok) throw new Error(res.statusText);
+  ensureSuccess(res);
 
   const payload = await res.json();
 

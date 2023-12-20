@@ -4,7 +4,7 @@ import { colorize } from 'json_colorize/mod.ts';
 import { colors } from 'cliffy/ansi/colors.ts';
 
 import { Config } from './config.ts';
-import { requireLogin } from './util.ts';
+import { ensureSuccess, requireLogin } from './util.ts';
 
 export default class extends Command {
   constructor({ endpoint, apiKey }: Config) {
@@ -27,6 +27,14 @@ export default class extends Command {
         if (!apiKey) requireLogin();
 
         showRequest(endpoint, apiKey!, id);
+      })
+      .command('cancel')
+      .description('Cancel the request.')
+      .arguments('<id:number>')
+      .action((_opts, id) => {
+        if (!apiKey) requireLogin();
+
+        cancelRequest(endpoint, apiKey!, id);
       });
   }
 }
@@ -49,7 +57,7 @@ async function listRequests(endpoint: string, apiKey: string) {
     },
   });
 
-  if (!res.ok) throw new Error();
+  ensureSuccess(res);
 
   const requests: Request[] = await res.json();
 
@@ -78,9 +86,25 @@ async function showRequest(endpoint: string, apiKey: string, id: number) {
     },
   });
 
-  if (!res.ok) throw new Error();
+  ensureSuccess(res);
 
-  const request = await res.json();
+  const payload = await res.json();
 
-  colorize(JSON.stringify(request, null, 2));
+  colorize(JSON.stringify(payload, null, 2));
+}
+
+async function cancelRequest(endpoint: string, apiKey: string, id: number) {
+  const res = await fetch(`${endpoint}/requests/${id}`, {
+    method: 'DELETE',
+
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+    },
+  });
+
+  ensureSuccess(res);
+
+  const payload = await res.json();
+
+  colorize(JSON.stringify(payload, null, 2));
 }
