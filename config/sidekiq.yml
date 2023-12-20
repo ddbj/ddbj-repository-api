@@ -2,5 +2,7 @@ max_retries: 12 # About < 12 hours. Ref: https://github.com/mperham/sidekiq/wiki
 
 :scheduler:
   :schedule:
+    DestroyStaledRequestsJob:
+      cron: '0 0 3 * * *'
     PurgeUnattachedUploadsJob:
-      every: 6h
+      cron: '0 5 3 * * *'
