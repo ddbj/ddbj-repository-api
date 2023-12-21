@@ -9,17 +9,15 @@ export type Config = {
 };
 
 export const defaultConfig = {
-  endpoint: 'http://localhost:3000/api',
-  issuer: 'http://keycloak.localhost:8080/auth/realms/master',
+  endpoint: 'https://repository-dev.ddbj.nig.ac.jp/api',
+  issuer: 'https://accounts-staging.ddbj.nig.ac.jp/auth/realms/master'
 };
 
 export async function readConfig() {
   try {
-    const { default: _default } = await import(configFilePath, { with: { type: 'json' } });
-
-    return _default;
+    return JSON.parse(await Deno.readTextFile(configFilePath));
   } catch (err) {
-    if (err instanceof TypeError) {
+    if (err.name === 'NotFound') {
       return {};
     } else {
       throw err;
