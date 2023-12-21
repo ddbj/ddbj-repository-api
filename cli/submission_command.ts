@@ -11,47 +11,50 @@ export default class extends Command {
     super();
 
     return this
-      .description('Manage requests.')
+      .description('Manage submissions.')
       .action(() => this.showHelp())
       .command('list')
-      .description('Get your requests.')
+      .description('Get your submissions.')
       .action(() => {
         if (!apiKey) requireLogin();
 
-        listRequests(endpoint, apiKey!);
+        listSubmissions(endpoint, apiKey!);
       })
       .command('show')
-      .description('Get the request.')
-      .arguments('<id:number>')
+      .description('Get the submission.')
+      .arguments('<id:string>')
       .action((_opts, id) => {
         if (!apiKey) requireLogin();
 
-        showRequest(endpoint, apiKey!, id);
+        showSubmission(endpoint, apiKey!, id);
       })
-      .command('cancel')
-      .description('Cancel the request.')
-      .arguments('<id:number>')
-      .action((_opts, id) => {
+      .command('get-file')
+      .description('Get the content of submission file.')
+      .arguments('<id:string> <path:string>')
+      .action((_opts, id, path) => {
         if (!apiKey) requireLogin();
 
-        cancelRequest(endpoint, apiKey!, id);
+        getFile(endpoint, apiKey!, id, path);
       });
   }
 }
 
-type Request = {
-  id: number;
+type Submission = {
+  id: string;
   created_at: string;
-  status: string;
-  validity: string;
+  db: string;
 
-  submission?: {
+  objects: Array<{
     id: string;
-  };
+
+    files: Array<{
+      path: string;
+    }>;
+  }>;
 };
 
-async function listRequests(endpoint: string, apiKey: string) {
-  const res = await fetch(`${endpoint}/requests`, {
+async function listSubmissions(endpoint: string, apiKey: string) {
+  const res = await fetch(`${endpoint}/submissions`, {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
     },
@@ -59,28 +62,26 @@ async function listRequests(endpoint: string, apiKey: string) {
 
   await ensureSuccess(res);
 
-  const requests: Request[] = await res.json();
+  const submissions: Submission[] = await res.json();
 
-  const headers = ['ID', 'Created', 'Status', 'Validity', 'Submission'];
+  const headers = ['ID', 'Created', 'DB'];
   const table = Table.from([headers.map(colors.bold.yellow)]);
 
   table.push(headers.map((header) => colors.bold.yellow('-'.repeat(header.length))));
 
-  requests.forEach((req) => {
+  submissions.forEach((submission) => {
     table.push([
-      colors.bold(req.id.toString()),
-      req.created_at,
-      req.status,
-      req.validity,
-      req.submission?.id || '',
-    ]);
+      colors.bold(submission.id),
+      submission.created_at,
+      submission.db
+    ])
   });
 
   table.render();
 }
 
-async function showRequest(endpoint: string, apiKey: string, id: number) {
-  const res = await fetch(`${endpoint}/requests/${id}`, {
+async function showSubmission(endpoint: string, apiKey: string, id: string) {
+  const res = await fetch(`${endpoint}/submissions/${id}`, {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
     },
@@ -93,10 +94,8 @@ async function showRequest(endpoint: string, apiKey: string, id: number) {
   colorize(JSON.stringify(payload, null, 2));
 }
 
-async function cancelRequest(endpoint: string, apiKey: string, id: number) {
-  const res = await fetch(`${endpoint}/requests/${id}`, {
-    method: 'DELETE',
-
+async function getFile(endpoint: string, apiKey: string, id: string, path: string) {
+  const res = await fetch(`${endpoint}/submissions/${id}/files/${path}`, {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
     },
@@ -104,7 +103,5 @@ async function cancelRequest(endpoint: string, apiKey: string, id: number) {
 
   await ensureSuccess(res);
 
-  const payload = await res.json();
-
-  colorize(JSON.stringify(payload, null, 2));
+  console.log(await res.text());
 }

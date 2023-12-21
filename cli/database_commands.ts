@@ -116,7 +116,7 @@ async function createRequest(endpoint: string, apiKey: string, resource: string,
     },
   );
 
-  ensureSuccess(res);
+  await ensureSuccess(res);
 
   return await res.json();
 }
@@ -128,7 +128,7 @@ async function waitForRequestFinished(url: string, apiKey: string) {
     },
   });
 
-  ensureSuccess(res);
+  await ensureSuccess(res);
 
   const payload = await res.json();
 
