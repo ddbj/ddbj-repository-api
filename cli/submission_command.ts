@@ -60,15 +60,17 @@ async function listSubmissions(endpoint: string, apiKey: string) {
 
   table.push(headers.map((header) => colors.bold.yellow('-'.repeat(header.length))));
 
-  await paginatedFetch(`${endpoint}/submissions`, apiKey, async res => {
+  await paginatedFetch(`${endpoint}/submissions`, apiKey, async (res) => {
+    await ensureSuccess(res);
+
     const submissions: Submission[] = await res.json();
 
     submissions.forEach((submission) => {
       table.push([
         colors.bold(submission.id),
         submission.created_at,
-        submission.db
-      ])
+        submission.db,
+      ]);
     });
   });
 

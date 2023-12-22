@@ -57,7 +57,9 @@ async function listRequests(endpoint: string, apiKey: string) {
 
   table.push(headers.map((header) => colors.bold.yellow('-'.repeat(header.length))));
 
-  await paginatedFetch(`${endpoint}/requests`, apiKey, async res => {
+  await paginatedFetch(`${endpoint}/requests`, apiKey, async (res) => {
+    await ensureSuccess(res);
+
     const requests: Request[] = await res.json();
 
     requests.forEach((req) => {
