@@ -3,6 +3,7 @@ import { Table } from 'cliffy/table/mod.ts';
 import { colorize } from 'json_colorize/mod.ts';
 import { colors } from 'cliffy/ansi/colors.ts';
 
+import paginatedFetch from './paginated_fetch.ts';
 import { Config } from './config.ts';
 import { ensureSuccess, requireLogin } from './util.ts';
 
@@ -51,29 +52,23 @@ type Request = {
 };
 
 async function listRequests(endpoint: string, apiKey: string) {
-  const res = await fetch(`${endpoint}/requests`, {
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-    },
-  });
-
-  await ensureSuccess(res);
-
-  const requests: Request[] = await res.json();
-
   const headers = ['ID', 'Created', 'Status', 'Validity', 'Submission'];
   const table = Table.from([headers.map(colors.bold.yellow)]);
 
   table.push(headers.map((header) => colors.bold.yellow('-'.repeat(header.length))));
 
-  requests.forEach((req) => {
-    table.push([
-      colors.bold(req.id.toString()),
-      req.created_at,
-      req.status,
-      req.validity,
-      req.submission?.id || '',
-    ]);
+  await paginatedFetch(`${endpoint}/requests`, apiKey, async res => {
+    const requests: Request[] = await res.json();
+
+    requests.forEach((req) => {
+      table.push([
+        colors.bold(req.id.toString()),
+        req.created_at,
+        req.status,
+        req.validity,
+        req.submission?.id || '',
+      ]);
+    });
   });
 
   table.render();

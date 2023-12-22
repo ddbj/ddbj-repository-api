@@ -1,23 +1,143 @@
 require 'rails_helper'
 
 RSpec.describe 'requests', type: :request, authorized: true do
-  before do
-    user = create(:user, api_key: 'API_KEY')
+  let!(:user) { create_default(:user, api_key: 'API_KEY') }
 
-    create :request, user:, id: 100, status: 'finished' do |request|
-      create :submission, request:, id: 200
+  describe 'GET /api/requests' do
+    describe 'payload' do
+      before do
+        create :request, id: 100, status: 'finished' do |request|
+          create :submission, request:, id: 200
+        end
+
+        create :request, id: 101, status: 'waiting'
+      end
+
+      example do
+        get '/api/requests', as: :json
+
+        expect(response).to have_http_status(:ok)
+
+        expect(response.parsed_body.map(&:deep_symbolize_keys)).to match([
+          {
+            id:         101,
+            url:        'http://www.example.com/api/requests/101',
+            created_at: instance_of(String),
+            status:     'waiting',
+            validity:   nil,
+
+            validation_reports: [
+              {
+                object_id: '_base',
+                path:      nil,
+                validity:  nil,
+                details:   nil
+              }
+            ],
+
+            submission: nil
+          },
+          {
+            id:         100,
+            url:        'http://www.example.com/api/requests/100',
+            created_at: instance_of(String),
+            status:     'finished',
+            validity:   nil,
+
+            validation_reports: [
+              {
+                object_id: '_base',
+                path:      nil,
+                validity:  nil,
+                details:   nil
+              }
+            ],
+
+            submission: {
+              id:  'X-200',
+              url: 'http://www.example.com/api/submissions/X-200'
+            }
+          }
+        ])
+      end
     end
 
-    create :request, user:, id: 101, status: 'waiting'
+    describe 'pagination' do
+      before do
+        stub_const 'Pagy::DEFAULT', Pagy::DEFAULT.merge(items: 2)
+
+        create :request, id: 100
+        create :request, id: 101
+        create :request, id: 102
+        create :request, id: 103
+        create :request, id: 104
+      end
+
+      example 'page=1' do
+        get '/api/requests', as: :json
+
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body.map { _1['id'] }).to eq([104, 103])
+
+        expect(response.headers['Link'].split(/,\s*/)).to contain_exactly(
+          '<http://www.example.com/api/requests?page=1>; rel="first"',
+          '<http://www.example.com/api/requests?page=3>; rel="last"',
+          '<http://www.example.com/api/requests?page=2>; rel="next"'
+        )
+      end
+
+      example 'page=2' do
+        get '/api/requests?page=2', as: :json
+
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body.map { _1['id'] }).to eq([102, 101])
+
+        expect(response.headers['Link'].split(/,\s*/)).to contain_exactly(
+          '<http://www.example.com/api/requests?page=1>; rel="first"',
+          '<http://www.example.com/api/requests?page=3>; rel="last"',
+          '<http://www.example.com/api/requests?page=1>; rel="prev"',
+          '<http://www.example.com/api/requests?page=3>; rel="next"'
+        )
+      end
+
+      example 'page=3' do
+        get '/api/requests?page=3', as: :json
+
+        expect(response).to have_http_status(:ok)
+        expect(response.parsed_body.map { _1['id'] }).to eq([100])
+
+        expect(response.headers['Link'].split(/,\s*/)).to contain_exactly(
+          '<http://www.example.com/api/requests?page=1>; rel="first"',
+          '<http://www.example.com/api/requests?page=3>; rel="last"',
+          '<http://www.example.com/api/requests?page=2>; rel="prev"'
+        )
+      end
+
+      example 'out of range' do
+        get '/api/requests?page=4', as: :json
+
+        expect(response).to have_http_status(:bad_request)
+
+        expect(response.parsed_body.deep_symbolize_keys).to eq(
+          error: 'expected :page in 1..3; got 4'
+        )
+      end
+    end
   end
 
-  example 'GET /api/requests' do
-    get '/api/requests', as: :json
+  describe 'GET /api/requests/:id' do
+    before do
+      create :request, id: 100, status: 'finished' do |request|
+        create :submission, request:, id: 200
+      end
+    end
 
-    expect(response).to have_http_status(:ok)
+    example do
+      get '/api/requests/100', as: :json
 
-    expect(response.parsed_body.map(&:deep_symbolize_keys)).to match([
-      {
+      expect(response).to have_http_status(:ok)
+
+      expect(response.parsed_body.deep_symbolize_keys).to match(
         id:         100,
         url:        'http://www.example.com/api/requests/100',
         created_at: instance_of(String),
@@ -37,65 +157,24 @@ RSpec.describe 'requests', type: :request, authorized: true do
           id:  'X-200',
           url: 'http://www.example.com/api/submissions/X-200'
         }
-      },
-      {
-        id:         101,
-        url:        'http://www.example.com/api/requests/101',
-        created_at: instance_of(String),
-        status:     'waiting',
-        validity:   nil,
-
-        validation_reports: [
-          {
-            object_id: '_base',
-            path:      nil,
-            validity:  nil,
-            details:   nil
-          }
-        ],
-
-        submission: nil
-      }
-    ])
-  end
-
-  example 'GET /api/requests/:id' do
-    get '/api/requests/100', as: :json
-
-    expect(response).to have_http_status(:ok)
-
-    expect(response.parsed_body.deep_symbolize_keys).to match(
-      id:         100,
-      url:        'http://www.example.com/api/requests/100',
-      created_at: instance_of(String),
-      status:     'finished',
-      validity:   nil,
-
-      validation_reports: [
-        {
-          object_id: '_base',
-          path:      nil,
-          validity:  nil,
-          details:   nil
-        }
-      ],
-
-      submission: {
-        id:  'X-200',
-        url: 'http://www.example.com/api/submissions/X-200'
-      }
-    )
+      )
+    end
   end
 
   describe 'DELETE /api/requests/:id' do
+    before do
+      create :request, id: 100, status: 'waiting'
+      create :request, id: 101, status: 'finished'
+    end
+
     example 'if request is waiting' do
-      delete '/api/requests/101'
+      delete '/api/requests/100'
 
       expect(response).to have_http_status(:ok)
     end
 
     example 'if request is finished' do
-      delete '/api/requests/100'
+      delete '/api/requests/101'
 
       expect(response).to have_http_status(:conflict)
     end

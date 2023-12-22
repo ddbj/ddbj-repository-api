@@ -1,6 +1,14 @@
 class SubmissionsController < ApplicationController
+  include Pagination
+
   def index
-    @submissions = submissions.order(:id)
+    pagy, @submissions = pagy(submissions.order(id: :desc), page: params[:page])
+
+    headers['Link'] = pagination_link_header(pagy, :submissions)
+  rescue Pagy::OverflowError => e
+    render json: {
+      error: e.message
+    }, status: :bad_request
   end
 
   def show
