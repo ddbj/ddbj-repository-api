@@ -8,7 +8,7 @@ RSpec.describe 'me', type: :request, authorized: true do
   example do
     get '/api/me'
 
-    expect(response).to have_http_status(:ok)
+    expect(response).to conform_schema(200)
 
     expect(response.parsed_body.deep_symbolize_keys).to eq(
       uid: 'alice'

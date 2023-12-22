@@ -13,7 +13,7 @@ RSpec.describe 'submissions', type: :request, authorized: true do
   example 'GET /api/submissions' do
     get '/api/submissions', as: :json
 
-    expect(response).to have_http_status(:ok)
+    expect(response).to conform_schema(200)
 
     expect(response.parsed_body.map(&:deep_symbolize_keys)).to eq([
       {
@@ -37,7 +37,7 @@ RSpec.describe 'submissions', type: :request, authorized: true do
   example 'GET /api/submissions/:id' do
     get '/api/submissions/X-42', as: :json
 
-    expect(response).to have_http_status(:ok)
+    expect(response).to conform_schema(200)
 
     expect(response.parsed_body.deep_symbolize_keys).to eq(
       id:         'X-42',

@@ -11,7 +11,7 @@ RSpec.describe 'MetaboBank: submit via file', type: :request, authorized: true d
       SDRF: {file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')}
     }
 
-    expect(response).to have_http_status(:created)
+    expect(response).to conform_schema(201)
     expect(ValidateJob).to have_been_enqueued
   end
 end
