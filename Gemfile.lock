@@ -219,6 +219,7 @@ GEM
       validate_email
       validate_url
       webfinger (~> 2.0)
+    pagy (6.2.0)
     parallel (1.23.0)
     pg (1.5.4)
     psych (5.1.1.1)
@@ -367,6 +368,7 @@ DEPENDENCIES
   jb
   metabobank_tools!
   openid_connect
+  pagy
   parallel
   pg
   puma
