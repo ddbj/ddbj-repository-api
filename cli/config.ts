@@ -10,7 +10,7 @@ export type Config = {
 
 export const defaultConfig = {
   endpoint: 'https://repository-dev.ddbj.nig.ac.jp/api',
-  issuer: 'https://accounts-staging.ddbj.nig.ac.jp/auth/realms/master'
+  issuer: 'https://accounts-staging.ddbj.nig.ac.jp/auth/realms/master',
 };
 
 export async function readConfig() {
