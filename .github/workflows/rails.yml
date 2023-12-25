@@ -1,9 +1,9 @@
-name: test
+name: rails
 
 on: push
 
 jobs:
-  rails:
+  test:
     runs-on: ubuntu-latest
 
     services:
