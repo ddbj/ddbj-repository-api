@@ -877,24 +877,6 @@ components:
             - object
             - 'null'
 
-    BioProjectViaFileJSON:
-      type: object
-
-      required:
-        - BioProject
-
-      properties:
-        BioProject:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
     BioProjectViaFileFormDataBioProject:
       allOf:
         - oneOf:
@@ -920,24 +902,6 @@ components:
 
           properties:
             BioProject[destination]:
-              type: string
-
-    BioSampleViaFileJSON:
-      type: object
-
-      required:
-        - BioSample
-
-      properties:
-        BioSample:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
               type: string
 
     BioSampleViaFileFormDataBioSample:
@@ -966,44 +930,6 @@ components:
           properties:
             BioSample[destination]:
               type: string
-
-    TradViaFileJSON:
-      type: object
-
-      required:
-        - Sequence
-        - Annotation
-
-      properties:
-        Sequence:
-          type: array
-          minItems: 1
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
-
-        Annotation:
-          type: array
-          minItems: 1
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
 
     TradViaFileFormDataSequence:
       allOf:
@@ -1081,90 +1007,6 @@ components:
               minItems: 1
 
               items:
-                type: string
-
-    DRAViaFileJSON:
-      type: object
-
-      required:
-        - Submission
-        - Experiment
-        - Run
-        - RunFile
-
-      properties:
-        Submission:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-        Experiment:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-        Run:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-        RunFile:
-          type: array
-          minItems: 1
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
-
-        Analysis:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-        AnalysisFile:
-          type: array
-          minItems: 0
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
                 type: string
 
     DRAViaFileFormDataSubmission:
@@ -1343,81 +1185,6 @@ components:
               items:
                 type: string
 
-    GEAViaFileJSON:
-      type: object
-
-      required:
-        - IDF
-        - SDRF
-
-      properties:
-        IDF:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-        SDRF:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-        ADF:
-          type: array
-          minItems: 0
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
-
-        RawDataFile:
-          type: array
-          minItems: 0
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
-
-        ProcessedDataFile:
-          type: array
-          minItems: 0
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
-
     GEAViaFileFormDataIDF:
       allOf:
         - oneOf:
@@ -1573,92 +1340,6 @@ components:
 
               items:
                 type: string
-
-    MetaboBankViaFileJSON:
-      type: object
-
-      required:
-        - IDF
-        - SDRF
-
-      properties:
-        IDF:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-        SDRF:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-        MAF:
-          type: array
-          minItems: 0
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
-
-        RawDataFile:
-          type: array
-          minItems: 0
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
-
-        ProcessedDataFile:
-          type: array
-          minItems: 0
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
-
-        BioSample:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
 
     MetaboBankViaFileFormDataIDF:
       allOf:
@@ -1838,39 +1519,6 @@ components:
             BioSample[destination]:
               type: string
 
-    JVarViaFileJSON:
-      type: object
-
-      required:
-        - Excel
-
-      properties:
-        Excel:
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-
-        VariantCallFile:
-          type: array
-          minItems: 0
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
-
     JVarViaFileFormDataExcel:
       allOf:
         - oneOf:
@@ -1947,15 +1595,6 @@ components:
   requestBodies:
     BioProjectViaFile:
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BioProjectViaFileJSON'
-
-          example:
-            BioProject:
-              path: mybioproject.xml
-              destination: path/to/destination
-
         multipart/form-data:
           schema:
             allOf:
@@ -1963,15 +1602,6 @@ components:
 
     BioSampleViaFile:
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BioSampleViaFileJSON'
-
-          example:
-            BioSample:
-              path: mybiosample.xml
-              destination: path/to/destination
-
         multipart/form-data:
           schema:
             allOf:
@@ -1979,18 +1609,6 @@ components:
 
     TradViaFile:
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TradViaFileJSON'
-
-          example:
-            Sequence:
-              path: mysequence.fasta
-              destination: path/to/destination
-            Annotation:
-              path: myannotation.ann
-              destination: path/to/destination
-
         multipart/form-data:
           schema:
             allOf:
@@ -1999,30 +1617,6 @@ components:
 
     DRAViaFile:
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/DRAViaFileJSON'
-
-          example:
-            Submission:
-              path: mysubmission.xml
-              destination: path/to/destination
-            Experiment:
-              path: myexperiment.xml
-              destination: path/to/destination
-            Run:
-              path: myrun.xml
-              destination: path/to/destination
-            RunFile:
-              path: myrunfile.fastq
-              destination: path/to/destination
-            Analysis:
-              path: myanalysis.xml
-              destination: path/to/destination
-            AnalysisFile:
-              path: myanalysisfile.raw
-              destination: path/to/destination
-
         multipart/form-data:
           schema:
             allOf:
@@ -2035,27 +1629,6 @@ components:
 
     GEAViaFile:
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/GEAViaFileJSON'
-
-          example:
-            IDF:
-              path: myidf.idf.txt
-              destination: path/to/destination
-            SDRF:
-              path: mysdrf.sdrf.txt
-              destination: path/to/destination
-            ADF:
-              path: myadf.adf.txt
-              destination: path/to/destination
-            RawDataFile:
-              path: myrawdatafile.raw
-              destination: path/to/destination
-            ProcessedDataFile:
-              path: myprocesseddatafile.raw
-              destination: path/to/destination
-
         multipart/form-data:
           schema:
             allOf:
@@ -2067,30 +1640,6 @@ components:
 
     MetaboBankViaFile:
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/MetaboBankViaFileJSON'
-
-          example:
-            IDF:
-              path: myidf.idf.txt
-              destination: path/to/destination
-            SDRF:
-              path: mysdrf.sdrf.txt
-              destination: path/to/destination
-            MAF:
-              path: mymaf.maf.txt
-              destination: path/to/destination
-            RawDataFile:
-              path: myrawdatafile.raw
-              destination: path/to/destination
-            ProcessedDataFile:
-              path: myprocesseddatafile.raw
-              destination: path/to/destination
-            BioSample:
-              path: mybiosample.tsv
-              destination: path/to/destination
-
         multipart/form-data:
           schema:
             allOf:
@@ -2103,18 +1652,6 @@ components:
 
     JVarViaFile:
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/JVarViaFileJSON'
-
-          example:
-            Excel:
-              path: myexcel.xlsx
-              destination: path/to/destination
-            VariantCallFile:
-              path: myvariantcallfile.vcf
-              destination: path/to/destination
-
         multipart/form-data:
           schema:
             allOf:
