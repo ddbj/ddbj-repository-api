@@ -572,44 +572,6 @@ components:
             - 'null'
 
     <%- dbs.each do |db| -%>
-    <%= db[:id] %>ViaFileJSON:
-      type: object
-
-      required:
-        <%- db[:objects].reject { _1[:optional] }.each do |obj| -%>
-        - <%= obj[:id] %>
-        <%- end -%>
-
-      properties:
-        <%- db[:objects].each do |obj| -%>
-        <%= obj[:id] %>:
-          <%- if obj[:multiple] -%>
-          type: array
-          minItems: <%= obj[:optional] ? 0 : 1 %>
-
-          items:
-            type: object
-            required: [path]
-
-            properties:
-              path:
-                $ref: '#/components/schemas/UserHomePath'
-
-              destination:
-                type: string
-          <%- else -%>
-          type: object
-          required: [path]
-
-          properties:
-            path:
-              $ref: '#/components/schemas/UserHomePath'
-
-            destination:
-              type: string
-          <%- end -%>
-
-        <%- end -%>
     <%- db[:objects].each do |obj| -%>
     <%= db[:id] %>ViaFileFormData<%= obj[:id] %>:
       allOf:
@@ -685,17 +647,6 @@ components:
     <%- dbs.each do |db| -%>
     <%= db[:id] %>ViaFile:
       content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/<%= db[:id] %>ViaFileJSON'
-
-          example:
-            <%- db[:objects].each do |obj| -%>
-            <%= obj[:id] %>:
-              path: my<%= obj[:id].downcase %>.<%= obj[:ext] %>
-              destination: path/to/destination
-            <%- end -%>
-
         multipart/form-data:
           schema:
             allOf:
