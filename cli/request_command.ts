@@ -53,7 +53,7 @@ type Request = {
 };
 
 async function listRequests(endpoint: string, apiKey: string) {
-  const headers = ['ID', 'Created', 'DB', 'Status', 'Validity', 'Submission'];
+  const headers = ['ID', 'Created', 'Purpose', 'DB', 'Status', 'Validity', 'Submission'];
   const table = Table.from([headers.map(colors.bold.yellow)]);
 
   table.push(headers.map((header) => colors.bold.yellow('-'.repeat(header.length))));
@@ -67,6 +67,7 @@ async function listRequests(endpoint: string, apiKey: string) {
       table.push([
         colors.bold(req.id.toString()),
         req.created_at,
+        req.purpose,
         req.db,
         req.status,
         req.validity,

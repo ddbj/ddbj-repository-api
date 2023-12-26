@@ -19,10 +19,10 @@ module ViaFile
     end
   end
 
-  def create_request_from_params(user, params)
+  def create_request_from_params(user, params, purpose:)
     ActiveRecord::Base.transaction {
       db      = DB.find { _1[:id].downcase == params.require(:db) }
-      request = user.requests.create!(db: db[:id], status: 'waiting')
+      request = user.requests.create!(db: db[:id], purpose:, status: 'waiting')
 
       request.objs.create! _id: '_base'
 

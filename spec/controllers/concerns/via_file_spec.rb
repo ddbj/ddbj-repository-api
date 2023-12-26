@@ -16,7 +16,7 @@ RSpec.describe ViaFile, type: :controller do
       }
     )
 
-    request = controller.create_request_from_params(user, params)
+    request = controller.create_request_from_params(user, params, purpose: 'validate')
 
     expect(request.objs.map(&:_id)).to contain_exactly('_base', 'BioSample')
   end
@@ -43,7 +43,7 @@ RSpec.describe ViaFile, type: :controller do
       }
     )
 
-    request = controller.create_request_from_params(user, params)
+    request = controller.create_request_from_params(user, params, purpose: 'validate')
 
     expect(request.objs.map(&:_id)).to contain_exactly(
       '_base',
@@ -74,7 +74,7 @@ RSpec.describe ViaFile, type: :controller do
     )
 
     expect {
-      controller.create_request_from_params(user, params)
+      controller.create_request_from_params(user, params, purpose: 'validate')
     }.to raise_error(ActiveRecord::RecordInvalid, 'Validation failed: Path is duplicated: idf.txt')
   end
 end
