@@ -16,7 +16,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
       example do
         get '/api/requests', as: :json
 
-        expect(response).to have_http_status(:ok)
+        expect(response).to conform_schema(200)
 
         expect(response.parsed_body.map(&:deep_symbolize_keys)).to match([
           {
@@ -76,7 +76,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
       example 'page=1' do
         get '/api/requests', as: :json
 
-        expect(response).to have_http_status(:ok)
+        expect(response).to conform_schema(200)
         expect(response.parsed_body.map { _1['id'] }).to eq([104, 103])
 
         expect(response.headers['Link'].split(/,\s*/)).to contain_exactly(
@@ -89,7 +89,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
       example 'page=2' do
         get '/api/requests?page=2', as: :json
 
-        expect(response).to have_http_status(:ok)
+        expect(response).to conform_schema(200)
         expect(response.parsed_body.map { _1['id'] }).to eq([102, 101])
 
         expect(response.headers['Link'].split(/,\s*/)).to contain_exactly(
@@ -103,7 +103,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
       example 'page=3' do
         get '/api/requests?page=3', as: :json
 
-        expect(response).to have_http_status(:ok)
+        expect(response).to conform_schema(200)
         expect(response.parsed_body.map { _1['id'] }).to eq([100])
 
         expect(response.headers['Link'].split(/,\s*/)).to contain_exactly(
@@ -116,7 +116,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
       example 'out of range' do
         get '/api/requests?page=4', as: :json
 
-        expect(response).to have_http_status(:bad_request)
+        expect(response).to conform_schema(400)
 
         expect(response.parsed_body.deep_symbolize_keys).to eq(
           error: 'expected :page in 1..3; got 4'
@@ -135,7 +135,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
     example do
       get '/api/requests/100', as: :json
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to conform_schema(200)
 
       expect(response.parsed_body.deep_symbolize_keys).to match(
         id:         100,
@@ -170,13 +170,13 @@ RSpec.describe 'requests', type: :request, authorized: true do
     example 'if request is waiting' do
       delete '/api/requests/100'
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to conform_schema(200)
     end
 
     example 'if request is finished' do
       delete '/api/requests/101'
 
-      expect(response).to have_http_status(:conflict)
+      expect(response).to conform_schema(409)
     end
   end
 end

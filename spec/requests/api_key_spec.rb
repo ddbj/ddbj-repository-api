@@ -5,7 +5,7 @@ RSpec.describe 'API key' do
     example do
       get '/api/api-key'
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to conform_schema(200)
 
       expect(response.parsed_body.deep_symbolize_keys).to eq(
         login_url: 'http://www.example.com/auth/login'
@@ -23,7 +23,7 @@ RSpec.describe 'API key' do
     example do
       post '/api/api-key/regenerate'
 
-      expect(response).to have_http_status(:ok)
+      expect(response).to conform_schema(200)
 
       expect(response.parsed_body.deep_symbolize_keys).to eq(
         api_key: 'NEW_API_KEY'

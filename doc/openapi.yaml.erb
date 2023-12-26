@@ -7,15 +7,15 @@ info:
   version: 1.0.0
 
 servers:
-  - url: https://repository.ddbj.nig.ac.jp/api
-  - url: https://repository-staging.ddbj.nig.ac.jp/api
-  - url: https://repository-dev.ddbj.nig.ac.jp/api
+  - url: https://repository.ddbj.nig.ac.jp
+  - url: https://repository-staging.ddbj.nig.ac.jp
+  - url: https://repository-dev.ddbj.nig.ac.jp
 
 security:
   - BearerAuth: []
 
 paths:
-  /api-key:
+  /api/api-key:
     get:
       description: Get login URL.
 
@@ -42,7 +42,7 @@ paths:
               example:
                 login_url: https://repository.ddbj.nig.ac.jp/auth/login
 
-  /api-key/regenerate:
+  /api/api-key/regenerate:
     post:
       description: Re-generate API key.
 
@@ -69,7 +69,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /me:
+  /api/me:
     get:
       description: Get your login ID.
 
@@ -97,7 +97,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 
   <%- dbs.each do |db| -%>
-  /validations/<%= db[:id].downcase %>/via-file:
+  /api/validations/<%= db[:id].downcase %>/via-file:
     post:
       description: Run validation for <%= db[:id] %>.
 
@@ -120,7 +120,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /submissions/<%= db[:id].downcase %>/via-file:
+  /api/submissions/<%= db[:id].downcase %>/via-file:
     post:
       description: Submit files to <%= db[:id] %>.
 
@@ -144,7 +144,7 @@ paths:
           $ref: '#/components/responses/UnprocessableEntity'
 
   <%- end -%>
-  /requests:
+  /api/requests:
     get:
       description: Get your requests.
 
@@ -220,7 +220,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /requests/{id}:
+  /api/requests/{id}:
     get:
       description: Get the request.
 
@@ -314,7 +314,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /submissions:
+  /api/submissions:
     get:
       description: Get your submissions.
 
@@ -353,7 +353,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /submissions/{id}:
+  /api/submissions/{id}:
     get:
       description: Get the submission.
 
@@ -366,9 +366,9 @@ paths:
           required: true
 
           schema:
-            type: integer
+            type: string
 
-          example: 42
+          example: X-42
 
       responses:
         '200':
@@ -382,7 +382,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /submissions/{id}/files/{path}:
+  /api/submissions/{id}/files/{path}:
     get:
       description: Get the submission file content.
 
@@ -395,9 +395,9 @@ paths:
           required: true
 
           schema:
-            type: integer
+            type: string
 
-          example: 42
+          example: X-42
 
         - name: path
           in: path
