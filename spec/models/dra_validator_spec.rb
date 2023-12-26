@@ -9,7 +9,7 @@ RSpec.describe DraValidator, type: :model do
       create :obj, request:, _id: 'RunFile',    file: uploaded_file(name: 'runfile.xml')
     }
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',
@@ -58,7 +58,7 @@ RSpec.describe DraValidator, type: :model do
       create :obj, request:, _id: 'RunFile',    file: uploaded_file(name: 'runfile.xml')
     }
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',
@@ -113,7 +113,7 @@ RSpec.describe DraValidator, type: :model do
 
     allow(Open3).to receive(:capture2e) { ['Something went wrong.', double(success?: false)] }
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status: 'finished',
@@ -143,7 +143,7 @@ RSpec.describe DraValidator, type: :model do
       create :obj, request:, _id: 'AnalysisFile', file: uploaded_file(name: 'analysisfile.xml')
     }
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',
@@ -175,7 +175,7 @@ RSpec.describe DraValidator, type: :model do
       create :obj, request:, _id: 'RunFile',    file: uploaded_file(name: 'runfile2.xml')
     }
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',

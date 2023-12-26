@@ -36,7 +36,7 @@ RSpec.describe DdbjValidator, type: :model do
       }
     )
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',
@@ -70,7 +70,7 @@ RSpec.describe DdbjValidator, type: :model do
   example 'if error occured from ddbj_validator, validity is error' do
     stub_request(:post, 'validator.example.com/api/validation').to_return status: 500
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',
