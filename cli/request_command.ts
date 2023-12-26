@@ -43,6 +43,7 @@ export default class extends Command {
 type Request = {
   id: number;
   created_at: string;
+  db: string;
   status: string;
   validity: string;
 
@@ -52,7 +53,7 @@ type Request = {
 };
 
 async function listRequests(endpoint: string, apiKey: string) {
-  const headers = ['ID', 'Created', 'Status', 'Validity', 'Submission'];
+  const headers = ['ID', 'Created', 'DB', 'Status', 'Validity', 'Submission'];
   const table = Table.from([headers.map(colors.bold.yellow)]);
 
   table.push(headers.map((header) => colors.bold.yellow('-'.repeat(header.length))));
@@ -66,6 +67,7 @@ async function listRequests(endpoint: string, apiKey: string) {
       table.push([
         colors.bold(req.id.toString()),
         req.created_at,
+        req.db,
         req.status,
         req.validity,
         req.submission?.id || '',

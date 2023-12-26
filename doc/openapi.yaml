@@ -30,6 +30,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 required: [login_url]
 
                 properties:
@@ -55,6 +56,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 required: [api_key]
 
                 properties:
@@ -82,6 +84,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 required: [uid]
 
                 properties:
@@ -569,6 +572,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 required: [message]
 
                 properties:
@@ -698,7 +702,8 @@ components:
   schemas:
     Request:
       type: object
-      required: [id, url, status, validity, validation_reports, submission]
+      additionalProperties: false
+      required: [id, url, created_at, db, status, validity, validation_reports, submission]
 
       properties:
         id:
@@ -711,6 +716,18 @@ components:
         created_at:
           type: string
           format: date-time
+
+        db:
+          type: string
+
+          enum:
+            - BioProject
+            - BioSample
+            - Trad
+            - DRA
+            - GEA
+            - MetaboBank
+            - JVar
 
         status:
           type: string
@@ -755,6 +772,7 @@ components:
 
     Submission:
       type: object
+      additionalProperties: false
       required: [id, url, created_at, db, objects]
 
       properties:
@@ -786,6 +804,7 @@ components:
 
           items:
             type: object
+            additionalProperties: false
             required: [id, files]
 
             properties:
@@ -817,6 +836,7 @@ components:
 
                 items:
                   type: object
+                  additionalProperties: false
                   required: [path, url]
 
                   properties:
@@ -829,6 +849,7 @@ components:
 
     ValidationReport:
       type: object
+      additionalProperties: false
       required: [object_id, path, validity, details]
 
       properties:
@@ -881,6 +902,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - BioProject[file]
@@ -891,6 +913,7 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - BioProject[path]
 
@@ -899,6 +922,7 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             BioProject[destination]:
@@ -908,6 +932,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - BioSample[file]
@@ -918,6 +943,7 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - BioSample[path]
 
@@ -926,6 +952,7 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             BioSample[destination]:
@@ -935,6 +962,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - Sequence[][file]
@@ -949,6 +977,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - Sequence[][path]
 
@@ -961,6 +990,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             Sequence[][destination]:
@@ -974,6 +1004,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - Annotation[][file]
@@ -988,6 +1019,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - Annotation[][path]
 
@@ -1000,6 +1032,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             Annotation[][destination]:
@@ -1013,6 +1046,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - Submission[file]
@@ -1023,6 +1057,7 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - Submission[path]
 
@@ -1031,6 +1066,7 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             Submission[destination]:
@@ -1040,6 +1076,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - Experiment[file]
@@ -1050,6 +1087,7 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - Experiment[path]
 
@@ -1058,6 +1096,7 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             Experiment[destination]:
@@ -1067,6 +1106,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - Run[file]
@@ -1077,6 +1117,7 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - Run[path]
 
@@ -1085,6 +1126,7 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             Run[destination]:
@@ -1094,6 +1136,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - RunFile[][file]
@@ -1108,6 +1151,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - RunFile[][path]
 
@@ -1120,6 +1164,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             RunFile[][destination]:
@@ -1133,6 +1178,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             properties:
               Analysis[file]:
@@ -1140,12 +1186,14 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
 
             properties:
               Analysis[path]:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             Analysis[destination]:
@@ -1155,6 +1203,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             properties:
               AnalysisFile[][file]:
@@ -1166,6 +1215,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
 
             properties:
               AnalysisFile[][path]:
@@ -1176,6 +1226,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             AnalysisFile[][destination]:
@@ -1189,6 +1240,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - IDF[file]
@@ -1199,6 +1251,7 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - IDF[path]
 
@@ -1207,6 +1260,7 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             IDF[destination]:
@@ -1216,6 +1270,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - SDRF[file]
@@ -1226,6 +1281,7 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - SDRF[path]
 
@@ -1234,6 +1290,7 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             SDRF[destination]:
@@ -1243,6 +1300,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             properties:
               ADF[][file]:
@@ -1254,6 +1312,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
 
             properties:
               ADF[][path]:
@@ -1264,6 +1323,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             ADF[][destination]:
@@ -1277,6 +1337,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             properties:
               RawDataFile[][file]:
@@ -1288,6 +1349,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
 
             properties:
               RawDataFile[][path]:
@@ -1298,6 +1360,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             RawDataFile[][destination]:
@@ -1311,6 +1374,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             properties:
               ProcessedDataFile[][file]:
@@ -1322,6 +1386,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
 
             properties:
               ProcessedDataFile[][path]:
@@ -1332,6 +1397,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             ProcessedDataFile[][destination]:
@@ -1345,6 +1411,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - IDF[file]
@@ -1355,6 +1422,7 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - IDF[path]
 
@@ -1363,6 +1431,7 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             IDF[destination]:
@@ -1372,6 +1441,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - SDRF[file]
@@ -1382,6 +1452,7 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - SDRF[path]
 
@@ -1390,6 +1461,7 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             SDRF[destination]:
@@ -1399,6 +1471,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             properties:
               MAF[][file]:
@@ -1410,6 +1483,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
 
             properties:
               MAF[][path]:
@@ -1420,6 +1494,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             MAF[][destination]:
@@ -1433,6 +1508,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             properties:
               RawDataFile[][file]:
@@ -1444,6 +1520,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
 
             properties:
               RawDataFile[][path]:
@@ -1454,6 +1531,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             RawDataFile[][destination]:
@@ -1467,6 +1545,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             properties:
               ProcessedDataFile[][file]:
@@ -1478,6 +1557,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
 
             properties:
               ProcessedDataFile[][path]:
@@ -1488,6 +1568,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             ProcessedDataFile[][destination]:
@@ -1501,6 +1582,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             properties:
               BioSample[file]:
@@ -1508,12 +1590,14 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
 
             properties:
               BioSample[path]:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             BioSample[destination]:
@@ -1523,6 +1607,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             required:
               - Excel[file]
@@ -1533,6 +1618,7 @@ components:
                 format: binary
 
           - type: object
+            additionalProperties: false
             required:
               - Excel[path]
 
@@ -1541,6 +1627,7 @@ components:
                 $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             Excel[destination]:
@@ -1550,6 +1637,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
 
             properties:
               VariantCallFile[][file]:
@@ -1561,6 +1649,7 @@ components:
                   format: binary
 
           - type: object
+            additionalProperties: false
 
             properties:
               VariantCallFile[][path]:
@@ -1571,6 +1660,7 @@ components:
                   $ref: '#/components/schemas/UserHomePath'
 
         - type: object
+          additionalProperties: false
 
           properties:
             VariantCallFile[][destination]:
@@ -1586,6 +1676,7 @@ components:
 
     Error:
       type: object
+      additionalProperties: false
       required: [error]
 
       properties:
@@ -1666,11 +1757,13 @@ components:
         application/json:
           schema:
             type: object
+            additionalProperties: false
             required: [request]
 
             properties:
               request:
                 type: object
+                additionalProperties: false
                 required: [id, url]
 
                 properties:

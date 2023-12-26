@@ -32,6 +32,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 required: [login_url]
 
                 properties:
@@ -57,6 +58,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 required: [api_key]
 
                 properties:
@@ -84,6 +86,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 required: [uid]
 
                 properties:
@@ -297,6 +300,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 required: [message]
 
                 properties:
@@ -426,7 +430,8 @@ components:
   schemas:
     Request:
       type: object
-      required: [id, url, status, validity, validation_reports, submission]
+      additionalProperties: false
+      required: [id, url, created_at, db, status, validity, validation_reports, submission]
 
       properties:
         id:
@@ -439,6 +444,14 @@ components:
         created_at:
           type: string
           format: date-time
+
+        db:
+          type: string
+
+          enum:
+            <%- dbs.each do |db| -%>
+            - <%= db[:id] %>
+            <%- end -%>
 
         status:
           type: string
@@ -483,6 +496,7 @@ components:
 
     Submission:
       type: object
+      additionalProperties: false
       required: [id, url, created_at, db, objects]
 
       properties:
@@ -510,6 +524,7 @@ components:
 
           items:
             type: object
+            additionalProperties: false
             required: [id, files]
 
             properties:
@@ -526,6 +541,7 @@ components:
 
                 items:
                   type: object
+                  additionalProperties: false
                   required: [path, url]
 
                   properties:
@@ -538,6 +554,7 @@ components:
 
     ValidationReport:
       type: object
+      additionalProperties: false
       required: [object_id, path, validity, details]
 
       properties:
@@ -577,6 +594,7 @@ components:
       allOf:
         - oneOf:
           - type: object
+            additionalProperties: false
             <%- unless obj[:optional] -%>
 
             required:
@@ -598,6 +616,7 @@ components:
                 <%- end -%>
 
           - type: object
+            additionalProperties: false
             <%- unless obj[:optional] -%>
             required:
               - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]
@@ -616,6 +635,7 @@ components:
                 <%- end -%>
 
         - type: object
+          additionalProperties: false
 
           properties:
             <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[destination]:
@@ -637,6 +657,7 @@ components:
 
     Error:
       type: object
+      additionalProperties: false
       required: [error]
 
       properties:
@@ -663,11 +684,13 @@ components:
         application/json:
           schema:
             type: object
+            additionalProperties: false
             required: [request]
 
             properties:
               request:
                 type: object
+                additionalProperties: false
                 required: [id, url]
 
                 properties:
