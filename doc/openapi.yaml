@@ -899,780 +899,763 @@ components:
             - 'null'
 
     BioProjectViaFileFormDataBioProject:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - BioProject[file]
-
-            properties:
-              BioProject[file]:
-                type: string
-                format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - BioProject[path]
-
-            properties:
-              BioProject[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - BioProject[file]
+
           properties:
+            BioProject[file]:
+              $ref: '#/components/schemas/File'
+
             BioProject[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - BioProject[path]
+
+          properties:
+            BioProject[path]:
+              $ref: '#/components/schemas/Path'
+
+            BioProject[destination]:
+              $ref: '#/components/schemas/Destination'
 
     BioSampleViaFileFormDataBioSample:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - BioSample[file]
-
-            properties:
-              BioSample[file]:
-                type: string
-                format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - BioSample[path]
-
-            properties:
-              BioSample[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - BioSample[file]
+
           properties:
+            BioSample[file]:
+              $ref: '#/components/schemas/File'
+
             BioSample[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - BioSample[path]
+
+          properties:
+            BioSample[path]:
+              $ref: '#/components/schemas/Path'
+
+            BioSample[destination]:
+              $ref: '#/components/schemas/Destination'
 
     TradViaFileFormDataSequence:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - Sequence[][file]
-
-            properties:
-              Sequence[][file]:
-                type: array
-                minItems: 1
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - Sequence[][path]
-
-            properties:
-              Sequence[][path]:
-                type: array
-                minItems: 1
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - Sequence[][file]
+
           properties:
+            Sequence[][file]:
+              type: array
+              minItems: 1
+
+              items:
+                $ref: '#/components/schemas/File'
+
             Sequence[][destination]:
               type: array
               minItems: 1
 
               items:
-                type: string
-
-    TradViaFileFormDataAnnotation:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - Annotation[][file]
-
-            properties:
-              Annotation[][file]:
-                type: array
-                minItems: 1
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - Annotation[][path]
-
-            properties:
-              Annotation[][path]:
-                type: array
-                minItems: 1
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
+                $ref: '#/components/schemas/Destination'
 
         - type: object
           additionalProperties: false
+          required:
+            - Sequence[][path]
 
           properties:
+            Sequence[][path]:
+              type: array
+              minItems: 1
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            Sequence[][destination]:
+              type: array
+              minItems: 1
+
+              items:
+                $ref: '#/components/schemas/Destination'
+
+    TradViaFileFormDataAnnotation:
+      oneOf:
+        - type: object
+          additionalProperties: false
+
+          required:
+            - Annotation[][file]
+
+          properties:
+            Annotation[][file]:
+              type: array
+              minItems: 1
+
+              items:
+                $ref: '#/components/schemas/File'
+
             Annotation[][destination]:
               type: array
               minItems: 1
 
               items:
-                type: string
+                $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - Annotation[][path]
+
+          properties:
+            Annotation[][path]:
+              type: array
+              minItems: 1
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            Annotation[][destination]:
+              type: array
+              minItems: 1
+
+              items:
+                $ref: '#/components/schemas/Destination'
 
     DRAViaFileFormDataSubmission:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - Submission[file]
-
-            properties:
-              Submission[file]:
-                type: string
-                format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - Submission[path]
-
-            properties:
-              Submission[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - Submission[file]
+
           properties:
+            Submission[file]:
+              $ref: '#/components/schemas/File'
+
             Submission[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - Submission[path]
+
+          properties:
+            Submission[path]:
+              $ref: '#/components/schemas/Path'
+
+            Submission[destination]:
+              $ref: '#/components/schemas/Destination'
 
     DRAViaFileFormDataExperiment:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - Experiment[file]
-
-            properties:
-              Experiment[file]:
-                type: string
-                format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - Experiment[path]
-
-            properties:
-              Experiment[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - Experiment[file]
+
           properties:
+            Experiment[file]:
+              $ref: '#/components/schemas/File'
+
             Experiment[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - Experiment[path]
+
+          properties:
+            Experiment[path]:
+              $ref: '#/components/schemas/Path'
+
+            Experiment[destination]:
+              $ref: '#/components/schemas/Destination'
 
     DRAViaFileFormDataRun:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - Run[file]
-
-            properties:
-              Run[file]:
-                type: string
-                format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - Run[path]
-
-            properties:
-              Run[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - Run[file]
+
           properties:
+            Run[file]:
+              $ref: '#/components/schemas/File'
+
             Run[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - Run[path]
+
+          properties:
+            Run[path]:
+              $ref: '#/components/schemas/Path'
+
+            Run[destination]:
+              $ref: '#/components/schemas/Destination'
 
     DRAViaFileFormDataRunFile:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - RunFile[][file]
-
-            properties:
-              RunFile[][file]:
-                type: array
-                minItems: 1
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - RunFile[][path]
-
-            properties:
-              RunFile[][path]:
-                type: array
-                minItems: 1
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - RunFile[][file]
+
           properties:
+            RunFile[][file]:
+              type: array
+              minItems: 1
+
+              items:
+                $ref: '#/components/schemas/File'
+
             RunFile[][destination]:
               type: array
               minItems: 1
 
               items:
-                type: string
+                $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - RunFile[][path]
+
+          properties:
+            RunFile[][path]:
+              type: array
+              minItems: 1
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            RunFile[][destination]:
+              type: array
+              minItems: 1
+
+              items:
+                $ref: '#/components/schemas/Destination'
 
     DRAViaFileFormDataAnalysis:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
+      oneOf:
+        - type: object
+          additionalProperties: false
 
-            properties:
-              Analysis[file]:
-                type: string
-                format: binary
+          properties:
+            Analysis[file]:
+              $ref: '#/components/schemas/File'
 
-          - type: object
-            additionalProperties: false
-
-            properties:
-              Analysis[path]:
-                $ref: '#/components/schemas/UserHomePath'
+            Analysis[destination]:
+              $ref: '#/components/schemas/Destination'
 
         - type: object
           additionalProperties: false
 
           properties:
+            Analysis[path]:
+              $ref: '#/components/schemas/Path'
+
             Analysis[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
 
     DRAViaFileFormDataAnalysisFile:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            properties:
-              AnalysisFile[][file]:
-                type: array
-                minItems: 0
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-
-            properties:
-              AnalysisFile[][path]:
-                type: array
-                minItems: 0
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
           properties:
+            AnalysisFile[][file]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/File'
+
             AnalysisFile[][destination]:
               type: array
               minItems: 0
 
               items:
-                type: string
+                $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+
+          properties:
+            AnalysisFile[][path]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            AnalysisFile[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Destination'
 
     GEAViaFileFormDataIDF:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - IDF[file]
-
-            properties:
-              IDF[file]:
-                type: string
-                format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - IDF[path]
-
-            properties:
-              IDF[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - IDF[file]
+
           properties:
+            IDF[file]:
+              $ref: '#/components/schemas/File'
+
             IDF[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - IDF[path]
+
+          properties:
+            IDF[path]:
+              $ref: '#/components/schemas/Path'
+
+            IDF[destination]:
+              $ref: '#/components/schemas/Destination'
 
     GEAViaFileFormDataSDRF:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - SDRF[file]
-
-            properties:
-              SDRF[file]:
-                type: string
-                format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - SDRF[path]
-
-            properties:
-              SDRF[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - SDRF[file]
+
           properties:
+            SDRF[file]:
+              $ref: '#/components/schemas/File'
+
             SDRF[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - SDRF[path]
+
+          properties:
+            SDRF[path]:
+              $ref: '#/components/schemas/Path'
+
+            SDRF[destination]:
+              $ref: '#/components/schemas/Destination'
 
     GEAViaFileFormDataADF:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            properties:
-              ADF[][file]:
-                type: array
-                minItems: 0
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-
-            properties:
-              ADF[][path]:
-                type: array
-                minItems: 0
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
           properties:
+            ADF[][file]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/File'
+
             ADF[][destination]:
               type: array
               minItems: 0
 
               items:
-                type: string
-
-    GEAViaFileFormDataRawDataFile:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            properties:
-              RawDataFile[][file]:
-                type: array
-                minItems: 0
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-
-            properties:
-              RawDataFile[][path]:
-                type: array
-                minItems: 0
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
+                $ref: '#/components/schemas/Destination'
 
         - type: object
           additionalProperties: false
 
           properties:
+            ADF[][path]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            ADF[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Destination'
+
+    GEAViaFileFormDataRawDataFile:
+      oneOf:
+        - type: object
+          additionalProperties: false
+
+          properties:
+            RawDataFile[][file]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/File'
+
             RawDataFile[][destination]:
               type: array
               minItems: 0
 
               items:
-                type: string
-
-    GEAViaFileFormDataProcessedDataFile:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            properties:
-              ProcessedDataFile[][file]:
-                type: array
-                minItems: 0
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-
-            properties:
-              ProcessedDataFile[][path]:
-                type: array
-                minItems: 0
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
+                $ref: '#/components/schemas/Destination'
 
         - type: object
           additionalProperties: false
 
           properties:
+            RawDataFile[][path]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            RawDataFile[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Destination'
+
+    GEAViaFileFormDataProcessedDataFile:
+      oneOf:
+        - type: object
+          additionalProperties: false
+
+          properties:
+            ProcessedDataFile[][file]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/File'
+
             ProcessedDataFile[][destination]:
               type: array
               minItems: 0
 
               items:
-                type: string
+                $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+
+          properties:
+            ProcessedDataFile[][path]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            ProcessedDataFile[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Destination'
 
     MetaboBankViaFileFormDataIDF:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - IDF[file]
-
-            properties:
-              IDF[file]:
-                type: string
-                format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - IDF[path]
-
-            properties:
-              IDF[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - IDF[file]
+
           properties:
+            IDF[file]:
+              $ref: '#/components/schemas/File'
+
             IDF[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - IDF[path]
+
+          properties:
+            IDF[path]:
+              $ref: '#/components/schemas/Path'
+
+            IDF[destination]:
+              $ref: '#/components/schemas/Destination'
 
     MetaboBankViaFileFormDataSDRF:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - SDRF[file]
-
-            properties:
-              SDRF[file]:
-                type: string
-                format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - SDRF[path]
-
-            properties:
-              SDRF[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - SDRF[file]
+
           properties:
+            SDRF[file]:
+              $ref: '#/components/schemas/File'
+
             SDRF[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - SDRF[path]
+
+          properties:
+            SDRF[path]:
+              $ref: '#/components/schemas/Path'
+
+            SDRF[destination]:
+              $ref: '#/components/schemas/Destination'
 
     MetaboBankViaFileFormDataMAF:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            properties:
-              MAF[][file]:
-                type: array
-                minItems: 0
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-
-            properties:
-              MAF[][path]:
-                type: array
-                minItems: 0
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
           properties:
+            MAF[][file]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/File'
+
             MAF[][destination]:
               type: array
               minItems: 0
 
               items:
-                type: string
-
-    MetaboBankViaFileFormDataRawDataFile:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            properties:
-              RawDataFile[][file]:
-                type: array
-                minItems: 0
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-
-            properties:
-              RawDataFile[][path]:
-                type: array
-                minItems: 0
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
+                $ref: '#/components/schemas/Destination'
 
         - type: object
           additionalProperties: false
 
           properties:
+            MAF[][path]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            MAF[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Destination'
+
+    MetaboBankViaFileFormDataRawDataFile:
+      oneOf:
+        - type: object
+          additionalProperties: false
+
+          properties:
+            RawDataFile[][file]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/File'
+
             RawDataFile[][destination]:
               type: array
               minItems: 0
 
               items:
-                type: string
-
-    MetaboBankViaFileFormDataProcessedDataFile:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            properties:
-              ProcessedDataFile[][file]:
-                type: array
-                minItems: 0
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-
-            properties:
-              ProcessedDataFile[][path]:
-                type: array
-                minItems: 0
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
+                $ref: '#/components/schemas/Destination'
 
         - type: object
           additionalProperties: false
 
           properties:
+            RawDataFile[][path]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            RawDataFile[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Destination'
+
+    MetaboBankViaFileFormDataProcessedDataFile:
+      oneOf:
+        - type: object
+          additionalProperties: false
+
+          properties:
+            ProcessedDataFile[][file]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/File'
+
             ProcessedDataFile[][destination]:
               type: array
               minItems: 0
 
               items:
-                type: string
+                $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+
+          properties:
+            ProcessedDataFile[][path]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            ProcessedDataFile[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Destination'
 
     MetaboBankViaFileFormDataBioSample:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
+      oneOf:
+        - type: object
+          additionalProperties: false
 
-            properties:
-              BioSample[file]:
-                type: string
-                format: binary
+          properties:
+            BioSample[file]:
+              $ref: '#/components/schemas/File'
 
-          - type: object
-            additionalProperties: false
-
-            properties:
-              BioSample[path]:
-                $ref: '#/components/schemas/UserHomePath'
+            BioSample[destination]:
+              $ref: '#/components/schemas/Destination'
 
         - type: object
           additionalProperties: false
 
           properties:
+            BioSample[path]:
+              $ref: '#/components/schemas/Path'
+
             BioSample[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
 
     JVarViaFileFormDataExcel:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            required:
-              - Excel[file]
-
-            properties:
-              Excel[file]:
-                type: string
-                format: binary
-
-          - type: object
-            additionalProperties: false
-            required:
-              - Excel[path]
-
-            properties:
-              Excel[path]:
-                $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
+          required:
+            - Excel[file]
+
           properties:
+            Excel[file]:
+              $ref: '#/components/schemas/File'
+
             Excel[destination]:
-              type: string
+              $ref: '#/components/schemas/Destination'
+
+        - type: object
+          additionalProperties: false
+          required:
+            - Excel[path]
+
+          properties:
+            Excel[path]:
+              $ref: '#/components/schemas/Path'
+
+            Excel[destination]:
+              $ref: '#/components/schemas/Destination'
 
     JVarViaFileFormDataVariantCallFile:
-      allOf:
-        - oneOf:
-          - type: object
-            additionalProperties: false
-
-            properties:
-              VariantCallFile[][file]:
-                type: array
-                minItems: 0
-
-                items:
-                  type: string
-                  format: binary
-
-          - type: object
-            additionalProperties: false
-
-            properties:
-              VariantCallFile[][path]:
-                type: array
-                minItems: 0
-
-                items:
-                  $ref: '#/components/schemas/UserHomePath'
-
+      oneOf:
         - type: object
           additionalProperties: false
 
           properties:
+            VariantCallFile[][file]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/File'
+
             VariantCallFile[][destination]:
               type: array
               minItems: 0
 
               items:
-                type: string
+                $ref: '#/components/schemas/Destination'
 
-    UserHomePath:
+        - type: object
+          additionalProperties: false
+
+          properties:
+            VariantCallFile[][path]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Path'
+
+            VariantCallFile[][destination]:
+              type: array
+              minItems: 0
+
+              items:
+                $ref: '#/components/schemas/Destination'
+
+    File:
       type: string
-      description: Relative path from the user's home directory.
+      format: binary
+
+    Path:
+      type: string
+      description: Path of the file on the NIG supercomputer, relative to the home directory of the authorised user.
+
+    Destination:
+      type: string
+      description: Destination of the file to be submitted.
 
     Error:
       type: object
