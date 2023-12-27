@@ -3,12 +3,6 @@ class Submissions::FilesController < ApplicationController
 
   include ActiveStorage::SetCurrent if Rails.env.test?
 
-  rescue_from NotFound do
-    render json: {
-      error: 'Not Found'
-    }, status: :not_found
-  end
-
   def show
     submission = current_user.submissions.find(params[:submission_id].delete_prefix('X-'))
 

@@ -5,9 +5,8 @@ class Submission < ApplicationRecord
     submission.dir.rmtree
   end
 
-  def public_id
-    id ? "X-#{id}" : nil
-  end
+  def to_param  = public_id
+  def public_id = id ? "X-#{id}" : nil
 
   def dir
     Pathname.new(ENV.fetch('REPOSITORY_DIR')).join(request.user.uid, 'submissions', public_id)

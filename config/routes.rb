@@ -9,6 +9,10 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :get_file do
+    get 'files/*path' => 'files#show', format: false, as: 'file'
+  end
+
   resource :auth, only: %i() do
     get :login
     get :callback
@@ -34,12 +38,15 @@ Rails.application.routes.draw do
     resources :submissions, only: %i(index show) do
       scope module: 'submissions' do
         concerns :via_file
-
-        get 'files/*path' => 'files#show', format: false, as: 'file'
+        concerns :get_file
       end
     end
 
-    resources :requests, only: %i(index show destroy)
+    resources :requests, only: %i(index show destroy) do
+      scope module: 'requests' do
+        concerns :get_file
+      end
+    end
   end
 
   get 'up' => 'rails/health#show', as: :rails_health_check

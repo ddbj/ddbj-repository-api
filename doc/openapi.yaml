@@ -590,6 +590,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /api/requests/{id}/files/{path}:
+    get:
+      description: Get the submission file content.
+
+      tags:
+        - Request
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+
+          schema:
+            type: integer
+
+        - name: path
+          in: path
+          required: true
+          style: matrix
+          explode: true
+
+          schema:
+            type: string
+
+          example: dest/mybiosample.xml
+
+      responses:
+        '302':
+          description: Redirect to the file.
+
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
   /api/submissions:
     get:
       description: Get your submissions.
@@ -703,7 +736,7 @@ components:
     Request:
       type: object
       additionalProperties: false
-      required: [id, url, created_at, purpose, db, status, validity, validation_reports, submission]
+      required: [id, url, created_at, purpose, db, objects, status, validity, validation_reports, submission]
 
       properties:
         id:
@@ -735,6 +768,9 @@ components:
             - GEA
             - MetaboBank
             - JVar
+
+        objects:
+          $ref: '#/components/schemas/Objects'
 
         status:
           type: string
@@ -807,52 +843,55 @@ components:
             - JVar
 
         objects:
-          type: array
+          $ref: '#/components/schemas/Objects'
 
-          items:
-            type: object
-            additionalProperties: false
-            required: [id, files]
+    Objects:
+      type: array
 
-            properties:
-              id:
-                type: string
+      items:
+        type: object
+        additionalProperties: false
+        required: [id, files]
 
-                enum:
-                  - BioProject
-                  - BioSample
-                  - Sequence
-                  - Annotation
-                  - Submission
-                  - Experiment
-                  - Run
-                  - RunFile
-                  - Analysis
-                  - AnalysisFile
-                  - IDF
-                  - SDRF
-                  - ADF
-                  - RawDataFile
-                  - ProcessedDataFile
-                  - MAF
-                  - Excel
-                  - VariantCallFile
+        properties:
+          id:
+            type: string
 
-              files:
-                type: array
+            enum:
+              - BioProject
+              - BioSample
+              - Sequence
+              - Annotation
+              - Submission
+              - Experiment
+              - Run
+              - RunFile
+              - Analysis
+              - AnalysisFile
+              - IDF
+              - SDRF
+              - ADF
+              - RawDataFile
+              - ProcessedDataFile
+              - MAF
+              - Excel
+              - VariantCallFile
 
-                items:
-                  type: object
-                  additionalProperties: false
-                  required: [path, url]
+          files:
+            type: array
 
-                  properties:
-                    path:
-                      type: string
+            items:
+              type: object
+              additionalProperties: false
+              required: [path, url]
 
-                    url:
-                      type: string
-                      format: uri
+              properties:
+                path:
+                  type: string
+
+                url:
+                  type: string
+                  format: uri
 
     ValidationReport:
       type: object

@@ -8,6 +8,8 @@ RSpec.describe 'requests', type: :request, authorized: true do
       before do
         create :request, id: 100, purpose: 'submit', db: 'GEA', status: 'finished' do |request|
           create :submission, request:, id: 200
+
+          create :obj, request:, _id: 'IDF', file: uploaded_file(name: 'myidf.txt')
         end
 
         create :request, id: 101, purpose: 'submit', db: 'MetaboBank', status: 'waiting'
@@ -25,6 +27,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
             created_at: instance_of(String),
             purpose:    'submit',
             db:         'MetaboBank',
+            objects:    [],
             status:     'waiting',
             validity:   nil,
 
@@ -45,8 +48,18 @@ RSpec.describe 'requests', type: :request, authorized: true do
             created_at: instance_of(String),
             purpose:    'submit',
             db:         'GEA',
-            status:     'finished',
-            validity:   nil,
+
+            objects: [
+              id: 'IDF',
+
+              files: [
+                path: 'myidf.txt',
+                url:  'http://www.example.com/api/requests/100/files/myidf.txt'
+              ]
+            ],
+
+            status:   'finished',
+            validity: nil,
 
             validation_reports: [
               {
@@ -54,7 +67,13 @@ RSpec.describe 'requests', type: :request, authorized: true do
                 path:      nil,
                 validity:  nil,
                 details:   nil
-              }
+              },
+              {
+                object_id: 'IDF',
+                path:      'myidf.txt',
+                validity:  nil,
+                details:   nil
+              },
             ],
 
             submission: {
@@ -147,6 +166,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
         created_at: instance_of(String),
         purpose:    'submit',
         db:         'BioSample',
+        objects:    [],
         status:     'finished',
         validity:   nil,
 
