@@ -29,6 +29,14 @@ export default class extends Command {
 
         showRequest(endpoint, apiKey!, id);
       })
+      .command('get-file')
+      .description('Get the content of submission file.')
+      .arguments('<id:string> <path:string>')
+      .action((_opts, id, path) => {
+        if (!apiKey) requireLogin();
+
+        getFile(endpoint, apiKey!, id, path);
+      })
       .command('cancel')
       .description('Cancel the request.')
       .arguments('<id:number>')
@@ -43,6 +51,7 @@ export default class extends Command {
 type Request = {
   id: number;
   created_at: string;
+  purpose: string;
   db: string;
   status: string;
   validity: string;
@@ -91,6 +100,18 @@ async function showRequest(endpoint: string, apiKey: string, id: number) {
   const payload = await res.json();
 
   colorize(JSON.stringify(payload, null, 2));
+}
+
+async function getFile(endpoint: string, apiKey: string, id: string, path: string) {
+  const res = await fetch(`${endpoint}/requests/${id}/files/${path}`, {
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+    },
+  });
+
+  await ensureSuccess(res);
+
+  console.log(await res.text());
 }
 
 async function cancelRequest(endpoint: string, apiKey: string, id: number) {
