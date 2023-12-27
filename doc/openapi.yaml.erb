@@ -431,7 +431,7 @@ components:
     Request:
       type: object
       additionalProperties: false
-      required: [id, url, created_at, db, status, validity, validation_reports, submission]
+      required: [id, url, created_at, purpose, db, status, validity, validation_reports, submission]
 
       properties:
         id:
@@ -444,6 +444,13 @@ components:
         created_at:
           type: string
           format: date-time
+
+        purpose:
+          type: string
+
+          enum:
+            - validate
+            - submit
 
         db:
           type: string

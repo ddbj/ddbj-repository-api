@@ -2,8 +2,9 @@ FactoryBot.define do
   factory :request do
     user
 
-    db     { DB.map { _1[:id] }.sample }
-    status { 'waiting' }
+    purpose { Request.purposes.values.sample }
+    db      { DB.map { _1[:id] }.sample }
+    status  { 'waiting' }
 
     after :create do |request|
       create :obj, request:, _id: '_base'

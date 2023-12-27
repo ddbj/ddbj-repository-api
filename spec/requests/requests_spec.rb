@@ -6,11 +6,11 @@ RSpec.describe 'requests', type: :request, authorized: true do
   describe 'GET /api/requests' do
     describe 'payload' do
       before do
-        create :request, id: 100, db: 'GEA', status: 'finished' do |request|
+        create :request, id: 100, purpose: 'submit', db: 'GEA', status: 'finished' do |request|
           create :submission, request:, id: 200
         end
 
-        create :request, id: 101, db: 'MetaboBank', status: 'waiting'
+        create :request, id: 101, purpose: 'submit', db: 'MetaboBank', status: 'waiting'
       end
 
       example do
@@ -23,6 +23,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
             id:         101,
             url:        'http://www.example.com/api/requests/101',
             created_at: instance_of(String),
+            purpose:    'submit',
             db:         'MetaboBank',
             status:     'waiting',
             validity:   nil,
@@ -42,6 +43,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
             id:         100,
             url:        'http://www.example.com/api/requests/100',
             created_at: instance_of(String),
+            purpose:    'submit',
             db:         'GEA',
             status:     'finished',
             validity:   nil,
@@ -129,7 +131,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
 
   describe 'GET /api/requests/:id' do
     before do
-      create :request, id: 100, db: 'BioSample', status: 'finished' do |request|
+      create :request, id: 100, purpose: 'submit', db: 'BioSample', status: 'finished' do |request|
         create :submission, request:, id: 200
       end
     end
@@ -143,6 +145,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
         id:         100,
         url:        'http://www.example.com/api/requests/100',
         created_at: instance_of(String),
+        purpose:    'submit',
         db:         'BioSample',
         status:     'finished',
         validity:   nil,
