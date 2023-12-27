@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby File.read(__dir__ + '/.ruby-version').chomp
+ruby file: '.ruby-version'
 
 gem 'rails', '~> 7.1.0'
 
