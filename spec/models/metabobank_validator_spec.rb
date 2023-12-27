@@ -7,7 +7,7 @@ RSpec.describe MetabobankValidator, type: :model do
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/valid/MTBKS231.sdrf.txt')
     }
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',
@@ -70,7 +70,7 @@ RSpec.describe MetabobankValidator, type: :model do
       create :obj, request:, _id: 'ProcessedDataFile', file: uploaded_file(name: '220629_ppg_conc.txt'), destination: 'processed'
     }
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',
@@ -114,7 +114,7 @@ RSpec.describe MetabobankValidator, type: :model do
       create :obj, request:, _id: 'BioSample', file: file_fixture_upload('metabobank/valid/MTBKS231.bs.tsv')
     }
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',
@@ -135,7 +135,7 @@ RSpec.describe MetabobankValidator, type: :model do
       create :obj, request:, _id: 'SDRF', file: file_fixture_upload('metabobank/invalid/MTBKS201.sdrf.txt')
     }
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',

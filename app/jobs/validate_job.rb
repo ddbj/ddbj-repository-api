@@ -1,5 +1,5 @@
 class ValidateJob < ApplicationJob
   def perform(request)
-    Validators.new(request).validate
+    Validators.validate request
   end
 end

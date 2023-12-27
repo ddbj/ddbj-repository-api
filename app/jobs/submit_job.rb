@@ -1,6 +1,6 @@
 class SubmitJob < ApplicationJob
   def perform(request)
-    Validators.new(request).validate do
+    Validators.validate request do
       next unless request.validity == 'valid'
 
       submission = request.create_submission!

@@ -10,7 +10,7 @@ RSpec.describe Validators, type: :model do
   let(:validator) { double(:validator) }
 
   before do
-    stub_const 'Validators::VALIDATOR', 'ddbj' => validator
+    allow(DdbjValidator).to receive(:new) { validator }
   end
 
   example 'cancel request' do
@@ -18,7 +18,7 @@ RSpec.describe Validators, type: :model do
 
     on_finish_called = false
 
-    Validators.new(request).validate do
+    Validators.validate request do
       on_finish_called = true
     end
 
@@ -35,7 +35,7 @@ RSpec.describe Validators, type: :model do
 
     expect_any_instance_of(ErrorSubscriber).to receive(:report)
 
-    Validators.new(request).validate
+    Validators.validate request
 
     expect(request).to have_attributes(
       status:   'finished',
