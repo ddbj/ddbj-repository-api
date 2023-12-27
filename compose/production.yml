@@ -5,7 +5,7 @@ services:
 
     volumes:
       - type: bind
-        source: ~/repository-$STAGE
+        source: ~/repository/$STAGE
         target: /data/repository
       - type: bind
         source: /home
