@@ -50,6 +50,8 @@
     "https://deno.land/std@0.206.0/async/pool.ts": "47c1841cfa9c036144943d11747ddd44064f5baf8cb7ece25473ba873c6aceb0",
     "https://deno.land/std@0.206.0/async/retry.ts": "b80e37cf1701fe1edf1bec25440e0a870a320193c5dd1990ae0cadd0fc3ab886",
     "https://deno.land/std@0.206.0/async/tee.ts": "47e42d35f622650b02234d43803d0383a89eb4387e1b83b5a40106d18ae36757",
+    "https://deno.land/std@0.206.0/jsonc/mod.ts": "b88dce28eb3645667caa856538ae2fe87af51410822544a0b45a4177ef3bd7dd",
+    "https://deno.land/std@0.206.0/jsonc/parse.ts": "c1096e2b7ffb4996d7ed841dfdb29a4fccc78edcc55299beaa20d6fe5facf7b6",
     "https://deno.land/std@0.206.0/path/_common/assert_path.ts": "061e4d093d4ba5aebceb2c4da3318bfe3289e868570e9d3a8e327d91c2958946",
     "https://deno.land/std@0.206.0/path/_common/basename.ts": "0d978ff818f339cd3b1d09dc914881f4d15617432ae519c1b8fdc09ff8d3789a",
     "https://deno.land/std@0.206.0/path/_common/common.ts": "9e4233b2eeb50f8b2ae10ecc2108f58583aea6fd3e8907827020282dc2b76143",
