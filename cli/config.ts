@@ -1,4 +1,5 @@
 import { dirname, join } from 'std/path/mod.ts';
+import { parse } from 'std/jsonc/mod.ts';
 
 import { expandHome } from 'https://deno.land/x/expandhome@v0.0.5/mod.ts';
 
@@ -15,7 +16,7 @@ export const defaultConfig = {
 
 export async function readConfig() {
   try {
-    return JSON.parse(await Deno.readTextFile(configFilePath));
+    return parse(await Deno.readTextFile(configFilePath));
   } catch (err) {
     if (err.name === 'NotFound') {
       return {};
@@ -33,4 +34,4 @@ export async function writeConfig(config: object) {
 }
 
 const configHome = Deno.env.get('XDG_CONFIG_HOME') || expandHome('~/.config');
-const configFilePath = join(configHome, 'ddbj-repository', 'config.json');
+const configFilePath = join(configHome, 'ddbj-repository', 'config.jsonc');
