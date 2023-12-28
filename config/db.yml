@@ -13,7 +13,7 @@
       ext: xml
 
 - id: Trad
-  validator: PassthroughValidator
+  validator: TradValidator
 
   objects:
     - id: Sequence
