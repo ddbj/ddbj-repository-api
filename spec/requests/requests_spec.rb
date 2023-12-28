@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'requests', type: :request, authorized: true do
-  let!(:user) { create_default(:user, api_key: 'API_KEY') }
+  let_it_be(:user) { create_default(:user, api_key: 'API_KEY') }
 
   describe 'GET /api/requests' do
     describe 'payload' do
@@ -86,14 +86,16 @@ RSpec.describe 'requests', type: :request, authorized: true do
     end
 
     describe 'pagination' do
-      before do
-        stub_const 'Pagy::DEFAULT', Pagy::DEFAULT.merge(items: 2)
-
+      before_all do
         create :request, id: 100
         create :request, id: 101
         create :request, id: 102
         create :request, id: 103
         create :request, id: 104
+      end
+
+      before do
+        stub_const 'Pagy::DEFAULT', Pagy::DEFAULT.merge(items: 2)
       end
 
       example 'page=1' do
