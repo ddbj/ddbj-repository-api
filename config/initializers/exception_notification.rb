@@ -1,3 +1,6 @@
+require 'exception_notification/rails'
+require 'exception_notification/sidekiq'
+
 ExceptionNotification.configure do |config|
   if recipients = ENV['EXCEPTION_RECIPIENTS'].presence
     config.add_notifier :email, **{
