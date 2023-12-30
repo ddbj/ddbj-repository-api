@@ -3,21 +3,7 @@ using PathnameContain
 module ViaFile
   extend ActiveSupport::Concern
 
-  class Error < StandardError; end
-
-  included do
-    rescue_from Error do |e|
-      render json: {
-        error: e.message
-      }, status: :bad_request
-    end
-
-    rescue_from ActiveRecord::RecordInvalid do |e|
-      render json: {
-        error: e.message
-      }, status: :unprocessable_entity
-    end
-  end
+  class BadRequest < StandardError; end
 
   def create_request_from_params(user, params, purpose:)
     ActiveRecord::Base.transaction {
@@ -51,7 +37,7 @@ module ViaFile
       user_home = Pathname.new(ENV.fetch('USER_HOME_DIR')).join(user.uid)
       path      = user_home.join(relative_path)
 
-      raise Error, "path must be in #{user_home}" unless user_home.contain?(path)
+      raise BadRequest, "path must be in #{user_home}" unless user_home.contain?(path)
 
       destination = rest[:destination]
 
@@ -74,7 +60,7 @@ module ViaFile
     in nil if obj[:optional]
       # do nothing
     in unknown
-      raise Error, "unexpected parameter format in #{id}: #{unknown.inspect}"
+      raise BadRequest, "unexpected parameter format in #{id}: #{unknown.inspect}"
     end
   end
 

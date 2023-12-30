@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     get :callback
   end
 
-  scope :api do
+  scope :api, defaults: {format: :json} do
     resource :api_key, path: 'api-key', only: %i(show) do
       post :regenerate
     end

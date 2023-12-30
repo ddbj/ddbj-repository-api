@@ -11,7 +11,7 @@ RSpec.describe 'submissions', type: :request, authorized: true do
   end
 
   example 'GET /api/submissions' do
-    get '/api/submissions', as: :json
+    get '/api/submissions'
 
     expect(response).to conform_schema(200)
 
@@ -35,7 +35,7 @@ RSpec.describe 'submissions', type: :request, authorized: true do
   end
 
   example 'GET /api/submissions/:id' do
-    get '/api/submissions/X-42', as: :json
+    get '/api/submissions/X-42'
 
     expect(response).to conform_schema(200)
 

@@ -1,0 +1,3 @@
+{
+  error: exception.message == exception.class.to_s ? status_in_words : exception.message
+}
