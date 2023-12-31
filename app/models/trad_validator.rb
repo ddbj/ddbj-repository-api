@@ -106,7 +106,11 @@ class TradValidator
   end
 
   def validate_ann(objs)
-    assoc = objs.select { _1._id == 'Annotation' }.map {|obj|
+    anns = objs.select { _1._id == 'Annotation' }
+
+    return if anns.empty?
+
+    assoc = anns.map {|obj|
       contact_person = extract_contact_person_in_ann(obj.file)
 
       if contact_person.values.any?(&:nil?)
@@ -119,12 +123,13 @@ class TradValidator
       [obj, contact_person]
     }
 
+    _, first_contact_person = assoc.first
+
     assoc.each do |obj, contact_person|
-      first = assoc.first
-      unless first[1] == contact_person
+      unless first_contact_person == contact_person
         obj.validation_details << {
           severity: 'error',
-          message: 'Contact person must be the same for all annotation files.'
+          message:  'Contact person must be the same for all annotation files.'
         }
       end
     end
