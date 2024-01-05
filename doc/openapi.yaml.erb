@@ -634,73 +634,6 @@ components:
             - object
             - 'null'
 
-    <%- dbs.each do |db| -%>
-    <%- db[:objects].each do |obj| -%>
-    <%= db[:id] %>ViaFileFormData<%= obj[:id] %>:
-      oneOf:
-        - type: object
-          additionalProperties: false
-          <%- unless obj[:optional] -%>
-
-          required:
-            - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]
-          <%- end -%>
-
-          properties:
-            <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]:
-              <%- if obj[:multiple] -%>
-              type: array
-              minItems: <%= obj[:optional] ? 0 : 1 %>
-
-              items:
-                $ref: '#/components/schemas/File'
-              <%- else -%>
-              $ref: '#/components/schemas/File'
-              <%- end -%>
-
-            <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[destination]:
-              <%- if obj[:multiple] -%>
-              type: array
-              minItems: <%= obj[:optional] ? 0 : 1 %>
-
-              items:
-                $ref: '#/components/schemas/Destination'
-              <%- else -%>
-              $ref: '#/components/schemas/Destination'
-              <%- end -%>
-
-        - type: object
-          additionalProperties: false
-          <%- unless obj[:optional] -%>
-          required:
-            - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]
-          <%- end -%>
-
-          properties:
-            <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]:
-              <%- if obj[:multiple] -%>
-              type: array
-              minItems: <%= obj[:optional] ? 0 : 1 %>
-
-              items:
-                $ref: '#/components/schemas/Path'
-              <%- else -%>
-              $ref: '#/components/schemas/Path'
-              <%- end -%>
-
-            <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[destination]:
-              <%- if obj[:multiple] -%>
-              type: array
-              minItems: <%= obj[:optional] ? 0 : 1 %>
-
-              items:
-                $ref: '#/components/schemas/Destination'
-              <%- else -%>
-              $ref: '#/components/schemas/Destination'
-              <%- end -%>
-
-    <%- end -%>
-    <%- end -%>
     File:
       type: string
       format: binary
@@ -728,11 +661,56 @@ components:
       content:
         multipart/form-data:
           schema:
+            type: object
+            additionalProperties: false
+
             allOf:
               <%- db[:objects].each do |obj| -%>
-              - $ref: '#/components/schemas/<%= db[:id] %>ViaFileFormData<%= obj[:id] %>'
+              <%- unless obj[:optional] -%>
+              - oneOf:
+                - required:
+                  - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]
+                - required:
+                  - <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]
+              <%- end -%>
               <%- end -%>
 
+            properties:
+              <%- db[:objects].each do |obj| -%>
+              <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[file]:
+                <%- if obj[:multiple] -%>
+                type: array
+                minItems: <%= obj[:optional] ? 0 : 1 %>
+
+                items:
+                  $ref: '#/components/schemas/File'
+                <%- else -%>
+                $ref: '#/components/schemas/File'
+                <%- end -%>
+
+              <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[path]:
+                <%- if obj[:multiple] -%>
+                type: array
+                minItems: <%= obj[:optional] ? 0 : 1 %>
+
+                items:
+                  $ref: '#/components/schemas/Path'
+                <%- else -%>
+                $ref: '#/components/schemas/Path'
+                <%- end -%>
+
+              <%= obj[:id] %><% if obj[:multiple] %>[]<% end %>[destination]:
+                <%- if obj[:multiple] -%>
+                type: array
+                minItems: <%= obj[:optional] ? 0 : 1 %>
+
+                items:
+                  $ref: '#/components/schemas/Destination'
+                <%- else -%>
+                $ref: '#/components/schemas/Destination'
+                <%- end -%>
+
+              <%- end -%>
     <%- end -%>
   responses:
     CreateResponseCreated:
