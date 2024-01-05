@@ -14,6 +14,6 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
         Authorization: `Bearer ${cookies.get('apiKey')}`
       }
     });
-    return {me: await res.json()};
+    return { me: await res.json() };
   }
 };

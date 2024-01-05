@@ -1,6 +1,7 @@
 <script>
   export let data;
 </script>
+
 <h2>Requests</h2>
 <table>
   <thead>
@@ -17,7 +18,7 @@
   <tbody>
     {#each data.responses as res}
       <tr>
-        <td><a href='/ui/request/{res.id}'>{res.id}</a></td>
+        <td><a href="/ui/request/{res.id}">{res.id}</a></td>
         <td>{res.created_at}</td>
         <td>{res.purpose}</td>
         <td>{res.db}</td>

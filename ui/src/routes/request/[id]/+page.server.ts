@@ -10,15 +10,15 @@ export const load: PageLoad = async ({ params, cookies }) => {
 async function waitForRequestFinished(url: string, apiKey: string) {
   const res = await fetch(url, {
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
-    },
+      Authorization: `Bearer ${apiKey}`
+    }
   });
 
   const payload = await res.json();
 
   if (payload.status === 'finished' || payload.status === 'canceled') return payload;
 
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return waitForRequestFinished(url, apiKey);
 }
