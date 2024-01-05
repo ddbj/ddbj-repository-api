@@ -3,6 +3,7 @@
 </script>
 
 <h2>Requests</h2>
+
 <table>
   <thead>
     <tr>
@@ -15,15 +16,20 @@
       <th>Submission</th>
     </tr>
   </thead>
+
   <tbody>
     {#each data.responses as res}
       <tr>
-        <td><a href="/ui/request/{res.id}">{res.id}</a></td>
+        <td>
+          <a href="/ui/request/{res.id}">{res.id}</a>
+        </td>
+
         <td>{res.created_at}</td>
         <td>{res.purpose}</td>
         <td>{res.db}</td>
         <td>{res.status}</td>
         <td>{res.validity}</td>
+
         <td>
           {#if res.submission}
             {res.submission.id}

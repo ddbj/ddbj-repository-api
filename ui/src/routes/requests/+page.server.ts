@@ -4,5 +4,8 @@ export async function load({ cookies }) {
       Authorization: `Bearer ${cookies.get('apiKey')}`
     }
   });
-  return { responses: await res.json() };
+
+  return {
+    responses: await res.json()
+  };
 }

@@ -2,6 +2,7 @@ import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ params, cookies }) => {
   const payload = await waitForRequestFinished(`http://localhost:3000/api/requests/${params.id}`, cookies.get('apiKey'));
+
   return {
     response: payload
   };
