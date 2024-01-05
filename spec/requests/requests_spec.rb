@@ -16,7 +16,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
       end
 
       example do
-        get '/api/requests', as: :json
+        get '/api/requests'
 
         expect(response).to conform_schema(200)
 
@@ -99,7 +99,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
       end
 
       example 'page=1' do
-        get '/api/requests', as: :json
+        get '/api/requests'
 
         expect(response).to conform_schema(200)
         expect(response.parsed_body.map { _1['id'] }).to eq([104, 103])
@@ -112,7 +112,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
       end
 
       example 'page=2' do
-        get '/api/requests?page=2', as: :json
+        get '/api/requests?page=2'
 
         expect(response).to conform_schema(200)
         expect(response.parsed_body.map { _1['id'] }).to eq([102, 101])
@@ -126,7 +126,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
       end
 
       example 'page=3' do
-        get '/api/requests?page=3', as: :json
+        get '/api/requests?page=3'
 
         expect(response).to conform_schema(200)
         expect(response.parsed_body.map { _1['id'] }).to eq([100])
@@ -139,7 +139,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
       end
 
       example 'out of range' do
-        get '/api/requests?page=4', as: :json
+        get '/api/requests?page=4'
 
         expect(response).to conform_schema(400)
 
@@ -158,7 +158,7 @@ RSpec.describe 'requests', type: :request, authorized: true do
     end
 
     example do
-      get '/api/requests/100', as: :json
+      get '/api/requests/100'
 
       expect(response).to conform_schema(200)
 
