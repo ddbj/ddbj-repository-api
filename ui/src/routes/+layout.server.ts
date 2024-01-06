@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 
 import type { LayoutServerLoad } from './$types';
 import { PUBLIC_API_URL } from '$env/static/public';
+import { base } from '$app/paths';
 
 export const load: LayoutServerLoad = async ({ cookies, url }) => {
   const apiKey = cookies.get('apiKey');
@@ -18,8 +19,8 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
     };
   }
 
-  if (new URL(url).pathname !== '/ui/login') {
-    redirect(307, '/ui/login');
+  if (new URL(url).pathname !== `${base}/login`) {
+    redirect(307, `${base}/login`);
   }
 
   return {};

@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
 
   import '../app.scss';
+  import { base } from '$app/paths';
   import { page } from '$app/stores';
 
   export let data;
@@ -13,19 +14,19 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="/ui">DDBJ Repository</a>
+    <a class="navbar-brand" href={base}>DDBJ Repository</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="/ui/submit" class:active={$page.url.pathname === '/ui/submit/'}>Submit</a>
+          <a class="nav-link" href="{base}/submit" class:active={$page.url.pathname === `${base}/submit/`}>Submit</a>
         </li>
 
         <li class="nav-item">
           <a
             class="nav-link"
-            href="/ui/requests"
-            class:active={$page.url.pathname === '/ui/requests/' || $page.url.pathname.startsWith('/ui/request/')}
+            href="{base}/requests"
+            class:active={$page.url.pathname === `${base}/requests/` || $page.url.pathname.startsWith(`${base}/request/`)}
           >
             Requests
           </a>
@@ -41,7 +42,7 @@
 
             <ul class="dropdown-menu">
               <li>
-                <form method="POST" action="/ui/session?/logout">
+                <form method="POST" action="{base}/session?/logout">
                   <button class="dropdown-item">Logout</button>
                 </form>
               </li>

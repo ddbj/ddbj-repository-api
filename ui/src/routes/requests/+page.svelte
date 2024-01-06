@@ -1,4 +1,6 @@
 <script>
+  import { base } from '$app/paths';
+
   export let data;
 </script>
 
@@ -21,7 +23,7 @@
     {#each data.responses as res}
       <tr>
         <td>
-          <a href="/ui/request/{res.id}">{res.id}</a>
+          <a href="{base}/request/{res.id}">{res.id}</a>
         </td>
 
         <td>{res.created_at}</td>

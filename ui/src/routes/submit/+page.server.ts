@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 
 import type { Actions } from './$types';
 import { PUBLIC_API_URL } from '$env/static/public';
+import { base } from '$app/paths';
 
 export const actions = {
   default: async ({ request, cookies }) => {
@@ -19,6 +20,6 @@ export const actions = {
 
     const payload = await res.json();
 
-    redirect(303, `/ui/request/${payload.request.id}`);
+    redirect(303, `${base}/request/${payload.request.id}`);
   }
 } satisfies Actions;
