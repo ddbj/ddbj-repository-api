@@ -1,5 +1,6 @@
 <script lang="ts">
   import ValidityBadge from '$lib/ValidityBadge.svelte';
+  import formatDateTime from '$lib/formatDateTime';
   import { base } from '$app/paths';
 
   export let data;
@@ -21,7 +22,7 @@
 
   <div>
     <dt>Created</dt>
-    <dd>{request.created_at}</dd>
+    <dd>{formatDateTime(request.created_at)}</dd>
   </div>
 
   <div>
