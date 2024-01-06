@@ -2,10 +2,12 @@ import type { PageLoad } from './$types';
 import { PUBLIC_API_URL } from '$env/static/public';
 
 export const load: PageLoad = async ({ params, cookies }) => {
-  const payload = await waitForRequestFinished(`${PUBLIC_API_URL}/requests/${params.id}`, cookies.get('apiKey'));
+  const url = `${PUBLIC_API_URL}/requests/${params.id}`;
+  const apiKey = cookies.get('apiKey');
+  const payload = await waitForRequestFinished(url, apiKey);
 
   return {
-    response: payload
+    request: payload
   };
 };
 

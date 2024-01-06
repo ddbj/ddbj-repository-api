@@ -1,4 +1,5 @@
 <script>
+  import ValidityBadge from '$lib/ValidityBadge.svelte';
   import { base } from '$app/paths';
 
   export let data;
@@ -32,19 +33,14 @@
         <td>{res.status}</td>
 
         <td>
-          <span
-            class="badge"
-            class:text-bg-success={res.validity === 'valid'}
-            class:text-bg-danger={res.validity === 'invalid'}
-            class:text-bg-secondary={res.validity === 'error'}
-          >
-            {res.validity}
-          </span>
+          <ValidityBadge validity={res.validity} />
         </td>
 
         <td>
           {#if res.submission}
             {res.submission.id}
+          {:else}
+            -
           {/if}
         </td>
       </tr>
