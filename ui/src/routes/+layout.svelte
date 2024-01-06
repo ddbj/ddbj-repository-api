@@ -7,6 +7,8 @@
 
   export let data;
 
+  $: pathname = $page.url.pathname;
+
   onMount(() => {
     import('bootstrap');
   });
@@ -19,15 +21,11 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="{base}/submit" class:active={$page.url.pathname === `${base}/submit`}>Submit</a>
+          <a class="nav-link" href="{base}/submit" class:active={pathname === `${base}/submit`}>Submit</a>
         </li>
 
         <li class="nav-item">
-          <a
-            class="nav-link"
-            href="{base}/requests"
-            class:active={$page.url.pathname === `${base}/requests` || $page.url.pathname.startsWith(`${base}/request/`)}
-          >
+          <a class="nav-link" href="{base}/requests" class:active={pathname === `${base}/requests` || pathname.startsWith(`${base}/request/`)}>
             Requests
           </a>
         </li>

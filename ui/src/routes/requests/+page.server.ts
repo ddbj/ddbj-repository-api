@@ -11,4 +11,4 @@ export const load: PageServerLoad = async ({ cookies }) => {
   return {
     responses: await res.json()
   };
-}
+};
