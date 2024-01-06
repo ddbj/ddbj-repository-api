@@ -107,7 +107,7 @@
         </td>
 
         <td>
-          <pre class="mb-0 p-1"><code>{JSON.stringify(report.details, null, 2)}</code></pre>
+          <pre class="mb-0 py-1"><code>{JSON.stringify(report.details, null, 2)}</code></pre>
         </td>
       </tr>
     {/each}

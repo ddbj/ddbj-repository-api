@@ -35,20 +35,28 @@
         </div>
       </fieldset>
 
-      <div class="form-check form-check-inline">
-        <input type="radio" name="resource" required id="resource-validations" value="validations" class="form-check-input" />
+      <div class="mt-3 d-flex gap-3 align-items-center">
+        <div class="d-flex border rounded">
+          <div class="px-3 py-1 border-end">
+            <div class="form-check">
+              <input type="radio" name="resource" required id="resource-validations" value="validations" class="form-check-input" />
 
-        <label for="resource-validations" class="form-check-label"> Validate </label>
-      </div>
+              <label for="resource-validations" class="form-check-label"> Validate </label>
+            </div>
+          </div>
 
-      <div class="form-check form-check-inline">
-        <input type="radio" name="resource" required id="resource-submissions" value="submissions" class="form-check-input" />
+          <div class="px-3 py-1">
+            <div class="form-check">
+              <input type="radio" name="resource" required id="resource-submissions" value="submissions" class="form-check-input" />
 
-        <label for="resource-submissions" class="form-check-label"> Submit </label>
-      </div>
+              <label for="resource-submissions" class="form-check-label"> Submit </label>
+            </div>
+          </div>
+        </div>
 
-      <div class="mt-3">
-        <button class="btn btn-primary">Execute</button>
+        <div>
+          <button class="btn btn-primary">Execute</button>
+        </div>
       </div>
     </form>
   </div>
