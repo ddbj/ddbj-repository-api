@@ -1,9 +1,9 @@
-import type { PageLoad } from './$types';
+import type { PageServerLoad } from './$types';
 import { PUBLIC_API_URL } from '$env/static/public';
 
-export const load: PageLoad = async ({ params, cookies }) => {
+export const load: PageServerLoad = async ({ params, cookies }) => {
   const url = `${PUBLIC_API_URL}/requests/${params.id}`;
-  const apiKey = cookies.get('apiKey');
+  const apiKey = cookies.get('apiKey')!;
   const payload = await waitForRequestFinished(url, apiKey);
 
   return {

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import ValidityBadge from '$lib/ValidityBadge.svelte';
   import { base } from '$app/paths';
 

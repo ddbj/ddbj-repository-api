@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { PUBLIC_API_URL } from '$env/static/public';
 
   const loginUrl = new URL('/auth/login', PUBLIC_API_URL).href;

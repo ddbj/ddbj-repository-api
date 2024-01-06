@@ -6,8 +6,9 @@ import { base } from '$app/paths';
 export const actions = {
   default: async ({ request, cookies }) => {
     const formData = await request.formData();
+    const apiKey = formData.get('apiKey') as string;
 
-    cookies.set('apiKey', formData.get('apiKey'), { path: base });
+    cookies.set('apiKey', apiKey, { path: base });
 
     redirect(303, base);
   }

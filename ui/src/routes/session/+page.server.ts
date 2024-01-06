@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 
+import type { Actions } from './$types';
 import { base } from '$app/paths';
 
 export const actions = {
@@ -8,4 +9,4 @@ export const actions = {
 
     redirect(307, `${base}/login`);
   }
-};
+} satisfies Actions;
