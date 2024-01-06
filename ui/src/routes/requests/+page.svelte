@@ -2,9 +2,9 @@
   export let data;
 </script>
 
-<h2>Requests</h2>
+<h1 class="display-6 mb-4">Requests</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>ID</th>
@@ -28,7 +28,17 @@
         <td>{res.purpose}</td>
         <td>{res.db}</td>
         <td>{res.status}</td>
-        <td>{res.validity}</td>
+
+        <td>
+          <span
+            class="badge"
+            class:text-bg-success={res.validity === 'valid'}
+            class:text-bg-danger={res.validity === 'invalid'}
+            class:text-bg-secondary={res.validity === 'error'}
+          >
+            {res.validity}
+          </span>
+        </td>
 
         <td>
           {#if res.submission}
