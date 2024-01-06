@@ -32,10 +32,7 @@
         <td>{res.purpose}</td>
         <td>{res.db}</td>
         <td>{res.status}</td>
-
-        <td>
-          <ValidityBadge validity={res.validity} />
-        </td>
+        <td><ValidityBadge validity={res.validity} /></td>
 
         <td>
           {#if res.submission}

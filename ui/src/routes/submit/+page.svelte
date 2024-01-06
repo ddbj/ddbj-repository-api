@@ -9,8 +9,10 @@
       data-bs-target="#metabobank-pane"
       role="tab"
       aria-controls="metabobank-pane"
-      aria-selected="true">MetaboBank</button
+      aria-selected="true"
     >
+      MetaboBank
+    </button>
   </li>
 </ul>
 
@@ -40,7 +42,6 @@
           <div class="px-3 py-1 border-end">
             <div class="form-check">
               <input type="radio" name="resource" required id="resource-validations" value="validations" class="form-check-input" />
-
               <label for="resource-validations" class="form-check-label"> Validate </label>
             </div>
           </div>
@@ -48,7 +49,6 @@
           <div class="px-3 py-1">
             <div class="form-check">
               <input type="radio" name="resource" required id="resource-submissions" value="submissions" class="form-check-input" />
-
               <label for="resource-submissions" class="form-check-label"> Submit </label>
             </div>
           </div>
