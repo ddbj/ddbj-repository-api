@@ -137,6 +137,8 @@ GEM
     diff-lcs (1.5.0)
     drb (2.2.0)
       ruby2_keywords
+    email_validator (2.2.4)
+      activemodel
     erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
@@ -172,9 +174,10 @@ GEM
       reline (>= 0.3.8)
     jb (0.8.2)
     jmespath (1.6.2)
-    json-jwt (1.16.4)
+    json-jwt (1.16.5)
       activesupport (>= 4.2)
       aes_key_wrap
+      base64
       bindata
       faraday (~> 2.0)
       faraday-follow_redirects
@@ -197,14 +200,14 @@ GEM
     msgpack (1.7.2)
     multipart-post (2.3.0)
     mutex_m (0.2.0)
-    net-imap (0.4.9)
+    net-imap (0.4.9.1)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
     net-protocol (0.2.2)
       timeout
-    net-smtp (0.4.0)
+    net-smtp (0.4.0.1)
       net-protocol
     nio4r (2.7.0)
     nokogiri (1.16.0-aarch64-linux)
@@ -214,16 +217,17 @@ GEM
     nokogiri (1.16.0-x86_64-linux)
       racc (~> 1.4)
     open3 (0.2.1)
-    openid_connect (2.2.1)
+    openid_connect (2.3.0)
       activemodel
       attr_required (>= 1.0.0)
+      email_validator
       faraday (~> 2.0)
       faraday-follow_redirects
       json-jwt (>= 1.16)
+      mail
       rack-oauth2 (~> 2.2)
       swd (~> 2.0)
       tzinfo
-      validate_email
       validate_url
       webfinger (~> 2.0)
     pagy (6.2.0)
@@ -346,9 +350,6 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uri-idna (0.2.2)
-    validate_email (0.1.6)
-      activemodel (>= 3.0)
-      mail (>= 2.2.5)
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
       public_suffix
