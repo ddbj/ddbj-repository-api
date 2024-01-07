@@ -5,15 +5,15 @@ info:
   version: 1.0.0
 
 servers:
-  - url: https://repository.ddbj.nig.ac.jp
-  - url: https://repository-staging.ddbj.nig.ac.jp
-  - url: https://repository-dev.ddbj.nig.ac.jp
+  - url: https://repository.ddbj.nig.ac.jp/api
+  - url: https://repository-staging.ddbj.nig.ac.jp/api
+  - url: https://repository-dev.ddbj.nig.ac.jp/api
 
 security:
   - BearerAuth: []
 
 paths:
-  /api/api-key:
+  /api-key:
     get:
       description: Get login URL.
 
@@ -41,7 +41,7 @@ paths:
               example:
                 login_url: https://repository.ddbj.nig.ac.jp/auth/login
 
-  /api/api-key/regenerate:
+  /api-key/regenerate:
     post:
       description: Re-generate API key.
 
@@ -69,7 +69,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /api/me:
+  /me:
     get:
       description: Get your login ID.
 
@@ -97,7 +97,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /api/validations/bioproject/via-file:
+  /validations/bioproject/via-file:
     post:
       description: Run validation for BioProject.
 
@@ -120,7 +120,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/submissions/bioproject/via-file:
+  /submissions/bioproject/via-file:
     post:
       description: Submit files to BioProject.
 
@@ -143,7 +143,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/validations/biosample/via-file:
+  /validations/biosample/via-file:
     post:
       description: Run validation for BioSample.
 
@@ -166,7 +166,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/submissions/biosample/via-file:
+  /submissions/biosample/via-file:
     post:
       description: Submit files to BioSample.
 
@@ -189,7 +189,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/validations/trad/via-file:
+  /validations/trad/via-file:
     post:
       description: Run validation for Trad.
 
@@ -212,7 +212,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/submissions/trad/via-file:
+  /submissions/trad/via-file:
     post:
       description: Submit files to Trad.
 
@@ -235,7 +235,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/validations/dra/via-file:
+  /validations/dra/via-file:
     post:
       description: Run validation for DRA.
 
@@ -258,7 +258,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/submissions/dra/via-file:
+  /submissions/dra/via-file:
     post:
       description: Submit files to DRA.
 
@@ -281,7 +281,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/validations/gea/via-file:
+  /validations/gea/via-file:
     post:
       description: Run validation for GEA.
 
@@ -304,7 +304,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/submissions/gea/via-file:
+  /submissions/gea/via-file:
     post:
       description: Submit files to GEA.
 
@@ -327,7 +327,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/validations/metabobank/via-file:
+  /validations/metabobank/via-file:
     post:
       description: Run validation for MetaboBank.
 
@@ -350,7 +350,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/submissions/metabobank/via-file:
+  /submissions/metabobank/via-file:
     post:
       description: Submit files to MetaboBank.
 
@@ -373,7 +373,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/validations/jvar/via-file:
+  /validations/jvar/via-file:
     post:
       description: Run validation for JVar.
 
@@ -396,7 +396,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/submissions/jvar/via-file:
+  /submissions/jvar/via-file:
     post:
       description: Submit files to JVar.
 
@@ -419,7 +419,7 @@ paths:
         '422':
           $ref: '#/components/responses/UnprocessableEntity'
 
-  /api/requests:
+  /requests:
     get:
       description: Get your requests.
 
@@ -495,7 +495,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /api/requests/{id}:
+  /requests/{id}:
     get:
       description: Get the request.
 
@@ -590,7 +590,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /api/requests/{id}/files/{path}:
+  /requests/{id}/files/{path}:
     get:
       description: Get the submission file content.
 
@@ -623,7 +623,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /api/submissions:
+  /submissions:
     get:
       description: Get your submissions.
 
@@ -662,7 +662,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /api/submissions/{id}:
+  /submissions/{id}:
     get:
       description: Get the submission.
 
@@ -691,7 +691,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /api/submissions/{id}/files/{path}:
+  /submissions/{id}/files/{path}:
     get:
       description: Get the submission file content.
 
