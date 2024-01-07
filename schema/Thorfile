@@ -1,0 +1,30 @@
+require 'fileutils'
+require 'json'
+require 'pathname'
+require 'yaml'
+
+class Schema < Thor
+  include Thor::Actions
+
+  ROOT = Pathname.new(__dir__).join('..')
+
+  def self.exit_on_failure? = true
+
+  desc 'generate', 'Generate schemas'
+  def generate
+    dbs = YAML.load_file(ROOT.join('schema/db.yml'), symbolize_names: true)
+    erb = ERB.new(ROOT.join('schema/openapi.yml.erb').read, trim_mode: '-')
+
+    ROOT.join('schema/db.json').write JSON.pretty_generate(dbs)
+    ROOT.join('schema/openapi.yml').write erb.result_with_hash(dbs:)
+  end
+
+  desc 'generate_copy', 'Generate and copy schemas'
+  def generate_copy
+    invoke :generate
+
+    FileUtils.cp ROOT.join('schema/db.json'),     ROOT.join('cli')
+    FileUtils.cp ROOT.join('schema/db.yml'),      ROOT.join('api/schema')
+    FileUtils.cp ROOT.join('schema/openapi.yml'), ROOT.join('api/schema')
+  end
+end
