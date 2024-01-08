@@ -1,8 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 
-import type { LayoutServerLoad } from './$types';
 import { PUBLIC_API_URL } from '$env/static/public';
 import { base } from '$app/paths';
+
+import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ cookies, url }) => {
   const apiKey = cookies.get('apiKey');

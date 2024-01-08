@@ -74,9 +74,14 @@
         <td>{obj.id}</td>
 
         <td>
-          <ul class="mb-0">
+          <ul class="list-unstyled mb-0">
             {#each obj.files as file}
-              <li>{file.path}</li>
+              <li>
+                <form method="POST" action="?/downloadFile">
+                  <input type="hidden" name="url" value={file.url} />
+                  <button class="btn btn-link p-0">{file.path}</button>
+                </form>
+              </li>
             {/each}
           </ul>
         </td>
@@ -101,11 +106,11 @@
     {#each request.validation_reports as report}
       <tr>
         <td>{report.object_id}</td>
-        <td>{report.path}</td>
+        <td>{report.path || '-'}</td>
         <td><ValidityBadge validity={report.validity} /></td>
 
         <td>
-          <pre class="mb-0 py-1"><code>{JSON.stringify(report.details, null, 2)}</code></pre>
+          <pre class="mb-0 py-1"><code>{report.details ? JSON.stringify(report.details, null, 2) : '-'}</code></pre>
         </td>
       </tr>
     {/each}
