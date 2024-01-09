@@ -132,7 +132,7 @@ async function waitForRequestFinished(url: string, apiKey: string) {
 
   const payload = await res.json();
 
-  if (payload.status === 'finished') return payload;
+  if (payload.status === 'finished' || payload.status === 'canceled') return payload;
 
   await delay(1000);
 
