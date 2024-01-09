@@ -1,8 +1,6 @@
 import { dirname, join } from 'std/path/mod.ts';
 import { parse } from 'std/jsonc/mod.ts';
 
-import { expandHome } from 'https://deno.land/x/expandhome@v0.0.5/mod.ts';
-
 export type Config = {
   endpoint: string;
   issuer: string;
@@ -33,5 +31,5 @@ export async function writeConfig(config: object) {
   await Deno.writeTextFile(configFilePath, JSON.stringify(newConfig, null, '  '));
 }
 
-const configHome = Deno.env.get('XDG_CONFIG_HOME') || expandHome('~/.config');
+const configHome = Deno.env.get('XDG_CONFIG_HOME') || join(Deno.env.get('HOME'), '.config');
 const configFilePath = join(configHome, 'ddbj-repository', 'config.jsonc');
