@@ -183,8 +183,17 @@ paths:
               example:
                 - id: 100
                   url: https://repository.ddbj.nig.ac.jp/api/requests/100
+                  created_at: '2024-01-01T00:00:00.000Z'
+                  purpose: submit
+                  db: BioProject
                   status: finished
                   validity: valid
+
+                  objects:
+                    - id: BioProject
+                      files:
+                        - path: mybioproject.xml
+                          url: https://repository.ddbj.nig.ac.jp/api/requests/100/files/mybioproject.xml
 
                   validation_reports:
                     - object_id: _base
@@ -206,8 +215,17 @@ paths:
 
                 - id: 101
                   url: https://repository.ddbj.nig.ac.jp/api/requests/101
+                  created_at: '2024-01-01T01:00:00.000Z'
+                  purpose: validate
+                  db: BioSample
                   status: waiting
                   validity: null
+
+                  objects:
+                    - id: BioSample
+                      files:
+                        - path: mybiosample.xml
+                          url: https://repository.ddbj.nig.ac.jp/api/requests/101/files/mybiosample.xml
 
                   validation_reports:
                     - object_id: _base
